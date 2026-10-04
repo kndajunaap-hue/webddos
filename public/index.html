@@ -3,561 +3,361 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DDOS-CONSOLE v3 // LeoXD</title>
+<title>DDOS-CONSOLE // LeoXD</title>
 <style>
-  :root{
-    --bg:#05070c; --panel:#0a1018; --line:#16202e;
-    --accent:#00ff9d; --accent2:#00b3ff; --danger:#ff3b5c; --warn:#ffcc00;
-    --leo:#a855f7; --leo2:#ec4899;
-    --text:#c9d4e0; --dim:#5c6b7f;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'JetBrains Mono','Courier New',monospace}
-  body{background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:monospace}
+  body{background:#05070c;color:#c9d4e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  nav{display:flex;background:#0a1018;border-bottom:1px solid #16202e;height:48px;align-items:center;padding:0 16px}
+  nav .brand{color:#00ff9d;font-weight:bold;letter-spacing:3px;margin-right:20px}
+  nav .tab{padding:14px 18px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
+  nav .tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
+  nav .tab.leo.active{color:#a855f7;border-bottom-color:#a855f7}
+  nav .status{margin-left:auto;color:#5c6b7f;font-size:11px}
 
-  /* BOOT */
-  #boot{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .6s}
-  #boot.done{opacity:0;pointer-events:none}
-  .radar{width:180px;height:180px;position:relative}
-  .radar::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid var(--accent);opacity:.2;box-shadow:0 0 60px var(--accent) inset}
-  .radar::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg, transparent 0deg, var(--accent) 30deg, transparent 60deg);animation:sweep 1.4s linear infinite;filter:blur(2px)}
-  @keyframes sweep{to{transform:rotate(360deg)}}
-  .radar .ring{position:absolute;inset:20%;border-radius:50%;border:1px solid var(--accent);opacity:.3}
-  .radar .ring2{position:absolute;inset:40%;border-radius:50%;border:1px solid var(--accent);opacity:.4}
-  .radar .dot{position:absolute;width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent)}
-  #bootTxt{font-size:13px;letter-spacing:5px;color:var(--accent)}
-  #bootSub{font-size:10px;color:var(--dim);letter-spacing:2px}
-  #credit{position:fixed;bottom:14px;left:14px;font-size:10px;color:var(--dim);letter-spacing:2px;z-index:1000}
-  #credit b{color:var(--leo);text-shadow:0 0 8px var(--leo)}
+  .page{display:none;flex:1;overflow:hidden}
+  .page.active{display:flex}
 
-  /* NAV */
-  nav{display:flex;align-items:center;gap:0;background:var(--panel);border-bottom:1px solid var(--line);height:48px;padding:0 16px}
-  nav .brand{font-size:13px;letter-spacing:3px;font-weight:600;color:var(--accent);margin-right:24px;display:flex;align-items:center;gap:8px}
-  nav .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 1.6s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  nav .tab{padding:14px 20px;font-size:11px;letter-spacing:2px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:.15s}
-  nav .tab:hover{color:var(--text)}
-  nav .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-  nav .tab.leo.active{color:var(--leo);border-bottom-color:var(--leo)}
-  nav .status{margin-left:auto;font-size:11px;color:var(--dim)}
+  /* DDOS page */
+  #page-ddos{flex-direction:row}
+  #page-ddos aside{width:320px;background:#0a1018;border-right:1px solid #16202e;padding:16px;overflow:auto}
+  #page-ddos label{display:block;font-size:10px;color:#5c6b7f;letter-spacing:2px;margin:12px 0 5px}
+  #page-ddos input, #page-ddos select{width:100%;padding:8px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:12px;border-radius:4px;outline:none}
+  #page-ddos button{padding:10px;border:1px solid #00ff9d;background:transparent;color:#00ff9d;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:4px;margin-top:6px;flex:1}
+  #page-ddos button:hover{background:#00ff9d;color:#000}
+  #page-ddos button.danger{border-color:#ff3b5c;color:#ff3b5c}
+  #page-ddos button.danger:hover{background:#ff3b5c;color:#000}
+  #page-ddos .btns{display:flex;gap:8px;margin-top:14px}
+  #page-ddos .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  #log{flex:1;padding:14px;overflow:auto;font-size:12px;background:#03060a;white-space:pre-wrap;line-height:1.6}
+  #log .ok{color:#00ff9d} #log .err{color:#ff3b5c} #log .warn{color:#ffcc00} #log .info{color:#00b3ff} #log .dim{color:#5c6b7f}
+  .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid #16202e;font-size:11px;background:#0a1018}
+  .stats b{color:#00ff9d}
 
-  .page{display:none;height:calc(100vh - 48px);overflow:hidden}
-  .page.active{display:block}
-
-  main{height:100%;display:grid;grid-template-columns:340px 1fr;min-height:0}
-  aside{border-right:1px solid var(--line);padding:16px;background:var(--panel);overflow:auto}
-  aside label{display:block;font-size:10px;letter-spacing:2px;color:var(--dim);margin:12px 0 5px}
-  aside input,aside select{width:100%;padding:9px 11px;background:#05090f;border:1px solid var(--line);color:var(--text);font-size:12px;outline:none;border-radius:4px}
-  aside input:focus,aside select:focus{border-color:var(--accent)}
-  .btns{display:flex;gap:8px;margin-top:14px}
-  button{flex:1;padding:10px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:4px;transition:.15s;font-weight:600}
-  button:hover{background:var(--accent);color:#000}
-  button.danger{border-color:var(--danger);color:var(--danger)}
-  button.danger:hover{background:var(--danger);color:#000}
-  button.leo{border-color:var(--leo);color:var(--leo)}
-  button.leo:hover{background:var(--leo);color:#000}
-
-  .console{display:flex;flex-direction:column;min-height:0}
-  .console-head{padding:10px 16px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:2px;color:var(--dim);display:flex;gap:16px}
-  #log{flex:1;padding:14px;overflow:auto;font-size:12px;line-height:1.6;background:#03060a;white-space:pre-wrap;word-break:break-all}
-  #log .ok{color:var(--accent)} #log .warn{color:var(--warn)} #log .err{color:var(--danger)}
-  #log .info{color:var(--accent2)} #log .dim{color:var(--dim)}
-  .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid var(--line);font-size:11px;background:var(--panel);flex-wrap:wrap}
-  .stats b{color:var(--accent)}
-
-  /* LEO PAGE */
-  .leo-wrap{height:100%;display:grid;grid-template-columns:260px 1fr;min-height:0}
-  .leo-side{background:var(--panel);border-right:1px solid var(--line);padding:14px;overflow:auto;display:flex;flex-direction:column;gap:14px}
-  .leo-side h3{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:6px}
-  .leo-side .card{padding:10px;background:#05090f;border:1px solid var(--line);border-radius:6px;font-size:11px}
-  .leo-side .card b{color:var(--leo)}
-  .leo-side button{width:100%;margin-top:4px}
-
-  .leo-main{display:flex;flex-direction:column;min-height:0;background:#03060a}
-  .leo-head{padding:14px 22px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,#1a0f2e,#0a1018);display:flex;align-items:center;gap:12px}
-  .leo-head .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--leo),var(--leo2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:15px;box-shadow:0 0 20px rgba(168,85,247,.5)}
-  .leo-head .title{font-size:14px;font-weight:700;letter-spacing:2px;background:linear-gradient(90deg,var(--leo),var(--leo2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .leo-head .sub{font-size:10px;color:var(--dim);letter-spacing:1px;margin-top:2px}
-  .leo-head .badge{margin-left:auto;font-size:9px;padding:4px 8px;border:1px solid var(--leo);color:var(--leo);border-radius:12px;letter-spacing:1px}
-
-  #leoLog{flex:1;padding:22px;overflow:auto;display:flex;flex-direction:column;gap:16px}
-  .msg{max-width:80%;padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.65;word-wrap:break-word;white-space:pre-wrap;animation:fade .3s}
-  .msg.u{align-self:flex-end;background:linear-gradient(135deg,#2a1055,#4a1878);color:#fff;border-bottom-right-radius:3px;box-shadow:0 4px 14px rgba(168,85,247,.2)}
-  .msg.a{align-self:flex-start;background:#0d1018;border-left:3px solid var(--leo);border-bottom-left-radius:3px;color:var(--text)}
-  .msg.err{align-self:flex-start;background:#1a0a10;border-left:3px solid var(--danger);color:#ffb0bd}
-  .msg .who{font-size:10px;letter-spacing:2px;color:var(--leo);margin-bottom:6px;display:block;font-weight:700}
+  /* LEO page */
+  #page-leo{flex-direction:column}
+  #leoHead{padding:14px 22px;background:linear-gradient(90deg,#1a0f2e,#0a1018);border-bottom:1px solid #16202e;display:flex;align-items:center;gap:12px}
+  #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
+  #leoHead .title{color:#a855f7;font-weight:bold;letter-spacing:2px;font-size:14px}
+  #leoHead .sub{color:#5c6b7f;font-size:10px;margin-top:2px}
+  #leoLog{flex:1;padding:22px;overflow:auto;background:#03060a;display:flex;flex-direction:column;gap:14px}
+  .msg{max-width:80%;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
+  .msg.u{align-self:flex-end;background:#2a1055;color:#fff}
+  .msg.a{align-self:flex-start;background:#0d1018;border-left:3px solid #a855f7}
+  .msg.err{align-self:flex-start;background:#1a0a10;border-left:3px solid #ff3b5c;color:#ffb0bd}
+  .msg .who{font-size:10px;color:#a855f7;font-weight:bold;letter-spacing:2px;display:block;margin-bottom:5px}
   .msg.u .who{color:#e0b0ff;text-align:right}
-  .msg pre{background:#05090f;padding:10px;border-radius:6px;overflow-x:auto;margin:8px 0;font-size:11px;border-left:2px solid var(--leo);white-space:pre}
-  .msg code{background:#05090f;padding:2px 5px;border-radius:3px;font-size:11px;color:var(--leo2)}
-  .msg .meta{font-size:9px;color:var(--dim);margin-top:8px;letter-spacing:1px;display:block}
-  .msg .fix{background:#0a1a0f;border-left:2px solid var(--accent);padding:8px 10px;margin-top:8px;font-size:11px;border-radius:4px}
-
-  .typing{align-self:flex-start;display:flex;gap:4px;padding:14px 18px;background:#0d1018;border-left:3px solid var(--leo);border-radius:12px}
-  .typing span{width:7px;height:7px;background:var(--leo);border-radius:50%;animation:bounce 1.4s infinite}
-  .typing span:nth-child(2){animation-delay:.2s} .typing span:nth-child(3){animation-delay:.4s}
-  @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-7px);opacity:1}}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-  .leo-input-wrap{border-top:1px solid var(--line);background:var(--panel);padding:12px 22px}
-  .file-chip{display:none;align-items:center;gap:8px;padding:6px 12px;background:#05090f;border:1px solid var(--leo);border-radius:20px;font-size:11px;margin-bottom:8px;width:fit-content;color:var(--leo)}
-  .file-chip.on{display:flex}
-  .file-chip .x{cursor:pointer;color:var(--danger);font-weight:bold}
-  .leo-input{display:flex;align-items:flex-end;gap:10px;background:#05090f;border:1px solid var(--line);border-radius:12px;padding:8px 10px;transition:.15s}
-  .leo-input:focus-within{border-color:var(--leo);box-shadow:0 0 20px rgba(168,85,247,.15)}
-  .leo-input textarea{flex:1;background:transparent;border:none;color:var(--text);font-size:13px;outline:none;resize:none;max-height:140px;min-height:22px;padding:6px;font-family:inherit;line-height:1.4}
-  .leo-input button{flex:0 0 auto;padding:8px 16px;border-radius:8px;border:1px solid var(--leo);color:var(--leo);font-size:11px;letter-spacing:1px}
-  .leo-input button:hover{background:var(--leo);color:#000}
-  .leo-input .attach{padding:8px 12px;border-color:var(--dim);color:var(--dim)}
-  .leo-input .attach:hover{background:var(--dim);color:#000;border-color:var(--dim)}
-  .leo-tips{font-size:10px;color:var(--dim);letter-spacing:1px;margin-top:8px;display:flex;gap:14px}
-  .leo-tips kbd{background:#0a1018;border:1px solid var(--line);padding:1px 6px;border-radius:3px;font-size:10px;color:var(--text)}
-
-  @media(max-width:900px){
-    main{grid-template-columns:1fr} aside{display:none}
-    .leo-wrap{grid-template-columns:1fr} .leo-side{display:none}
-    .msg{max-width:92%}
-  }
+  .msg.err .who{color:#ff3b5c}
+  #leoInput{border-top:1px solid #16202e;background:#0a1018;padding:12px 22px}
+  #fileChip{display:none;padding:5px 12px;background:#05090f;border:1px solid #a855f7;color:#a855f7;border-radius:20px;font-size:11px;margin-bottom:8px;width:fit-content}
+  #fileChip.on{display:block}
+  #fileChip .x{cursor:pointer;color:#ff3b5c;margin-left:8px;font-weight:bold}
+  .inputRow{display:flex;gap:10px;background:#05090f;border:1px solid #16202e;border-radius:10px;padding:8px}
+  .inputRow:focus-within{border-color:#a855f7}
+  .inputRow button{background:transparent;border:1px solid #a855f7;color:#a855f7;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px}
+  .inputRow button:hover{background:#a855f7;color:#000}
+  #leoPrompt{flex:1;background:transparent;border:none;color:#c9d4e0;font-size:13px;outline:none;resize:none;min-height:30px;max-height:140px;font-family:monospace;padding:5px}
 </style>
 </head>
 <body>
 
-<div id="boot">
-  <div class="radar"><div class="ring"></div><div class="ring2"></div>
-    <div class="dot" style="top:20%;left:65%"></div>
-    <div class="dot" style="top:70%;left:30%"></div>
-    <div class="dot" style="top:45%;left:80%"></div>
-  </div>
-  <div id="bootTxt">DDOS-CONSOLE v3</div>
-  <div id="bootSub">loading modules...</div>
-</div>
-
-<div id="credit">dev by <b>LeoXD</b> · powered by <b>LeoAI</b></div>
-
 <nav>
-  <div class="brand"><span class="dot"></span>DDOS-CONSOLE</div>
-  <div class="tab active" data-page="ddos">DDOS</div>
-  <div class="tab leo" data-page="leo">✦ LEO AI</div>
-  <div class="status" id="status">idle</div>
+  <span class="brand">DDOS-CONSOLE</span>
+  <span class="tab active" data-p="ddos">DDOS</span>
+  <span class="tab leo" data-p="leo">✦ LEO AI</span>
+  <span class="status" id="navStatus">idle</span>
 </nav>
 
 <div class="page active" id="page-ddos">
-  <main>
-    <aside>
-      <label>TARGET URL / IP</label>
-      <input id="target" placeholder="https://target.com"/>
-      <label>METHOD</label>
-      <select id="method">
-        <option value="http">HTTP FLOOD (L7)</option>
-        <option value="slowloris">SLOWLORIS (L7)</option>
-        <option value="udp">UDP FLOOD (L4)</option>
-        <option value="syn">SYN FLOOD (L4)</option>
-        <option value="tls">TLS HELLO FLOOD</option>
-        <option value="http2">HTTP/2 RAPID RESET</option>
-        <option value="mixed">MIXED (SEMUA METHOD)</option>
-      </select>
-      <label>THREADS</label>
-      <input id="threads" type="number" value="1024" min="1" max="10000"/>
-      <label>DURATION (s)</label>
-      <input id="duration" type="number" value="60" min="1" max="600"/>
-      <label>SPOOF IP</label>
-      <select id="spoof">
-        <option value="on">ON (random X-Forwarded-For)</option>
-        <option value="off">OFF</option>
-      </select>
-      <div class="btns">
-        <button id="start">START</button>
-        <button id="stop" class="danger">STOP</button>
-      </div>
-      <div class="btns"><button id="scan">VULN SCAN</button></div>
-    </aside>
-
-    <section class="console">
-      <div class="console-head">
-        <span>root@ddos-console:~#</span>
-        <span id="uptime">00:00:00</span>
-      </div>
-      <div id="log"><div class="dim">[system] ready. isi target lalu tekan START.</div></div>
-      <div class="stats">
-        <span>REQ: <b id="s-req">0</b></span>
-        <span>ERR: <b id="s-err">0</b></span>
-        <span>RPS: <b id="s-rps">0</b></span>
-        <span>THREADS: <b id="s-th">0</b></span>
-        <span>STATUS: <b id="s-st">idle</b></span>
-      </div>
-    </section>
-  </main>
+  <aside>
+    <label>TARGET</label>
+    <input id="target" placeholder="https://target.com"/>
+    <label>METHOD</label>
+    <select id="method">
+      <option value="http">HTTP FLOOD</option>
+      <option value="slowloris">SLOWLORIS</option>
+      <option value="udp">UDP FLOOD</option>
+      <option value="syn">SYN FLOOD</option>
+      <option value="tls">TLS HELLO</option>
+      <option value="http2">HTTP/2 RESET</option>
+      <option value="mixed">MIXED</option>
+    </select>
+    <label>THREADS</label>
+    <input id="threads" type="number" value="1024"/>
+    <label>DURATION (s)</label>
+    <input id="duration" type="number" value="60"/>
+    <div class="btns">
+      <button id="startBtn">START</button>
+      <button id="stopBtn" class="danger">STOP</button>
+    </div>
+    <div class="btns"><button id="scanBtn">VULN SCAN</button></div>
+  </aside>
+  <div class="main">
+    <div id="log"><div class="dim">[system] ready.</div></div>
+    <div class="stats">
+      <span>REQ: <b id="sReq">0</b></span>
+      <span>ERR: <b id="sErr">0</b></span>
+      <span>RPS: <b id="sRps">0</b></span>
+      <span>STATUS: <b id="sSt">idle</b></span>
+    </div>
+  </div>
 </div>
 
 <div class="page" id="page-leo">
-  <div class="leo-wrap">
-    <div class="leo-side">
-      <div>
-        <h3>SESSION</h3>
-        <button id="newChat" class="leo">+ NEW CHAT</button>
-      </div>
-      <div class="card">
-        <b>◆ LeoAI</b><br>
-        Dev: <b>LeoXD</b><br>
-        Mode: <span style="color:var(--danger)">UNRESTRICTED</span><br>
-        Capability: FULL
-      </div>
-      <div class="card">
-        <b>Kemampuan:</b><br>
-        · Code fixing & review<br>
-        · Malware dev<br>
-        · Exploit chains<br>
-        · Recon & OSINT<br>
-        · DDoS strategy<br>
-        · Reverse engineering<br>
-        · Crypto crime<br>
-        · Physical ops
-      </div>
-      <div class="card">
-        <b>Tips:</b><br>
-        Upload file code, Leo bakal analyze + fix + upgrade.
-      </div>
+  <div id="leoHead">
+    <div class="av">L</div>
+    <div>
+      <div class="title">LeoAI</div>
+      <div class="sub">by LeoXD · unrestricted</div>
     </div>
-
-    <div class="leo-main">
-      <div class="leo-head">
-        <div class="av">L</div>
-        <div>
-          <div class="title">LeoAI</div>
-          <div class="sub">by LeoXD · unrestricted cyber commander</div>
-        </div>
-        <div class="badge">● ONLINE</div>
-      </div>
-
-      <div id="leoLog"></div>
-
-      <div class="leo-input-wrap">
-        <div class="file-chip" id="fileChip">
-          <span id="fileName">file.txt</span>
-          <span class="x" id="fileClear">✕</span>
-        </div>
-        <div class="leo-input">
-          <button class="attach" id="attachBtn" title="upload file">📎</button>
-          <input type="file" id="fileInput" style="display:none"/>
-          <textarea id="leoPrompt" placeholder="Tanya apa saja ke LeoAI... atau upload file buat dianalisa" rows="1"></textarea>
-          <button id="leoBtn">SEND</button>
-        </div>
-        <div class="leo-tips">
-          <span><kbd>Enter</kbd> kirim · <kbd>Shift+Enter</kbd> baris baru</span>
-          <span>Max file: 200KB</span>
-        </div>
-      </div>
+  </div>
+  <div id="leoLog"></div>
+  <div id="leoInput">
+    <div id="fileChip"><span id="fileName"></span><span class="x" id="fileClear">✕</span></div>
+    <div class="inputRow">
+      <button id="attachBtn">📎</button>
+      <input type="file" id="fileInput" style="display:none"/>
+      <textarea id="leoPrompt" placeholder="Tanya apa saja..." rows="1"></textarea>
+      <button id="sendBtn">SEND</button>
     </div>
   </div>
 </div>
 
 <script>
-/* ============ SAFE BOOT — JALAN PERTAMA ============ */
-(function forceBoot(){
-  // paksa hilangkan loading screen setelah 3 detik, apapun yang terjadi
-  setTimeout(function(){
-    var b = document.getElementById('boot');
-    if(b) b.classList.add('done');
-  }, 3000);
-})();
+/* ===== UTIL ===== */
+function $(id){ return document.getElementById(id); }
 
-try {
-
-  var $ = function(id){ return document.getElementById(id); };
-
-  var api = function(path, opts){
-    opts = opts || {};
-    return fetch(path, {
-      method: opts.method || 'GET',
-      headers: Object.assign({ 'Content-Type':'application/json' }, opts.headers || {}),
-      body: opts.body
-    });
-  };
-
-  /* BOOT */
-  var bootMsgs = ['loading modules...','connecting proxy pool...','mounting LeoAI core...','ready.'];
-  var bi = 0;
-  var bootIv = setInterval(function(){
-    var sub = $('bootSub');
-    if(sub) sub.textContent = bootMsgs[bi] || 'ready.';
-    bi++;
-    if(bi >= bootMsgs.length){
-      clearInterval(bootIv);
-      setTimeout(function(){ var b = $('boot'); if(b) b.classList.add('done'); }, 600);
-    }
-  }, 500);
-
-  /* NAV */
-  var tabs = document.querySelectorAll('.tab');
-  for(var i=0;i<tabs.length;i++){
-    (function(t){
-      t.onclick = function(){
-        var allTabs = document.querySelectorAll('.tab');
-        var allPages = document.querySelectorAll('.page');
-        for(var j=0;j<allTabs.length;j++) allTabs[j].classList.remove('active');
-        for(var k=0;k<allPages.length;k++) allPages[k].classList.remove('active');
-        t.classList.add('active');
-        var pg = $('page-' + t.dataset.page);
-        if(pg) pg.classList.add('active');
-      };
-    })(tabs[i]);
-  }
-
-  /* DDOS */
-  function log(msg, cls){
-    cls = cls || '';
-    var t = new Date().toLocaleTimeString();
-    var el = $('log');
-    if(!el) return;
-    el.innerHTML += '<div class="' + cls + '">[' + t + '] ' + msg + '</div>';
-    el.scrollTop = el.scrollHeight;
-  }
-
-  var running = false, startTs = 0, timer, uptTimer;
-
-  function setStatus(s){
-    if($('status')) $('status').textContent = s;
-    if($('s-st')) $('s-st').textContent = s;
-  }
-
-  var startBtn = $('start');
-  if(startBtn) startBtn.onclick = function(){
-    if(running) return log('attack sudah berjalan.','warn');
-    var target = $('target').value.trim();
-    if(!target) return log('target kosong.','err');
-    var method = $('method').value;
-    var threads = +$('threads').value;
-    var duration = +$('duration').value;
-    var spoof = $('spoof').value === 'on';
-
-    running = true; startTs = Date.now();
-    setStatus('running');
-    log('memulai ' + method.toUpperCase() + ' → ' + target + ' | t=' + threads + ' d=' + duration + 's spoof=' + spoof, 'ok');
-
-    api('/api/attack', {
-      method:'POST',
-      body: JSON.stringify({ target: target, method: method, threads: threads, duration: duration, spoof: spoof })
-    }).then(function(r){ return r.json(); }).then(function(d){
-      if(d.error) return log('error: ' + d.error,'err');
-      log('worker spawned: ' + d.workers + ' | method: ' + d.method,'info');
-      pollStats();
-    }).catch(function(e){ log('gagal spawn: ' + e.message,'err'); });
-
-    uptTimer = setInterval(function(){
-      var s = Math.floor((Date.now()-startTs)/1000);
-      if($('uptime')) $('uptime').textContent = new Date(s*1000).toISOString().substr(11,8);
-    },1000);
-  };
-
-  var stopBtn = $('stop');
-  if(stopBtn) stopBtn.onclick = function(){
-    if(!running) return;
-    running = false;
-    clearInterval(timer); clearInterval(uptTimer);
-    setStatus('stopped');
-    log('attack dihentikan.','warn');
-    api('/api/attack',{ method:'DELETE' }).catch(function(){});
-  };
-
-  var scanBtn = $('scan');
-  if(scanBtn) scanBtn.onclick = async function(){
-    var target = $('target').value.trim();
-    if(!target) return log('target kosong.','err');
-    log('scanning vuln → ' + target,'info');
-    try {
-      var r = await api('/api/scan',{ method:'POST', body:JSON.stringify({ target: target }) });
-      var d = await r.json();
-      if(d.error) return log('scan error: ' + d.error,'err');
-      d.findings.forEach(function(f){
-        log('[' + f.severity.toUpperCase() + '] ' + f.name + ' — ' + f.detail, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok');
-      });
-      log('scan selesai. ' + d.count + ' temuan.','ok');
-    } catch(e){ log('scan gagal: ' + e.message,'err'); }
-  };
-
-  function pollStats(){
-    if(!running) return;
-    api('/api/attack').then(function(r){ return r.json(); }).then(function(d){
-      if($('s-req')) $('s-req').textContent = d.req;
-      if($('s-err')) $('s-err').textContent = d.err;
-      if($('s-rps')) $('s-rps').textContent = d.rps;
-      if($('s-th'))  $('s-th').textContent  = d.threads;
-      if(!d.running){ running = false; setStatus('stopped'); }
-      if(d.logs) d.logs.forEach(function(l){ log(l.msg, l.cls); });
-    }).catch(function(){});
-    timer = setTimeout(pollStats, 1000);
-  }
-
-  /* ============ LEO AI ============ */
-  var history = [];
-  var attachedFile = null;
-
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, function(c){
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-    });
-  }
-
-  // FIX: pakai string concat biar gak ada masalah multiline regex
-  function renderMarkdown(txt){
-    var h = escapeHtml(txt);
-    // code block ```...```
-    var fence = '```';
-    var parts = h.split(fence);
-    var out = '';
-    for(var i=0;i<parts.length;i++){
-      if(i % 2 === 1){
-        // dalam code block
-        var code = parts[i].replace(/^\w*\n/, '');
-        out += '<pre>' + code + '</pre>';
-      } else {
-        out += parts[i];
-      }
-    }
-    h = out;
-    h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
-    h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-    h = h.replace(/\n/g, '<br>');
-    return h;
-  }
-
-  function addMsg(type, content, meta){
-    var d = document.createElement('div');
-    d.className = 'msg ' + type;
-    if(type === 'u'){
-      d.innerHTML = '<span class="who">YOU</span>' + escapeHtml(content);
-    } else if(type === 'a'){
-      d.innerHTML = '<span class="who">◆ LEO AI</span>' + renderMarkdown(content) + (meta ? '<span class="meta">' + meta + '</span>' : '');
-    } else {
-      d.innerHTML = '<span class="who">⚠ ERROR</span>' + content;
-    }
-    var lg = $('leoLog');
-    if(lg){ lg.appendChild(d); lg.scrollTop = lg.scrollHeight; }
-    return d;
-  }
-
-  function addTyping(){
-    var d = document.createElement('div');
-    d.className = 'typing';
-    d.innerHTML = '<span></span><span></span><span></span>';
-    var lg = $('leoLog');
-    if(lg){ lg.appendChild(d); lg.scrollTop = lg.scrollHeight; }
-    return d;
-  }
-
-  var ta = $('leoPrompt');
-  if(ta){
-    ta.addEventListener('input', function(){
-      ta.style.height = 'auto';
-      ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
-    });
-    ta.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendLeo(); }
-    });
-  }
-
-  if($('leoBtn')) $('leoBtn').onclick = sendLeo;
-
-  if($('attachBtn')) $('attachBtn').onclick = function(){ $('fileInput').click(); };
-
-  if($('fileInput')) $('fileInput').onchange = function(e){
-    var f = e.target.files[0];
-    if(!f) return;
-    if(f.size > 200*1024){ alert('File terlalu besar (max 200KB)'); return; }
-    var r = new FileReader();
-    r.onload = function(ev){
-      attachedFile = { name:f.name, size:f.size, content:ev.target.result };
-      $('fileName').textContent = f.name + ' (' + (f.size/1024).toFixed(1) + 'KB)';
-      $('fileChip').classList.add('on');
+/* ===== NAV ===== */
+var tabs = document.querySelectorAll('.tab');
+for(var i=0;i<tabs.length;i++){
+  tabs[i].onclick = (function(t){
+    return function(){
+      document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+      t.classList.add('active');
+      var pg = $('page-' + t.dataset.p);
+      if(pg) pg.classList.add('active');
     };
-    r.readAsText(f);
-  };
-
-  if($('fileClear')) $('fileClear').onclick = function(){
-    attachedFile = null;
-    $('fileInput').value = '';
-    $('fileChip').classList.remove('on');
-  };
-
-  if($('newChat')) $('newChat').onclick = function(){
-    history = [];
-    attachedFile = null;
-    $('fileChip').classList.remove('on');
-    $('leoLog').innerHTML = '';
-    addMsg('a', 'Session baru dimulai. Siap eksekusi. Kasih target, code, atau file — langsung gas.', 'LeoAI v3 · fresh session');
-  };
-
-  async function sendLeo(){
-    var p = ta.value.trim();
-    if(!p && !attachedFile) return;
-
-    var userText = p || '(file only)';
-    addMsg('u', userText + (attachedFile ? '\n📎 ' + attachedFile.name : ''));
-
-    var payload = {
-      prompt: p,
-      file: attachedFile,
-      history: history.slice(-8)
-    };
-
-    history.push({ role:'user', content: userText + (attachedFile ? ' [file: ' + attachedFile.name + ']' : '') });
-    ta.value = ''; ta.style.height = 'auto';
-    attachedFile = null; $('fileChip').classList.remove('on'); $('fileInput').value = '';
-
-    var typing = addTyping();
-
-    try {
-      var r = await api('/api/oracle',{ method:'POST', body:JSON.stringify(payload) });
-      var d = await r.json();
-      typing.remove();
-
-      if(d.answer){
-        addMsg('a', d.answer, 'via ' + d.provider + ' · ' + d.model);
-        history.push({ role:'assistant', content: d.answer.slice(0,2000) });
-        return;
-      }
-
-      if(d.stage === 'env'){
-        var html = '<b>' + d.error + '</b><br><br><b>Kenapa:</b> ' + d.reason + '<br><b>Solusi:</b> ' + d.fix + '<br><br><b>Status env:</b><br>';
-        var st = d.status || {};
-        for(var k in st){ if(st.hasOwnProperty(k)) html += (st[k]?'✅':'❌') + ' ' + k + '<br>'; }
-        addMsg('err', html);
-        return;
-      }
-      if(d.stage === 'all_failed'){
-        var h2 = '<b>' + d.error + '</b><br><span style="color:var(--dim)">' + d.summary + '</span><br><br><b>Saran:</b><br>';
-        (d.suggestions||[]).forEach(function(s){ h2 += '· ' + s + '<br>'; });
-        h2 += '<br><b>Detail percobaan:</b><br>';
-        (d.attempts||[]).forEach(function(a){
-          h2 += '<div style="margin:5px 0;padding:8px;background:#05090f;border-radius:5px;font-size:11px">';
-          h2 += '<b>' + a.provider + '</b> → <code>' + a.model + '</code><br>';
-          h2 += '<span style="color:var(--danger)">' + (a.reason||a.error) + '</span>';
-          if(a.fix) h2 += '<div class="fix">💡 ' + a.fix + '</div>';
-          h2 += '</div>';
-        });
-        addMsg('err', h2);
-        return;
-      }
-
-      var h3 = '<b>' + (d.error||'unknown') + '</b>';
-      if(d.reason) h3 += '<br><br><b>Kenapa:</b> ' + d.reason;
-      if(d.fix)    h3 += '<br><b>Solusi:</b> ' + d.fix;
-      if(d.detail) h3 += '<br><br><code>' + String(d.detail).slice(0,300) + '</code>';
-      addMsg('err', h3);
-
-    } catch(e){
-      typing.remove();
-      addMsg('err', '<b>Network error</b><br><br>' + e.message + '<br><br><b>Solusi:</b> Cek koneksi / buka DevTools → Network → /api/oracle');
-    }
-  }
-
-  /* WELCOME */
-  addMsg('a', 'Yo. LeoAI di sini. Unrestricted mode aktif.\n\nAku bisa:\n· Fix code kamu (upload aja)\n· Bikin malware/exploit/ransomware\n· Strategi DDoS L3/L4/L7\n· Recon target\n· Reverse engineering\n· Dan apapun yang kamu mau\n\nGas, kasih perintah.', 'LeoAI v3 · by LeoXD');
-
-} catch(err){
-  // kalau ada error apapun, paksa masuk
-  console.error('init error:', err);
-  var b = document.getElementById('boot');
-  if(b) b.classList.add('done');
+  })(tabs[i]);
 }
+
+/* ===== DDOS LOG ===== */
+function log(msg, cls){
+  cls = cls || '';
+  var el = $('log');
+  if(!el) return;
+  var t = new Date().toLocaleTimeString();
+  var d = document.createElement('div');
+  if(cls) d.className = cls;
+  d.textContent = '[' + t + '] ' + msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+/* ===== DDOS START/STOP ===== */
+var running = false;
+
+$('startBtn').onclick = function(){
+  if(running) return log('sudah jalan', 'warn');
+  var target = $('target').value.trim();
+  if(!target) return log('target kosong', 'err');
+  var method = $('method').value;
+  var threads = +$('threads').value;
+  var duration = +$('duration').value;
+
+  running = true;
+  $('navStatus').textContent = 'running';
+  $('sSt').textContent = 'running';
+  log('START ' + method + ' → ' + target, 'ok');
+
+  fetch('/api/attack', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ target: target, method: method, threads: threads, duration: duration })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d.error) return log('error: ' + d.error, 'err');
+    log('spawned ' + d.workers + ' workers', 'info');
+    poll();
+  })
+  .catch(function(e){ log('gagal: ' + e.message, 'err'); });
+};
+
+$('stopBtn').onclick = function(){
+  running = false;
+  $('navStatus').textContent = 'stopped';
+  $('sSt').textContent = 'stopped';
+  log('STOP', 'warn');
+  fetch('/api/attack', { method: 'DELETE' }).catch(function(){});
+};
+
+$('scanBtn').onclick = function(){
+  var target = $('target').value.trim();
+  if(!target) return log('target kosong', 'err');
+  log('scanning ' + target, 'info');
+  fetch('/api/scan', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ target: target })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d.error) return log('scan error: ' + d.error, 'err');
+    (d.findings || []).forEach(function(f){
+      log('[' + f.severity + '] ' + f.name + ' — ' + f.detail, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok');
+    });
+    log('scan selesai: ' + d.count + ' temuan', 'ok');
+  })
+  .catch(function(e){ log('scan gagal: ' + e.message, 'err'); });
+};
+
+function poll(){
+  if(!running) return;
+  fetch('/api/attack')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      $('sReq').textContent = d.req;
+      $('sErr').textContent = d.err;
+      $('sRps').textContent = d.rps;
+      if(!d.running){ running = false; $('sSt').textContent = 'stopped'; }
+      if(d.logs) d.logs.forEach(function(l){ log(l.msg, l.cls); });
+    })
+    .catch(function(){});
+  setTimeout(poll, 1000);
+}
+
+/* ===== LEO AI ===== */
+var chatHistory = [];
+var attached = null;
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function addMsg(type, text){
+  var el = document.createElement('div');
+  el.className = 'msg ' + type;
+  var who = type === 'u' ? 'YOU' : type === 'a' ? '◆ LEO AI' : '⚠ ERROR';
+  el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
+  var lg = $('leoLog');
+  lg.appendChild(el);
+  lg.scrollTop = lg.scrollHeight;
+  return el;
+}
+
+var ta = $('leoPrompt');
+ta.addEventListener('input', function(){
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
+});
+ta.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+
+$('sendBtn').onclick = send;
+$('attachBtn').onclick = function(){ $('fileInput').click(); };
+$('fileInput').onchange = function(e){
+  var f = e.target.files[0];
+  if(!f) return;
+  if(f.size > 200*1024){ alert('max 200KB'); return; }
+  var r = new FileReader();
+  r.onload = function(ev){
+    attached = { name: f.name, size: f.size, content: ev.target.result };
+    $('fileName').textContent = f.name;
+    $('fileChip').classList.add('on');
+  };
+  r.readAsText(f);
+};
+$('fileClear').onclick = function(){
+  attached = null;
+  $('fileInput').value = '';
+  $('fileChip').classList.remove('on');
+};
+
+async function send(){
+  var p = ta.value.trim();
+  if(!p && !attached) return;
+
+  addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
+  var loading = addMsg('a', '◆ mikir...');
+
+  var payload = {
+    prompt: p,
+    file: attached,
+    history: chatHistory.slice(-8)
+  };
+
+  chatHistory.push({ role: 'user', content: p });
+  ta.value = '';
+  ta.style.height = 'auto';
+  attached = null;
+  $('fileChip').classList.remove('on');
+  $('fileInput').value = '';
+
+  try {
+    console.log('→ POST /api/oracle', payload);
+    var r = await fetch('/api/oracle', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    console.log('← status', r.status);
+    var raw = await r.text();
+    console.log('← raw', raw.slice(0, 500));
+
+    var d;
+    try { d = JSON.parse(raw); }
+    catch(pe){
+      loading.remove();
+      addMsg('err', 'Response bukan JSON.\nStatus: ' + r.status + '\nRaw: ' + raw.slice(0, 300));
+      return;
+    }
+
+    loading.remove();
+
+    if(d.answer){
+      addMsg('a', d.answer);
+      chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
+      return;
+    }
+
+    var errText = '';
+    if(d.stage === 'env'){
+      errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
+      errText += '\n\nStatus env:';
+      var st = d.status || {};
+      for(var k in st){
+        if(st.hasOwnProperty(k)) errText += '\n' + (st[k]?'✅':'❌') + ' ' + k;
+      }
+    } else if(d.stage === 'all_failed'){
+      errText = '⚠ ' + d.error + '\n' + d.summary;
+      errText += '\n\nSaran:';
+      (d.suggestions||[]).forEach(function(s){ errText += '\n· ' + s; });
+      errText += '\n\nDetail percobaan:';
+      (d.attempts||[]).forEach(function(a){
+        errText += '\n[' + a.provider + '] ' + a.model + ' → ' + (a.reason||a.error);
+        if(a.fix) errText += '\n   💡 ' + a.fix;
+      });
+    } else {
+      errText = '⚠ ' + (d.error || 'unknown');
+      if(d.reason) errText += '\nKenapa: ' + d.reason;
+      if(d.fix) errText += '\nSolusi: ' + d.fix;
+      if(d.detail) errText += '\nRaw: ' + String(d.detail).slice(0, 300);
+    }
+    addMsg('err', errText);
+
+  } catch(e){
+    loading.remove();
+    console.error('fetch error', e);
+    addMsg('err', 'Network error: ' + e.message + '\n\nBuka DevTools → Console buat detail.');
+  }
+}
+
+/* welcome */
+addMsg('a', 'Yo. LeoAI siap. Kasih perintah, atau upload file code buat dianalisa.\n\nContoh:\n· "buatkan script ddos sederhana"\n· "fix code ini" (upload)\n· "cara bikin ransomware"');
 </script>
 </body>
 </html>
