@@ -1,7 +1,5 @@
 import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
 
-// Storage in-memory (production: pakai Vercel KV / Supabase)
-// Format: { key: { tier, owner, createdAt, expiresAt, active, usage } }
 const KEYS = global.__LEO_KEYS || (global.__LEO_KEYS = new Map());
 
 function genKey(prefix){
@@ -23,12 +21,12 @@ export function validateKey(key){
 
 export function createKey(opts){
   opts = opts || {};
-  const tier     = opts.tier     || 'free';       // free | pro | elite
-  const days     = opts.days     || 14;
-  const owner    = opts.owner    || 'unknown';
-  const prefix   = tier === 'elite' ? 'lk_elite' : tier === 'pro' ? 'lk_pro' : 'lk_free';
-  const key      = genKey(prefix);
-  const now      = Date.now();
+  const tier   = opts.tier   || 'free';
+  const days   = opts.days   || 14;
+  const owner  = opts.owner  || 'unknown';
+  const prefix = tier === 'elite' ? 'lk_elite' : tier === 'pro' ? 'lk_pro' : 'lk_free';
+  const key    = genKey(prefix);
+  const now    = Date.now();
 
   KEYS.set(key, {
     key: key,
@@ -64,7 +62,6 @@ export default async function handler(req, res){
   if(!originGuard(req,res)) return;
   if(!ratelimit(req,res)) return;
 
-  // Validasi key (dipanggil dari frontend)
   if(req.method === 'POST' && req.body && req.body.action === 'validate'){
     const k = validateKey(sanitize(req.body.key || ''));
     if(!k) return res.status(401).json({ valid: false, error: 'invalid or expired key' });
