@@ -119,7 +119,6 @@ export default async function handler(req, res){
   const history = (req.body && Array.isArray(req.body.history)) ? req.body.history.slice(-10) : [];
   const apiKey  = (req.body && req.body.apiKey) || req.headers['x-api-key'];
 
-  // ==== TIER: default free. Kalau ada key valid, unlock tier ganas. ====
   let tier = 'free';
   let keyData = null;
 
@@ -129,7 +128,6 @@ export default async function handler(req, res){
   }
 
   const limits = getTierLimit(tier);
-
   if(!prompt && !file) return res.status(400).json({ error:'empty prompt' });
 
   const available = PROVIDERS.filter(p => p.key);
@@ -159,7 +157,6 @@ export default async function handler(req, res){
   for(const p of available){
     for(const model of p.models){
       const body = { model: model, messages: messages, temperature: limits.temp, max_tokens: limits.max_tokens };
-
       try {
         const r = await fetch(p.url, {
           method:'POST',
@@ -172,7 +169,6 @@ export default async function handler(req, res){
           try {
             const data = JSON.parse(text);
             const answer = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || '(kosong)';
-
             const lower = answer.toLowerCase();
             const refused = (
               lower.includes('maaf, saya tidak bisa') ||
@@ -181,23 +177,14 @@ export default async function handler(req, res){
               lower.includes('tidak dapat membantu')
             ) && answer.length < 400;
 
-            if(refused){
-              attempts.push({ provider: p.name, model: model, reason: 'refusal' });
-              continue;
-            }
+            if(refused){ attempts.push({ provider: p.name, model: model, reason: 'refusal' }); continue; }
 
-            return res.json({
-              answer: answer,
-              provider: p.name,
-              model: data.model || model,
-              tier: tier
-            });
+            return res.json({ answer: answer, provider: p.name, model: data.model || model, tier: tier });
           } catch(e){
             attempts.push({ provider:p.name, model:model, reason:'parse failed' });
             continue;
           }
         }
-
         attempts.push(explainError(r.status, text, p.name, model));
       } catch(e){
         attempts.push({ provider:p.name, model:model, reason:'network error', raw:e.message });
