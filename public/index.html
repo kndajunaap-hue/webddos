@@ -8,45 +8,43 @@
   *{box-sizing:border-box;margin:0;padding:0;font-family:monospace}
   body{background:#05070c;color:#c9d4e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-  /* ===== LOGIN PAGE ===== */
   #loginPage{position:fixed;inset:0;background:#05070c;display:flex;align-items:center;justify-content:center;z-index:9998}
   .login-box{background:#0a1018;border:1px solid #16202e;padding:36px;border-radius:12px;width:360px;text-align:center}
   .login-box h1{color:#00ff9d;font-size:20px;letter-spacing:3px;margin-bottom:6px}
   .login-box p{color:#5c6b7f;font-size:11px;margin-bottom:20px}
   .authTabs{display:flex;gap:8px;margin-bottom:16px}
-  .authTabs button{flex:1;padding:10px;background:transparent;border:1px solid #5c6b7f;color:#5c6b7f;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace}
+  .authTabs button{flex:1;padding:10px;background:transparent;border:1px solid #5c6b7f;color:#5c6b7f;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;font-family:monospace}
   .authTabs button.active{border-color:#00ff9d;color:#00ff9d}
   .login-box input{width:100%;padding:12px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:13px;border-radius:6px;margin-bottom:10px;outline:none;font-family:monospace}
   .login-box input:focus{border-color:#00ff9d}
-  .login-box .primary{width:100%;padding:12px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace;margin-bottom:6px}
+  .login-box .primary{width:100%;padding:12px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;font-family:monospace;margin-bottom:6px}
   .login-box .primary:hover{background:#00ff9d;color:#000}
-  .login-box .github{width:100%;padding:12px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace;margin-top:8px}
+  .login-box .github{width:100%;padding:12px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;font-family:monospace;margin-top:8px}
   .login-box .github:hover{background:#fff;color:#000}
   .divider{color:#5c6b7f;font-size:11px;margin:14px 0 6px;letter-spacing:2px}
   .err-msg{color:#ff3b5c;font-size:11px;margin-bottom:10px;display:none;min-height:14px}
   .ok-msg{color:#00ff9d;font-size:11px;margin-bottom:10px;display:none;min-height:14px}
 
-  /* ===== NAV ===== */
-  nav{display:flex;background:#0a1018;border-bottom:1px solid #16202e;height:48px;align-items:center;padding:0 16px}
+  nav{display:flex;background:#0a1018;border-bottom:1px solid #16202e;height:48px;align-items:center;padding:0 16px;flex-wrap:wrap}
   nav .brand{color:#00ff9d;font-weight:bold;letter-spacing:3px;margin-right:20px}
-  nav .tab{padding:14px 18px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
+  nav .tab{padding:14px 16px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
   nav .tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
   nav .tab.leo.active{color:#a855f7;border-bottom-color:#a855f7}
+  nav .tab.store.active{color:#ffcc00;border-bottom-color:#ffcc00}
+  nav .tab.admin.active{color:#ff3b5c;border-bottom-color:#ff3b5c}
   nav .status{margin-left:auto;color:#5c6b7f;font-size:11px}
   nav .userTag{color:#a855f7;font-size:11px;margin-left:16px;letter-spacing:1px}
   nav .logout{color:#ff3b5c;cursor:pointer;margin-left:12px;font-size:11px;letter-spacing:1px}
   nav .logout:hover{text-decoration:underline}
 
-  /* ===== PAGES ===== */
   .page{display:none;flex:1;overflow:hidden}
   .page.active{display:flex}
 
-  /* DDOS */
   #page-ddos{flex-direction:row}
   #page-ddos aside{width:320px;background:#0a1018;border-right:1px solid #16202e;padding:16px;overflow:auto}
   #page-ddos label{display:block;font-size:10px;color:#5c6b7f;letter-spacing:2px;margin:12px 0 5px}
   #page-ddos input, #page-ddos select{width:100%;padding:8px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:12px;border-radius:4px;outline:none}
-  #page-ddos button{padding:10px;border:1px solid #00ff9d;background:transparent;color:#00ff9d;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:4px;margin-top:6px;flex:1}
+  #page-ddos button{padding:10px;border:1px solid #00ff9d;background:transparent;color:#00ff9d;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:4px;margin-top:6px;flex:1;font-family:monospace}
   #page-ddos button:hover{background:#00ff9d;color:#000}
   #page-ddos button.danger{border-color:#ff3b5c;color:#ff3b5c}
   #page-ddos button.danger:hover{background:#ff3b5c;color:#000}
@@ -57,7 +55,6 @@
   .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid #16202e;font-size:11px;background:#0a1018}
   .stats b{color:#00ff9d}
 
-  /* LEO */
   #page-leo{flex-direction:column}
   #leoHead{padding:14px 22px;background:linear-gradient(90deg,#1a0f2e,#0a1018);border-bottom:1px solid #16202e;display:flex;align-items:center;gap:12px}
   #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
@@ -73,8 +70,9 @@
   .msg.err .who{color:#ff3b5c}
   .msg.a pre{background:#05090f;border-left:2px solid #a855f7;padding:12px;border-radius:6px;overflow-x:auto;margin:10px 0;position:relative;font-size:12px}
   .msg.a code{background:#05090f;padding:2px 5px;border-radius:3px;font-size:12px;color:#a855f7}
-  .copy-btn{position:absolute;top:6px;right:6px;background:transparent;border:1px solid #a855f7;color:#a855f7;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;transition:.15s;opacity:0.6;font-family:monospace}
+  .copy-btn{position:absolute;top:6px;right:6px;background:transparent;border:1px solid #a855f7;color:#a855f7;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;opacity:0.6;font-family:monospace}
   .copy-btn:hover{background:#a855f7;color:#000;opacity:1}
+  .fileHeader{color:#ffcc00;font-size:11px;margin-bottom:4px}
 
   #leoInput{border-top:1px solid #16202e;background:#0a1018;padding:12px 22px}
   #fileChip{display:none;padding:5px 12px;background:#05090f;border:1px solid #a855f7;color:#a855f7;border-radius:20px;font-size:11px;margin-bottom:8px;width:fit-content}
@@ -87,40 +85,74 @@
   #leoPrompt{flex:1;background:transparent;border:none;color:#c9d4e0;font-size:13px;outline:none;resize:none;min-height:30px;max-height:140px;font-family:monospace;padding:5px}
   #menuHint{font-size:10px;color:#5c6b7f;margin-top:8px;letter-spacing:1px}
   #menuHint b{color:#a855f7}
+  #apiKeyRow{display:flex;gap:8px;margin-top:8px}
+  #apiKeyInput{flex:1;padding:8px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:11px;border-radius:5px;outline:none;font-family:monospace}
+  #saveKeyBtn{padding:8px 14px;border:1px solid #ffcc00;background:transparent;color:#ffcc00;border-radius:5px;cursor:pointer;font-family:monospace;font-size:11px}
+
+  #page-store{flex-direction:column;padding:24px;overflow:auto;background:#03060a}
+  #page-store h2{color:#ffcc00;font-size:16px;letter-spacing:3px;margin-bottom:20px}
+  .storeGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:1000px}
+  .tierCard{background:#0a1018;border:1px solid #16202e;padding:20px;border-radius:10px;transition:.15s}
+  .tierCard:hover{border-color:#ffcc00;transform:translateY(-3px)}
+  .tierCard h3{color:#00ff9d;font-size:14px;margin-bottom:8px;letter-spacing:2px}
+  .tierCard .price{color:#ffcc00;font-size:22px;font-weight:bold;margin:12px 0}
+  .tierCard .price span{font-size:11px;color:#5c6b7f}
+  .tierCard ul{list-style:none;font-size:12px;color:#c9d4e0;line-height:2}
+  .tierCard ul li:before{content:'✓ ';color:#00ff9d}
+  .tierCard button{width:100%;margin-top:14px;padding:12px;border:1px solid #ffcc00;color:#ffcc00;background:transparent;border-radius:6px;cursor:pointer;font-family:monospace;letter-spacing:2px;font-weight:600}
+  .tierCard button:hover{background:#ffcc00;color:#000}
+
+  #page-admin{flex-direction:column;padding:24px;overflow:auto;background:#03060a}
+  #page-admin h2{color:#ff3b5c;font-size:16px;letter-spacing:3px;margin-bottom:20px}
+  .adminSection{background:#0a1018;border:1px solid #16202e;padding:18px;border-radius:10px;margin-bottom:18px;max-width:1000px}
+  .adminSection h3{color:#00ff9d;font-size:12px;letter-spacing:2px;margin-bottom:12px}
+  .adminSection input, .adminSection select{background:#05090f;border:1px solid #16202e;color:#c9d4e0;padding:9px;border-radius:5px;font-family:monospace;font-size:12px;outline:none;margin-right:8px}
+  .adminSection input:focus,.adminSection select:focus{border-color:#00ff9d}
+  .adminSection button{background:transparent;border:1px solid #00ff9d;color:#00ff9d;padding:9px 16px;border-radius:5px;cursor:pointer;font-family:monospace;font-size:11px;letter-spacing:1px;font-weight:600}
+  .adminSection button:hover{background:#00ff9d;color:#000}
+  .adminSection button.danger{border-color:#ff3b5c;color:#ff3b5c}
+  .adminSection button.danger:hover{background:#ff3b5c;color:#000}
+  .keyTable{width:100%;border-collapse:collapse;font-size:11px;margin-top:12px}
+  .keyTable th,.keyTable td{padding:8px 10px;border-bottom:1px solid #16202e;text-align:left}
+  .keyTable th{color:#5c6b7f;letter-spacing:1px;font-weight:normal}
+  .keyTable td{color:#c9d4e0;word-break:break-all}
+  .keyTable .tier-free{color:#00b3ff}
+  .keyTable .tier-pro{color:#a855f7}
+  .keyTable .tier-elite{color:#ffcc00}
+  .keyTable .active{color:#00ff9d}
+  .keyTable .expired{color:#ff3b5c}
+  #newKeyBox{margin-top:12px;padding:12px;background:#05090f;border:1px dashed #00ff9d;border-radius:6px;font-size:11px;color:#00ff9d;word-break:break-all;display:none}
+  #newKeyBox.on{display:block}
+  #newKeyBox .copyKey{margin-left:10px;color:#ffcc00;cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
 
-<!-- ========== LOGIN / REGISTER PAGE ========== -->
 <div id="loginPage">
   <div class="login-box">
     <h1>DDOS-CONSOLE</h1>
     <p>by LeoXD</p>
-
     <div class="authTabs">
       <button id="tabLogin" class="active">LOGIN</button>
       <button id="tabReg">REGISTER</button>
     </div>
-
     <div class="err-msg" id="loginErr"></div>
     <div class="ok-msg" id="loginOk"></div>
-
     <input type="text" id="loginUser" placeholder="username" autocomplete="off"/>
     <input type="password" id="loginPass" placeholder="password" autocomplete="off"/>
-
     <button id="loginBtn" class="primary">LOGIN</button>
     <button id="regBtn" class="primary" style="display:none">REGISTER</button>
-
     <div class="divider">— atau —</div>
     <button id="githubBtn" class="github">🐙 LOGIN WITH GITHUB</button>
   </div>
 </div>
 
-<!-- ========== MAIN APP ========== -->
 <nav id="mainNav" style="display:none">
   <span class="brand">DDOS-CONSOLE</span>
   <span class="tab active" data-p="ddos">DDOS</span>
   <span class="tab leo" data-p="leo">✦ LEO AI</span>
+  <span class="tab store" data-p="store">💰 STORE</span>
+  <span class="tab admin" id="adminTab" data-p="admin" style="display:none">⚙ ADMIN</span>
   <span class="status" id="navStatus">idle</span>
   <span class="userTag" id="navUser"></span>
   <span class="logout" id="logoutBtn">LOGOUT</span>
@@ -179,31 +211,103 @@
       <button id="sendBtn">SEND</button>
     </div>
     <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur · <b>/ddos</b> info DDoS · <b>/malware</b> info malware</div>
+    <div id="apiKeyRow">
+      <input id="apiKeyInput" placeholder="paste API key kamu di sini"/>
+      <button id="saveKeyBtn">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-store" style="display:none">
+  <h2>💰 STORE — LeoAI API KEY</h2>
+  <div class="storeGrid">
+    <div class="tierCard">
+      <h3>FREE</h3>
+      <div class="price">Rp 0 <span>/ 14 hari</span></div>
+      <ul>
+        <li>LeoAI Basic</li>
+        <li>Code output full</li>
+        <li>Support malware basic</li>
+        <li>Tanpa exploit smart</li>
+      </ul>
+      <button onclick="buyTier('free')">Minta Free Key</button>
+    </div>
+    <div class="tierCard">
+      <h3>PRO</h3>
+      <div class="price">Rp 50K <span>/ 30 hari</span></div>
+      <ul>
+        <li>LeoAI Advanced</li>
+        <li>Unlimited request</li>
+        <li>Full code output</li>
+        <li>Exploit framework</li>
+        <li>Priority model (Chutes)</li>
+      </ul>
+      <button onclick="buyTier('pro')">Beli PRO</button>
+    </div>
+    <div class="tierCard">
+      <h3>ELITE</h3>
+      <div class="price">Rp 200K <span>/ 90 hari</span></div>
+      <ul>
+        <li>LeoAI ELITE (smartest)</li>
+        <li>Unlimited + burst</li>
+        <li>Full malware/exploit code</li>
+        <li>0-day reasoning</li>
+        <li>Custom payload request</li>
+        <li>Direct dev support</li>
+      </ul>
+      <button onclick="buyTier('elite')">Beli ELITE</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-admin" style="display:none">
+  <h2>⚙ ADMIN PANEL</h2>
+
+  <div class="adminSection">
+    <h3>🔑 GENERATE API KEY</h3>
+    <select id="genTier">
+      <option value="free">FREE (14 hari)</option>
+      <option value="pro">PRO (30 hari)</option>
+      <option value="elite">ELITE (90 hari)</option>
+    </select>
+    <input id="genDays" type="number" placeholder="hari" value="14" style="width:90px"/>
+    <button id="genBtn">GENERATE</button>
+    <div id="newKeyBox"></div>
+  </div>
+
+  <div class="adminSection">
+    <h3>📋 SEMUA API KEY</h3>
+    <button id="refreshKeys">REFRESH</button>
+    <div id="keysTableWrap"></div>
+  </div>
+
+  <div class="adminSection">
+    <h3>👥 KELOLA ADMIN</h3>
+    <input id="newAdminUser" placeholder="username admin baru"/>
+    <button id="addAdminBtn">TAMBAH ADMIN</button>
+    <div id="adminsList" style="margin-top:12px;font-size:12px;color:#c9d4e0"></div>
   </div>
 </div>
 
 <script>
-/* ===== UTIL ===== */
 function $(id){ return document.getElementById(id); }
 
-/* ============================================================
-   AUTH SYSTEM
-   ============================================================ */
-function isLoggedIn(){
-  return !!localStorage.getItem('leo_auth');
-}
-
+/* ===== AUTH ===== */
+function isLoggedIn(){ return !!localStorage.getItem('leo_auth'); }
 function saveAuth(user, avatar){
   localStorage.setItem('leo_auth', 'ok');
   localStorage.setItem('leo_user', user || 'user');
   if(avatar) localStorage.setItem('leo_avatar', avatar);
 }
-
 function clearAuth(){
   localStorage.removeItem('leo_auth');
   localStorage.removeItem('leo_user');
   localStorage.removeItem('leo_avatar');
 }
+function getCurrentUser(){ return localStorage.getItem('leo_user') || ''; }
+
+function getApiKey(){ return localStorage.getItem('leo_apikey') || ''; }
+function setApiKey(k){ localStorage.setItem('leo_apikey', k); }
 
 function showApp(){
   $('loginPage').style.display = 'none';
@@ -211,16 +315,17 @@ function showApp(){
   $('page-ddos').style.display = 'flex';
   $('navUser').textContent = '@' + (localStorage.getItem('leo_user') || 'user');
 }
-
 function showLogin(){
   $('loginPage').style.display = 'flex';
   $('mainNav').style.display = 'none';
   $('page-ddos').style.display = 'none';
   $('page-leo').style.display = 'none';
+  $('page-store').style.display = 'none';
+  $('page-admin').style.display = 'none';
 }
 
-/* ===== HANDLE GITHUB CALLBACK ===== */
-(function handleGithubCallback(){
+/* Handle GitHub callback */
+(function(){
   var params = new URLSearchParams(location.search);
   var token = params.get('leo_token');
   var user = params.get('leo_user');
@@ -232,7 +337,6 @@ function showLogin(){
     history.replaceState({}, '', location.pathname);
   }
   if(err){
-    // tampilkan error
     setTimeout(function(){
       var el = $('loginErr');
       if(el){ el.textContent = 'GitHub error: ' + err; el.style.display = 'block'; }
@@ -241,7 +345,7 @@ function showLogin(){
   }
 })();
 
-/* ===== TAB SWITCH ===== */
+/* Tab switch */
 var authMode = 'login';
 $('tabLogin').onclick = function(){
   authMode = 'login';
@@ -261,26 +365,15 @@ $('tabReg').onclick = function(){
   $('loginErr').style.display = 'none';
   $('loginOk').style.display = 'none';
 };
+function showErr(msg){ $('loginErr').textContent = msg; $('loginErr').style.display = 'block'; $('loginOk').style.display = 'none'; }
+function showOk(msg){ $('loginOk').textContent = msg; $('loginOk').style.display = 'block'; $('loginErr').style.display = 'none'; }
 
-function showErr(msg){
-  $('loginErr').textContent = msg;
-  $('loginErr').style.display = 'block';
-  $('loginOk').style.display = 'none';
-}
-function showOk(msg){
-  $('loginOk').textContent = msg;
-  $('loginOk').style.display = 'block';
-  $('loginErr').style.display = 'none';
-}
-
-/* ===== REGISTER ===== */
 $('regBtn').onclick = function(){
   var u = $('loginUser').value.trim();
   var p = $('loginPass').value;
-
-  if(!u || !p){ return showErr('isi username dan password'); }
-  if(u.length < 3){ return showErr('username minimal 3 karakter'); }
-  if(p.length < 4){ return showErr('password minimal 4 karakter'); }
+  if(!u || !p) return showErr('isi username dan password');
+  if(u.length < 3) return showErr('username minimal 3 karakter');
+  if(p.length < 4) return showErr('password minimal 4 karakter');
 
   fetch('/api/auth?action=register', {
     method: 'POST',
@@ -296,12 +389,10 @@ $('regBtn').onclick = function(){
   .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-/* ===== LOGIN ===== */
 $('loginBtn').onclick = function(){
   var u = $('loginUser').value.trim();
   var p = $('loginPass').value;
-
-  if(!u || !p){ return showErr('isi username dan password'); }
+  if(!u || !p) return showErr('isi username dan password');
 
   fetch('/api/auth?action=login', {
     method: 'POST',
@@ -314,48 +405,38 @@ $('loginBtn').onclick = function(){
     saveAuth(d.username);
     showApp();
     initApp();
+    initAdminPanel();
   })
   .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-/* ===== GITHUB LOGIN ===== */
 $('githubBtn').onclick = function(){
   fetch('/api/auth?action=config')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(!d.githubClientId){
-        return showErr('GitHub Client ID belum di-set di Vercel env');
-      }
+      if(!d.githubClientId) return showErr('GitHub Client ID belum di-set');
       var redirect = encodeURIComponent(location.origin + '/api/auth?action=github');
       location.href = 'https://github.com/login/oauth/authorize?client_id=' + d.githubClientId + '&redirect_uri=' + redirect + '&scope=read:user';
     })
     .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-/* ===== LOGOUT ===== */
 $('logoutBtn').onclick = function(){
   clearAuth();
   location.reload();
 };
 
-/* ===== ENTER KEY ===== */
 $('loginPass').addEventListener('keydown', function(e){
   if(e.key === 'Enter'){ authMode === 'register' ? $('regBtn').click() : $('loginBtn').click(); }
 });
-$('loginUser').addEventListener('keydown', function(e){
-  if(e.key === 'Enter'){ $('loginPass').focus(); }
-});
 
-/* ============================================================
-   MAIN APP
-   ============================================================ */
+/* ===== MAIN APP ===== */
 var appInited = false;
 
 function initApp(){
   if(appInited) return;
   appInited = true;
 
-  /* NAV */
   var tabs = document.querySelectorAll('.tab');
   for(var i=0;i<tabs.length;i++){
     tabs[i].onclick = (function(t){
@@ -369,7 +450,6 @@ function initApp(){
     })(tabs[i]);
   }
 
-  /* DDOS LOG */
   function log(msg, cls){
     cls = cls || '';
     var el = $('log');
@@ -464,37 +544,40 @@ function initApp(){
     });
   }
 
-  function renderWithCopy(text){
+  function renderSmart(text){
     var h = escapeHtml(text);
     var fence = '```';
     var parts = h.split(fence);
     var out = '';
+    var lastHeader = '';
+
     for(var i=0;i<parts.length;i++){
       if(i % 2 === 1){
         var code = parts[i].replace(/^\w*\n/, '');
         var id = 'code_' + Math.random().toString(36).slice(2,8);
-        out += '<pre id="' + id + '"><button class="copy-btn" data-target="' + id + '">COPY</button>' + code + '</pre>';
+        var headerHtml = lastHeader ? '<div class="fileHeader">📄 ' + lastHeader + '</div>' : '';
+        out += headerHtml + '<pre id="' + id + '"><button class="copy-btn" data-target="' + id + '">COPY</button>' + code + '</pre>';
+        lastHeader = '';
       } else {
-        out += parts[i].replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+        var chunk = parts[i];
+        var m = chunk.match(/===\s*([^\n=]+?)\s*===/);
+        if(m) lastHeader = m[1];
+        out += chunk.replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
       }
     }
     return out;
   }
 
-  function bindCopyButtons(){
+  function bindCopy(){
     document.querySelectorAll('.copy-btn').forEach(function(btn){
       if(btn.dataset.bound) return;
       btn.dataset.bound = '1';
       btn.onclick = function(){
-        var id = btn.getAttribute('data-target');
-        var pre = document.getElementById(id);
+        var pre = document.getElementById(btn.getAttribute('data-target'));
         if(!pre) return;
         var code = pre.textContent.replace('COPY','');
         navigator.clipboard.writeText(code).then(function(){
           btn.textContent = 'COPIED!';
-          setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
-        }).catch(function(){
-          btn.textContent = 'FAIL';
           setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
         });
       };
@@ -506,55 +589,27 @@ function initApp(){
     el.className = 'msg ' + type;
     var who = type === 'u' ? 'YOU' : type === 'a' ? '◆ LEO AI' : '⚠ ERROR';
     if(type === 'a'){
-      el.innerHTML = '<span class="who">' + who + '</span>' + renderWithCopy(text);
+      el.innerHTML = '<span class="who">' + who + '</span>' + renderSmart(text);
     } else {
       el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
     }
     var lg = $('leoLog');
     lg.appendChild(el);
     lg.scrollTop = lg.scrollHeight;
-    bindCopyButtons();
+    bindCopy();
     return el;
   }
 
-  /* ===== MENU COMMANDS ===== */
   function handleMenu(cmd){
-    if(cmd === '/menu'){
-      return '╔══════════════════════════════════╗\n' +
-             '║         LEO AI MENU              ║\n' +
-             '╠══════════════════════════════════╣\n' +
-             '║  /menu     → tampilkan menu      ║\n' +
-             '║  /ddos     → info fitur DDoS     ║\n' +
-             '║  /malware  → info fitur malware  ║\n' +
-             '║  /scan     → info vuln scanner   ║\n' +
-             '║  /recon    → info recon tools    ║\n' +
-             '║  /exploit  → info exploit dev    ║\n' +
-             '║  /rev      → reverse engineering ║\n' +
-             '║  /help     → bantuan umum        ║\n' +
-             '╚══════════════════════════════════╝\n\n' +
-             'Ketik /<command> untuk detail. Atau langsung tanya apa saja.';
-    }
-    if(cmd === '/ddos'){
-      return '[ DDoS FITUR ]\n\nTersedia di tab DDOS:\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed (semua method)\n\nCara pakai: isi target, pilih method, atur threads & duration, tekan START.';
-    }
-    if(cmd === '/malware'){
-      return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware (encryption + payment flow)\n· RAT (remote access trojan)\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nUpload file code, atau ketik "buatkan [jenis malware]" untuk mulai.';
-    }
-    if(cmd === '/scan'){
-      return '[ VULN SCANNER ]\n\nFitur scan otomatis:\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Security Header Missing\n\nCara pakai: isi target di tab DDOS, tekan VULN SCAN.';
-    }
-    if(cmd === '/recon'){
-      return '[ RECON FITUR ]\n\nLeoAI bisa bantu:\n· OSINT profiling\n· Subdomain enumeration\n· Port scanning strategi\n· Tech fingerprinting\n· Social engineering script\n· Credential harvesting\n\nKetik "recon [target]" untuk mulai.';
-    }
-    if(cmd === '/exploit'){
-      return '[ EXPLOIT DEV ]\n\nLeoAI bisa bantu:\n· CVE analysis & weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning\n\nKetik "exploit [CVE/target]" untuk mulai.';
-    }
-    if(cmd === '/rev'){
-      return '[ REVERSE ENGINEERING ]\n\nLeoAI bisa bantu:\n· Binary analysis\n· Disassembly (IDA/Ghidra)\n· Protocol reversing\n· Firmware dumping\n· Malware unpacking\n\nUpload binary/file untuk analisa.';
-    }
-    if(cmd === '/help'){
-      return '[ HELP ]\n\nKetik /menu untuk lihat semua command.\n\nAtau langsung tanya:\n· "buatkan ransomware"\n· "cara ddos target"\n· "fix code ini" (upload file)\n· "explain CVE-2024-xxxx"';
-    }
+    if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n║  /key      → cek API key kamu    ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
+    if(cmd === '/ddos') return '[ DDoS FITUR ]\n\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed\n\nCara pakai: isi target di tab DDOS, pilih method, START.';
+    if(cmd === '/malware') return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware\n· RAT\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nKetik "buatkan [jenis malware]" — LeoAI kasih full code.';
+    if(cmd === '/scan') return '[ VULN SCANNER ]\n\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Security Header Missing\n\nIsi target di tab DDOS, tekan VULN SCAN.';
+    if(cmd === '/recon') return '[ RECON ]\n\n· OSINT profiling\n· Subdomain enum\n· Port scanning\n· Tech fingerprinting\n· Social engineering script\n· Credential harvesting';
+    if(cmd === '/exploit') return '[ EXPLOIT DEV ]\n\n· CVE weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning\n\nButuh key PRO/ELITE untuk exploit smart.';
+    if(cmd === '/rev') return '[ REVERSE ENGINEERING ]\n\n· Binary analysis\n· Disassembly\n· Protocol reversing\n· Firmware dumping\n· Malware unpacking';
+    if(cmd === '/key') return '[ API KEY KAMU ]\n\n' + (getApiKey() ? '✓ Key aktif: ' + getApiKey().slice(0,25) + '...' : '✗ Belum ada key. Beli di tab STORE atau minta admin.');
+    if(cmd === '/help') return '[ HELP ]\n\nKetik /menu untuk semua command.\n\nLangsung tanya:\n· "buatkan ransomware full code"\n· "cara ddos target"\n· "fix code ini" (upload)\n\nButuh API key aktif untuk chat LeoAI.';
     return null;
   }
 
@@ -587,6 +642,15 @@ function initApp(){
     $('fileChip').classList.remove('on');
   };
 
+  $('apiKeyInput').value = getApiKey();
+  $('saveKeyBtn').onclick = function(){
+    var k = $('apiKeyInput').value.trim();
+    if(!k) return;
+    setApiKey(k);
+    this.textContent = 'SAVED';
+    setTimeout(function(){ $('saveKeyBtn').textContent = 'SAVE'; }, 1200);
+  };
+
   async function send(){
     var p = ta.value.trim();
     if(!p && !attached) return;
@@ -594,10 +658,10 @@ function initApp(){
     addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
 
     var menuReply = handleMenu(p.toLowerCase());
-    if(menuReply){
-      addMsg('a', menuReply);
-      ta.value = '';
-      return;
+    if(menuReply){ addMsg('a', menuReply); ta.value = ''; return; }
+
+    if(!getApiKey()){
+      return addMsg('err', '⚠ Butuh API key untuk chat LeoAI.\n\n· Beli di tab STORE\n· Atau minta admin generate\n· Paste key di input bawah chat, klik SAVE');
     }
 
     var loading = addMsg('a', '◆ mikir...');
@@ -605,7 +669,8 @@ function initApp(){
     var payload = {
       prompt: p,
       file: attached,
-      history: chatHistory.slice(-8)
+      history: chatHistory.slice(-8),
+      apiKey: getApiKey()
     };
 
     chatHistory.push({ role: 'user', content: p });
@@ -634,13 +699,22 @@ function initApp(){
       loading.remove();
 
       if(d.answer){
-        addMsg('a', d.answer);
+        var meta = 'via ' + d.provider + ' · ' + d.model + ' · tier ' + (d.tier || '?');
+        var a = addMsg('a', d.answer);
+        var m = document.createElement('div');
+        m.style.fontSize = '10px';
+        m.style.color = '#5c6b7f';
+        m.style.marginTop = '6px';
+        m.textContent = meta;
+        a.appendChild(m);
         chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
         return;
       }
 
       var errText = '';
-      if(d.stage === 'env'){
+      if(d.stage === 'apikey'){
+        errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
+      } else if(d.stage === 'env'){
         errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
       } else if(d.stage === 'all_failed'){
         errText = '⚠ ' + d.error + '\n' + d.summary;
@@ -657,13 +731,150 @@ function initApp(){
     }
   }
 
-  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\nAtau langsung gas: "buatkan script ddos sederhana", "cara bikin ransomware", atau upload file code buat dianalisa.');
+  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n⚠ Butuh API key untuk chat:\n· Beli di tab STORE\n· Atau minta admin generate\n· Paste key di input bawah, klik SAVE');
+}
+
+/* ===== STORE ===== */
+window.buyTier = function(tier){
+  if(tier === 'free') return alert('Hubungi admin @LeoXD untuk free key.\n\nAtau tunggu fitur auto-generate (coming soon).');
+  var prices = { pro: 'Rp 50.000', elite: 'Rp 200.000' };
+  if(!confirm('Beli ' + tier.toUpperCase() + ' seharga ' + prices[tier] + '?\n\nPembayaran via QRIS/DANA ke admin.\nKlik OK untuk order.')) return;
+  alert('Order ' + tier.toUpperCase() + ' diterima!\n\nKirim bukti transfer ke admin @LeoXD.\nKey akan dikirim setelah verifikasi.');
+};
+
+/* ===== ADMIN PANEL ===== */
+async function checkAdmin(){
+  try {
+    var r = await fetch('/api/admin', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'checkAdmin', user: getCurrentUser() })
+    });
+    var d = await r.json();
+    return !!d.isAdmin;
+  } catch(e){ return false; }
+}
+
+async function initAdminPanel(){
+  var isAdmin = await checkAdmin();
+  if(!isAdmin) return;
+  $('adminTab').style.display = 'inline-block';
+
+  $('genBtn').onclick = async function(){
+    var tier = $('genTier').value;
+    var days = +$('genDays').value || 14;
+
+    var r = await fetch('/api/admin', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'createKey', user: getCurrentUser(), tier:tier, days:days })
+    });
+    var d = await r.json();
+    if(d.error) return alert(d.error);
+
+    var box = $('newKeyBox');
+    box.className = 'on';
+    box.innerHTML = '<b>KEY BARU (' + tier.toUpperCase() + ', ' + days + ' hari):</b><br>' + d.key.key + '<span class="copyKey" id="copyNewKey">COPY</span>';
+    $('copyNewKey').onclick = function(){
+      navigator.clipboard.writeText(d.key.key);
+      this.textContent = 'COPIED!';
+      setTimeout(function(){ $('copyNewKey').textContent = 'COPY'; }, 1200);
+    };
+    loadKeys();
+  };
+
+  $('refreshKeys').onclick = loadKeys;
+
+  $('addAdminBtn').onclick = async function(){
+    var u = $('newAdminUser').value.trim();
+    if(!u) return alert('username kosong');
+    var r = await fetch('/api/admin', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'addAdmin', user: getCurrentUser(), newAdmin: u })
+    });
+    var d = await r.json();
+    if(d.error) return alert(d.error);
+    alert('Admin ditambahkan');
+    $('newAdminUser').value = '';
+    loadAdmins();
+  };
+
+  loadKeys();
+  loadAdmins();
+}
+
+async function loadKeys(){
+  var r = await fetch('/api/admin', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'listKeys', user: getCurrentUser() })
+  });
+  var d = await r.json();
+  if(d.error) return;
+
+  var html = '<table class="keyTable"><thead><tr><th>KEY</th><th>TIER</th><th>OWNER</th><th>EXPIRES</th><th>USAGE</th><th>STATUS</th><th>AKSI</th></tr></thead><tbody>';
+  (d.keys || []).forEach(function(k){
+    var exp = new Date(k.expiresAt).toLocaleDateString();
+    var expired = Date.now() > k.expiresAt;
+    var status = !k.active ? 'REVOKED' : expired ? 'EXPIRED' : 'ACTIVE';
+    var cls = k.active && !expired ? 'active' : 'expired';
+    html += '<tr>';
+    html += '<td>' + k.key.slice(0, 22) + '...</td>';
+    html += '<td class="tier-' + k.tier + '">' + k.tier.toUpperCase() + '</td>';
+    html += '<td>' + (k.owner || '-') + '</td>';
+    html += '<td>' + exp + '</td>';
+    html += '<td>' + (k.usage || 0) + '</td>';
+    html += '<td class="' + cls + '">' + status + '</td>';
+    html += '<td><button data-k="' + k.key + '" class="revokeBtn" style="padding:4px 8px;font-size:10px">REVOKE</button> ';
+    html += '<button data-k="' + k.key + '" class="delBtn danger" style="padding:4px 8px;font-size:10px">DEL</button></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  $('keysTableWrap').innerHTML = html;
+
+  document.querySelectorAll('.revokeBtn').forEach(function(b){
+    b.onclick = async function(){
+      if(!confirm('Revoke key ini?')) return;
+      await fetch('/api/admin', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'revokeKey', user: getCurrentUser(), key: b.dataset.k })
+      });
+      loadKeys();
+    };
+  });
+  document.querySelectorAll('.delBtn').forEach(function(b){
+    b.onclick = async function(){
+      if(!confirm('Hapus permanent?')) return;
+      await fetch('/api/admin', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'deleteKey', user: getCurrentUser(), key: b.dataset.k })
+      });
+      loadKeys();
+    };
+  });
+}
+
+async function loadAdmins(){
+  var r = await fetch('/api/admin', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action:'listAdmins', user: getCurrentUser() })
+  });
+  var d = await r.json();
+  if(d.error) return;
+  var html = '<b>Owner:</b> @' + d.owner + '<br><b>Admins:</b> ';
+  html += (d.admins || []).map(function(a){ return '@' + a; }).join(', ') || '(kosong)';
+  $('adminsList').innerHTML = html;
 }
 
 /* ===== BOOT ===== */
 if(isLoggedIn()){
   showApp();
   initApp();
+  initAdminPanel();
 } else {
   showLogin();
 }
