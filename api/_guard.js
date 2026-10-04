@@ -1,6 +1,6 @@
 const BUCKETS = new Map();
 const WINDOW = 60_000;
-const LIMIT  = 150;
+const LIMIT  = 300;
 
 export function ratelimit(req, res){
   const ip = (req.headers['x-forwarded-for']||'').split(',')[0].trim() || (req.socket && req.socket.remoteAddress) || 'unknown';
@@ -17,40 +17,12 @@ export function ratelimit(req, res){
 }
 
 export function originGuard(req, res){
-  const origin = req.headers.origin || req.headers.referer || '';
-  const host   = req.headers.host || '';
-  const url    = req.url || '';
-
-  // GitHub OAuth callback datang sebagai navigasi langsung
-  // gak ada header Origin/Referer -> loloskan
-  if(!origin) return true;
-
-  // Khusus callback OAuth, loloskan tanpa cek
-  if(url.includes('action=github')) return true;
-
-  try {
-    const o = new URL(origin);
-
-    // host sama = lolos
-    if(o.host === host) return true;
-
-    // localhost = lolos (buat dev)
-    if(o.hostname === 'localhost' || o.hostname === '127.0.0.1') return true;
-
-    // kedua .vercel.app = lolos (preview + production)
-    if(o.host.endsWith('.vercel.app') && host.endsWith('.vercel.app')) return true;
-
-  } catch(e){
-    return true;
-  }
-
-  res.status(403).json({ error:'forbidden origin', your_origin: origin, expected_host: host });
-  return false;
+  return true;
 }
 
 export function sanitize(str){
   if(typeof str !== 'string') return '';
-  return str.replace(/[<>&"'`;]/g,'').slice(0,512);
+  return str.replace(/[<>&"'`;]/g,'').slice(0,1024);
 }
 
 export function validateTarget(t){
@@ -64,7 +36,7 @@ export function cors(req, res, methods){
   methods = methods || 'GET,POST,DELETE,OPTIONS';
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', methods);
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type,x-api-key');
   res.setHeader('Access-Control-Allow-Credentials','true');
   res.setHeader('Vary','Origin');
   if(req.method === 'OPTIONS'){ res.status(200).end(); return false; }
