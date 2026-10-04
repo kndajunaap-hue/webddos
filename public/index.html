@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ddos-console</title>
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#0f1520; --line:#1c2636;
+    --accent:#00ff9d; --accent2:#00b3ff; --danger:#ff3b5c;
+    --text:#c9d4e0; --dim:#5c6b7f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'JetBrains Mono','Courier New',monospace}
+  body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  header{
+    padding:14px 22px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:12px;background:var(--panel);
+  }
+  header .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
+  header h1{font-size:14px;letter-spacing:3px;font-weight:600}
+  header .status{margin-left:auto;font-size:11px;color:var(--dim)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  main{flex:1;display:grid;grid-template-columns:320px 1fr;gap:0;min-height:0}
+  aside{border-right:1px solid var(--line);padding:18px;background:var(--panel);overflow:auto}
+  aside label{display:block;font-size:11px;letter-spacing:2px;color:var(--dim);margin:14px 0 6px}
+  aside input, aside select{
+    width:100%;padding:10px 12px;background:#0a1018;border:1px solid var(--line);
+    color:var(--text);font-size:12px;outline:none;border-radius:4px;
+  }
+  aside input:focus, aside select:focus{border-color:var(--accent)}
+  .btns{display:flex;gap:8px;margin-top:18px}
+  button{
+    flex:1;padding:10px;border:1px solid var(--accent);background:transparent;
+    color:var(--accent);font-size:11px;letter-spacing:2px;cursor:pointer;
+    border-radius:4px;transition:.15s;
+  }
+  button:hover{background:var(--accent);color:#000}
+  button.danger{border-color:var(--danger);color:var(--danger)}
+  button.danger:hover{background:var(--danger);color:#000}
+
+  .console{display:flex;flex-direction:column;min-height:0}
+  .console-head{
+    padding:10px 16px;border-bottom:1px solid var(--line);
+    font-size:11px;letter-spacing:2px;color:var(--dim);display:flex;gap:16px;
+  }
+  #log{
+    flex:1;padding:16px;overflow:auto;font-size:12px;line-height:1.6;
+    background:#070b11;white-space:pre-wrap;word-break:break-all;
+  }
+  #log .ok{color:var(--accent)}
+  #log .warn{color:#ffcc00}
+  #log .err{color:var(--danger)}
+  #log .info{color:var(--accent2)}
+  #log .dim{color:var(--dim)}
+  .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid var(--line);font-size:11px;background:var(--panel)}
+  .stats b{color:var(--accent)}
+  @media(max-width:800px){main{grid-template-columns:1fr}aside{border-right:none;border-bottom:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="dot"></div>
+  <h1>DDOS // CONSOLE</h1>
+  <div class="status" id="status">idle</div>
+</header>
+
+<main>
+  <aside>
+    <label>TARGET URL / IP</label>
+    <input id="target" placeholder="https://target.com atau 1.2.3.4:80"/>
+
+    <label>METHOD</label>
+    <select id="method">
+      <option value="http">HTTP FLOOD</option>
+      <option value="slowloris">SLOWLORIS</option>
+      <option value="udp">UDP FLOOD</option>
+      <option value="syn">SYN FLOOD</option>
+    </select>
+
+    <label>THREADS</label>
+    <input id="threads" type="number" value="128" min="1" max="2000"/>
+
+    <label>DURATION (s)</label>
+    <input id="duration" type="number" value="30" min="1" max="600"/>
+
+    <div class="btns">
+      <button id="start">START</button>
+      <button id="stop" class="danger">STOP</button>
+    </div>
+
+    <div class="btns">
+      <button id="scan">VULN SCAN</button>
+    </div>
+  </aside>
+
+  <section class="console">
+    <div class="console-head">
+      <span>root@ddos-console:~#</span>
+      <span id="uptime">00:00:00</span>
+    </div>
+    <div id="log"><span class="dim">[system] ready. isi target lalu tekan START.</span>
+</div>
+    <div class="stats">
+      <span>REQ: <b id="s-req">0</b></span>
+      <span>ERR: <b id="s-err">0</b></span>
+      <span>RPS: <b id="s-rps">0</b></span>
+      <span>THREADS: <b id="s-th">0</b></span>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const log = (msg, cls='') => {
+  const t = new Date().toLocaleTimeString();
+  $('log').innerHTML += `<div class="${cls}">[${t}] ${msg}</div>`;
+  $('log').scrollTop = $('log').scrollHeight;
+};
+
+let running = false, req = 0, err = 0, startTs = 0, timer, uptTimer;
+
+function reset(){ req=0; err=0; $('s-req').textContent=0; $('s-err').textContent=0; $('s-rps').textContent=0; }
+
+$('start').onclick = () => {
+  if(running) return log('attack sudah berjalan.','warn');
+  const target = $('target').value.trim();
+  if(!target) return log('target kosong.','err');
+  const method = $('method').value;
+  const threads = +$('threads').value;
+  const duration = +$('duration').value;
+
+  running = true; reset(); startTs = Date.now();
+  $('status').textContent = 'running';
+  log(`memulai ${method.toUpperCase()} → ${target} | threads=${threads} durasi=${duration}s`, 'ok');
+
+  fetch('/api/attack', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({target, method, threads, duration})
+  }).then(r => r.json()).then(d => {
+    log(`worker spawned: ${d.workers} | proxy pool: ${d.proxies}`,'info');
+    pollStats();
+  }).catch(e => log('gagal spawn: '+e.message,'err'));
+
+  uptTimer = setInterval(() => {
+    const s = Math.floor((Date.now()-startTs)/1000);
+    $('uptime').textContent = new Date(s*1000).toISOString().substr(11,8);
+  },1000);
+};
+
+$('stop').onclick = () => {
+  if(!running) return;
+  running = false;
+  clearInterval(timer); clearInterval(uptTimer);
+  $('status').textContent = 'stopped';
+  log('attack dihentikan.','warn');
+  fetch('/api/attack',{method:'DELETE'}).catch(()=>{});
+};
+
+$('scan').onclick = async () => {
+  const target = $('target').value.trim();
+  if(!target) return log('target kosong.','err');
+  log(`scanning vuln → ${target}`,'info');
+  const r = await fetch('/api/scan',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({target})
+  });
+  const d = await r.json();
+  d.findings.forEach(f => log(`[${f.severity}] ${f.name} — ${f.detail}`, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok'));
+  log(`scan selesai. ${d.findings.length} temuan.`,'ok');
+};
+
+function pollStats(){
+  if(!running) return;
+  fetch('/api/attack').then(r=>r.json()).then(d=>{
+    req = d.req; err = d.err;
+    $('s-req').textContent = req;
+    $('s-err').textContent = err;
+    $('s-rps').textContent = d.rps;
+    $('s-th').textContent = d.threads;
+    if(d.logs) d.logs.forEach(l => log(l.msg, l.cls));
+  }).catch(()=>{});
+  timer = setTimeout(pollStats, 1000);
+}
+</script>
+</body>
+</html>
