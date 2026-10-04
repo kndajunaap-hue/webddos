@@ -1,8 +1,6 @@
 import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
 
-// ==== User storage (in-memory, cold start akan reset) ====
-// Untuk production persistent, ganti ke Vercel KV / Supabase
-const USERS = new Map();
+const USERS = global.__LEO_USERS || (global.__LEO_USERS = new Map());
 
 export default async function handler(req, res){
   if(!cors(req,res,'POST,GET,OPTIONS')) return;
@@ -11,7 +9,7 @@ export default async function handler(req, res){
 
   const action = (req.query && req.query.action) || (req.body && req.body.action);
 
-  // ============ GitHub OAuth Callback ============
+  // ===== GitHub OAuth Callback =====
   if(action === 'github' && req.method === 'GET'){
     const code = req.query && req.query.code;
     if(!code){
@@ -62,35 +60,19 @@ export default async function handler(req, res){
     }
   }
 
-  // ============ Register ============
   if(action === 'register' && req.method === 'POST'){
     const username = sanitize(req.body && req.body.username || '');
     const password = sanitize(req.body && req.body.password || '');
 
-    if(!username || !password){
-      return res.status(400).json({ error: 'username dan password wajib diisi' });
-    }
-    if(username.length < 3){
-      return res.status(400).json({ error: 'username minimal 3 karakter' });
-    }
-    if(password.length < 4){
-      return res.status(400).json({ error: 'password minimal 4 karakter' });
-    }
-    if(USERS.has(username)){
-      return res.status(409).json({ error: 'username sudah dipakai' });
-    }
+    if(!username || !password) return res.status(400).json({ error: 'username dan password wajib diisi' });
+    if(username.length < 3) return res.status(400).json({ error: 'username minimal 3 karakter' });
+    if(password.length < 4) return res.status(400).json({ error: 'password minimal 4 karakter' });
+    if(USERS.has(username)) return res.status(409).json({ error: 'username sudah dipakai' });
 
-    USERS.set(username, {
-      password: password,
-      githubId: null,
-      avatar: null,
-      name: username
-    });
-
+    USERS.set(username, { password: password, githubId: null, avatar: null, name: username });
     return res.json({ ok: true, username: username });
   }
 
-  // ============ Login ============
   if(action === 'login' && req.method === 'POST'){
     const username = sanitize(req.body && req.body.username || '');
     const password = sanitize(req.body && req.body.password || '');
@@ -104,11 +86,8 @@ export default async function handler(req, res){
     return res.json({ ok: true, username: username, token: sessionToken });
   }
 
-  // ============ Get GitHub Client ID (untuk frontend) ============
   if(action === 'config' && req.method === 'GET'){
-    return res.json({
-      githubClientId: process.env.GITHUB_CLIENT_ID || ''
-    });
+    return res.json({ githubClientId: process.env.GITHUB_CLIENT_ID || '' });
   }
 
   return res.status(400).json({ error: 'unknown action' });
