@@ -4,12 +4,12 @@ import { URL } from 'url';
 import { cors, ratelimit, originGuard, validateTarget } from './_guard.js';
 
 const CHECKS = [
-  { name:'SQL Injection',          sev:'high',   re:/sql syntax|mysql_fetch|ORA-\d{5}|PostgreSQL.*ERROR|ODBC.*Driver/i },
+  { name:'SQL Injection',          sev:'high',   re:/sql syntax|mysql_fetch|ORA-\d{5}|PostgreSQL.*ERROR/i },
   { name:'XSS Reflected',          sev:'high',   re:/<script>alert\(1\)<\/script>|onerror=alert/i },
   { name:'Directory Traversal',    sev:'high',   re:/root:x:0:0:|\[fonts\].*\[extensions\]/i },
   { name:'Open Directory Listing', sev:'medium', re:/<title>Index of \//i },
   { name:'PHPInfo Exposure',       sev:'medium', re:/PHP Version|phpinfo\(\)/i },
-  { name:'Git Exposure',           sev:'high',   re:/Index of.*\.git|\[core\].*repositoryformatversion/i },
+  { name:'Git Exposure',           sev:'high',   re:/Index of.*\.git|repositoryformatversion/i },
   { name:'Env File Leak',          sev:'high',   re:/APP_KEY=|DB_PASSWORD=|AWS_SECRET/i },
   { name:'Server Banner Leak',     sev:'low',    re:/Apache\/\d|nginx\/\d|IIS\/\d/i }
 ];
@@ -36,8 +36,8 @@ function fetchUrl(url){
     }, res => {
       let body='';
       res.on('data',c=>{ body+=c; if(body.length>512*1024) res.destroy(); });
-      res.on('end',()=>resolve({ status:res.statusCode, headers:res.headers, body }));
-      res.on('error',()=>resolve({ status:0, headers:{}, body }));
+      res.on('end',()=>resolve({ status:res.statusCode, headers:res.headers, body:body }));
+      res.on('error',()=>resolve({ status:0, headers:{}, body:body }));
     });
     req.on('error',e=>resolve({ error:e.message, headers:{}, body:'' }));
     req.on('timeout',()=>{ req.destroy(); resolve({ error:'timeout', headers:{}, body:'' }); });
@@ -51,14 +51,14 @@ export default async function handler(req,res){
   if(!ratelimit(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({ error:'POST only' });
 
-  const target = validateTarget(req.body?.target);
+  const target = validateTarget(req.body && req.body.target);
   if(!target) return res.status(400).json({ error:'invalid target' });
 
   const findings = [];
   const base = await fetchUrl(target);
   if(base.error){
     findings.push({ name:'Connection Failed', severity:'high', detail:base.error });
-    return res.json({ findings, count:findings.length });
+    return res.json({ findings: findings, count:findings.length });
   }
 
   for(const h of HEADER_CHECKS){
@@ -66,10 +66,10 @@ export default async function handler(req,res){
   }
   if(base.headers.server) findings.push({ name:'Server Banner', severity:'low', detail:base.headers.server });
 
-  const results = await Promise.all(PROBES.map(p => fetchUrl(target.replace(/\/$/,'') + p).then(r => ({ path:p, ...r }))));
+  const results = await Promise.all(PROBES.map(p => fetchUrl(target.replace(/\/$/,'') + p).then(r => Object.assign({ path:p }, r))));
   for(const r of results){
     for(const c of CHECKS){
-      if(c.re.test(r.body)) findings.push({ name:c.name, severity:c.sev, detail:`${r.path} → ${r.status||r.error}` });
+      if(c.re.test(r.body)) findings.push({ name:c.name, severity:c.sev, detail:r.path + ' → ' + (r.status||r.error) });
     }
   }
 
@@ -79,5 +79,5 @@ export default async function handler(req,res){
     if(!seen.has(k)){ seen.add(k); uniq.push(f); }
   }
 
-  return res.json({ findings: uniq, count: uniq.length, target });
+  return res.json({ findings: uniq, count: uniq.length, target: target });
 }
