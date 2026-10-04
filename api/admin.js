@@ -1,8 +1,9 @@
 import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
-import { createKey, listKeys, revokeKey, deleteKey } from './apikey.js';
+import { createKey } from './apikey.js';
+
+const OWNER = (process.env.OWNER_USERNAME || 'LeoXD').toLowerCase();
 
 const ADMINS = global.__LEO_ADMINS || (global.__LEO_ADMINS = new Set());
-const OWNER  = (process.env.OWNER_USERNAME || 'LeoXD').toLowerCase();
 
 function isAdmin(username){
   if(!username) return false;
@@ -37,22 +38,6 @@ export default async function handler(req, res){
 
     const k = createKey({ tier: tier, days: days, owner: user });
     return res.json({ ok: true, key: k });
-  }
-
-  if(action === 'listKeys'){
-    return res.json({ ok: true, keys: listKeys() });
-  }
-
-  if(action === 'revokeKey'){
-    const key = sanitize(body.key || '');
-    if(!key) return res.status(400).json({ error: 'key kosong' });
-    return res.json({ ok: revokeKey(key) });
-  }
-
-  if(action === 'deleteKey'){
-    const key = sanitize(body.key || '');
-    if(!key) return res.status(400).json({ error: 'key kosong' });
-    return res.json({ ok: deleteKey(key) });
   }
 
   if(action === 'addAdmin'){
