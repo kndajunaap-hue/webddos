@@ -112,7 +112,7 @@
     <div class="dot" style="top:45%;left:80%"></div>
   </div>
   <div id="bootTxt">INITIALIZING CONSOLE</div>
-  <div id="bootSub" id="bootSub">loading modules...</div>
+  <div id="bootSub">loading modules...</div>
 </div>
 
 <header>
@@ -185,40 +185,23 @@
 
 <script>
 const $ = id => document.getElementById(id);
-const TOKEN_KEY = 'console_token';
-
-// === TOKEN GENERATOR (HMAC-SHA256 dari 'console-v2') ===
-// Client pakai token statis: harus sama dengan HMAC di server
-// Set CONSOLE_SECRET di vercel, lalu ganti TOKEN di bawah dengan nilai HMAC-nya
-// atau ambil via prompt ke user
-function getToken(){
-  let t = localStorage.getItem(TOKEN_KEY);
-  if(!t){
-    t = prompt('masukkan console token:');
-    if(t) localStorage.setItem(TOKEN_KEY, t);
-  }
-  return t || '';
-}
-const TOKEN = getToken();
 
 const api = (path, opts={}) => fetch(path, {
   ...opts,
-  headers: { 'Content-Type':'application/json', 'x-console-token': TOKEN, ...(opts.headers||{}) }
+  headers: { 'Content-Type':'application/json', ...(opts.headers||{}) }
 });
 
-// === BOOT ANIMATION ===
 const bootMsgs = ['loading modules...','connecting proxy pool...','syncing oracle...','ready.'];
 let bi = 0;
 const bootIv = setInterval(() => {
-  document.getElementById('bootSub').textContent = bootMsgs[bi] || 'ready.';
+  $('bootSub').textContent = bootMsgs[bi] || 'ready.';
   bi++;
   if(bi >= bootMsgs.length){
     clearInterval(bootIv);
-    setTimeout(() => document.getElementById('boot').classList.add('done'), 600);
+    setTimeout(() => $('boot').classList.add('done'), 600);
   }
 }, 500);
 
-// === LOG ===
 const log = (msg, cls='') => {
   const t = new Date().toLocaleTimeString();
   $('log').innerHTML += `<div class="${cls}">[${t}] ${msg}</div>`;
@@ -232,7 +215,6 @@ function setStatus(s){
   $('s-st').textContent = s;
 }
 
-// === START ===
 $('start').onclick = () => {
   if(running) return log('attack sudah berjalan.','warn');
   const target = $('target').value.trim();
@@ -260,7 +242,6 @@ $('start').onclick = () => {
   },1000);
 };
 
-// === STOP ===
 $('stop').onclick = () => {
   if(!running) return;
   running = false;
@@ -270,7 +251,6 @@ $('stop').onclick = () => {
   api('/api/attack',{ method:'DELETE' }).catch(()=>{});
 };
 
-// === SCAN ===
 $('scan').onclick = async () => {
   const target = $('target').value.trim();
   if(!target) return log('target kosong.','err');
@@ -284,7 +264,6 @@ $('scan').onclick = async () => {
   } catch(e){ log('scan gagal: '+e.message,'err'); }
 };
 
-// === POLL STATS ===
 function pollStats(){
   if(!running) return;
   api('/api/attack').then(r=>r.json()).then(d=>{
@@ -298,7 +277,6 @@ function pollStats(){
   timer = setTimeout(pollStats, 1000);
 }
 
-// === ORACLE AI ===
 $('oracle').onclick = () => $('aiPanel').classList.toggle('open');
 $('aiClose').onclick = () => $('aiPanel').classList.remove('open');
 $('aiSend').onclick = sendAi;
