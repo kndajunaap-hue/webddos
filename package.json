@@ -1,0 +1,10 @@
+{
+  "name": "ddos-console",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "https": "^1.0.0",
+    "net": "^1.0.2"
+  }
+}
