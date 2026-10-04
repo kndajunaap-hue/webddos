@@ -119,16 +119,13 @@ export default async function handler(req, res){
   const history = (req.body && Array.isArray(req.body.history)) ? req.body.history.slice(-10) : [];
   const apiKey  = (req.body && req.body.apiKey) || req.headers['x-api-key'];
 
-  // ==== TIER: default free. Kalau ada API key valid, naik tier. ====
+  // ==== TIER: default free. Kalau ada key valid, unlock tier ganas. ====
   let tier = 'free';
   let keyData = null;
 
   if(apiKey){
     keyData = validateKey(apiKey);
-    if(keyData){
-      tier = keyData.tier;
-    }
-    // kalau key invalid, tetap lanjut sebagai free
+    if(keyData) tier = keyData.tier;
   }
 
   const limits = getTierLimit(tier);
@@ -193,8 +190,7 @@ export default async function handler(req, res){
               answer: answer,
               provider: p.name,
               model: data.model || model,
-              tier: tier,
-              keyUsage: keyData ? keyData.usage : null
+              tier: tier
             });
           } catch(e){
             attempts.push({ provider:p.name, model:model, reason:'parse failed' });
