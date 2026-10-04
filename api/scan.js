@@ -1,21 +1,30 @@
 import https from 'https';
 import http from 'http';
 import { URL } from 'url';
+import { cors, ratelimit, originGuard, tokenGuard, validateTarget } from './_guard.js';
 
 const CHECKS = [
-  { name:'SQL Injection',    severity:'high',   test:r=>/sql|mysql|syntax.*error|odbc/i.test(r) },
-  { name:'XSS Reflected',    severity:'high',   test:(r,s)=>s.body&&s.body.includes('<script>alert(1)</script>') },
-  { name:'Open Directory',   severity:'medium', test:r=>/Index of \//i.test(r) },
-  { name:'Server Banner Leak',severity:'low',   test:(r,s)=>/Server:/i.test(s.headers) },
-  { name:'Missing HSTS',     severity:'medium', test:(r,s)=>!/strict-transport-security/i.test(s.headers) },
-  { name:'Missing CSP',      severity:'medium', test:(r,s)=>!/content-security-policy/i.test(s.headers) },
-  { name:'X-Frame-Options Absent', severity:'low', test:(r,s)=>!/x-frame-options/i.test(s.headers) },
-  { name:'Directory Traversal', severity:'high', test:r=>/root:.*:0:0:/i.test(r) },
-  { name:'PHP Info Leak',    severity:'medium', test:r=>/phpinfo\(\)|PHP Version/i.test(r) },
-  { name:'Git Exposure',     severity:'high',   test:r=>/Index of.*\.git/i.test(r) },
+  { name:'SQL Injection',          sev:'high',   re:/sql syntax|mysql_fetch|ORA-\d{5}|PostgreSQL.*ERROR|ODBC.*Driver/i },
+  { name:'XSS Reflected',          sev:'high',   re:/<script>alert\(1\)<\/script>|onerror=alert/i },
+  { name:'Directory Traversal',    sev:'high',   re:/root:x:0:0:|\[fonts\].*\[extensions\]/i },
+  { name:'Open Directory Listing', sev:'medium', re:/<title>Index of \//i },
+  { name:'PHPInfo Exposure',       sev:'medium', re:/PHP Version|phpinfo\(\)/i },
+  { name:'Git Exposure',           sev:'high',   re:/Index of.*\.git|\[core\].*repositoryformatversion/i },
+  { name:'Env File Leak',          sev:'high',   re:/APP_KEY=|DB_PASSWORD=|AWS_SECRET/i },
+  { name:'Server Banner Leak',     sev:'low',    re:/Apache\/\d|nginx\/\d|IIS\/\d/i }
 ];
 
-function fetchUrl(url, opts={}){
+const HEADER_CHECKS = [
+  { name:'Missing HSTS',        sev:'medium', key:'strict-transport-security' },
+  { name:'Missing CSP',         sev:'medium', key:'content-security-policy' },
+  { name:'Missing X-Frame',     sev:'low',    key:'x-frame-options' },
+  { name:'Missing X-Content',   sev:'low',    key:'x-content-type-options' },
+  { name:'Missing Referrer',    sev:'low',    key:'referrer-policy' }
+];
+
+const PROBES = ['/admin','/login','/.git/','/.env','/phpinfo.php','/wp-admin/','/api/','/backup.zip','/config.php','/?id=1%27','/?q=<script>alert(1)</script>','/../../etc/passwd'];
+
+function fetchUrl(url){
   return new Promise(resolve => {
     const u = new URL(url);
     const mod = u.protocol==='https:' ? https : http;
@@ -26,67 +35,50 @@ function fetchUrl(url, opts={}){
       rejectUnauthorized:false, timeout:8000
     }, res => {
       let body='';
-      res.on('data',c=>body+=c);
+      res.on('data',c=>{ body+=c; if(body.length>512*1024) res.destroy(); });
       res.on('end',()=>resolve({ status:res.statusCode, headers:res.headers, body }));
+      res.on('error',()=>resolve({ status:0, headers:{}, body }));
     });
-    req.on('error',e=>resolve({ error:e.message, body:'', headers:{} }));
-    req.on('timeout',()=>{ req.destroy(); resolve({ error:'timeout', body:'', headers:{} }); });
+    req.on('error',e=>resolve({ error:e.message, headers:{}, body:'' }));
+    req.on('timeout',()=>{ req.destroy(); resolve({ error:'timeout', headers:{}, body:'' }); });
     req.end();
   });
 }
 
-export default async function handler(req, res){
-  res.setHeader('Access-Control-Allow-Origin','*');
-  res.setHeader('Access-Control-Allow-Methods','POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
-  if(req.method==='OPTIONS') return res.status(200).end();
-  if(req.method!=='POST') return res.status(405).json({error:'POST only'});
+export default async function handler(req,res){
+  if(!cors(req,res,'POST,OPTIONS')) return;
+  if(!originGuard(req,res)) return;
+  if(!ratelimit(req,res)) return;
+  if(!tokenGuard(req,res)) return;
+  if(req.method!=='POST') return res.status(405).json({ error:'POST only' });
 
-  const { target } = req.body||{};
-  if(!target) return res.status(400).json({error:'target required'});
+  const target = validateTarget(req.body?.target);
+  if(!target) return res.status(400).json({ error:'invalid target' });
 
   const findings = [];
   const base = await fetchUrl(target);
-
   if(base.error){
     findings.push({ name:'Connection Failed', severity:'high', detail:base.error });
-    return res.json({ findings });
+    return res.json({ findings, count:findings.length });
   }
 
-  // probe path umum
-  const probes = [
-    '/admin','/login','/.git/','/.env','/phpinfo.php','/wp-admin/',
-    '/api/','/backup.zip','/config.php','/?id=1%27','/?q=<script>alert(1)</script>'
-  ];
-  const results = await Promise.all(probes.map(p => {
-    const url = target.replace(/\/$/,'') + p;
-    return fetchUrl(url).then(r => ({ path:p, ...r }));
-  }));
+  for(const h of HEADER_CHECKS){
+    if(!base.headers[h.key]) findings.push({ name:h.name, severity:h.sev, detail:'header absen' });
+  }
+  if(base.headers.server) findings.push({ name:'Server Banner', severity:'low', detail:base.headers.server });
 
+  const results = await Promise.all(PROBES.map(p => fetchUrl(target.replace(/\/$/,'') + p).then(r => ({ path:p, ...r }))));
   for(const r of results){
     for(const c of CHECKS){
-      try {
-        if(c.test(r.body, r)) findings.push({ name:c.name, severity:c.severity, detail:`${r.path} → ${r.status||r.error}` });
-      } catch(e){}
+      if(c.re.test(r.body)) findings.push({ name:c.name, severity:c.sev, detail:`${r.path} → ${r.status||r.error}` });
     }
   }
 
-  // header checks pada base
-  for(const c of CHECKS){
-    try {
-      if(!c.name.includes('Directory') && !c.name.includes('SQL') && !c.name.includes('XSS') && c.test(base.body, base)){
-        findings.push({ name:c.name, severity:c.severity, detail:'base response' });
-      }
-    } catch(e){}
-  }
-
-  // dedupe
-  const uniq = [];
-  const seen = new Set();
+  const seen = new Set(), uniq = [];
   for(const f of findings){
-    const k = f.name+f.detail;
+    const k = f.name + '|' + f.detail;
     if(!seen.has(k)){ seen.add(k); uniq.push(f); }
   }
 
-  return res.json({ findings: uniq, count: uniq.length });
+  return res.json({ findings: uniq, count: uniq.length, target });
 }
