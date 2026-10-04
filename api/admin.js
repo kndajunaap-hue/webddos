@@ -2,7 +2,6 @@ import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
 import { createKey } from './apikey.js';
 
 const OWNER = (process.env.OWNER_USERNAME || 'LeoXD').toLowerCase();
-
 const ADMINS = global.__LEO_ADMINS || (global.__LEO_ADMINS = new Set());
 
 function isAdmin(username){
@@ -20,7 +19,7 @@ export default async function handler(req, res){
   const action = body.action || (req.query && req.query.action);
   const user = sanitize(body.user || (req.query && req.query.user) || '');
 
-  if(action !== 'checkAdmin' && !isAdmin(user)){
+  if(action !== 'checkAdmin' && action !== 'autoFreeKey' && !isAdmin(user)){
     return res.status(403).json({ error: 'akses ditolak: bukan admin' });
   }
 
@@ -28,14 +27,19 @@ export default async function handler(req, res){
     return res.json({ isAdmin: isAdmin(user), owner: OWNER });
   }
 
+  // ==== AUTO GENERATE FREE KEY 6 HARI ====
+  if(action === 'autoFreeKey'){
+    const k = createKey({ tier: 'free', days: 6, owner: user || 'anonymous' });
+    return res.json({ ok: true, key: k });
+  }
+
+  // ==== GENERATE KEY MANUAL (admin) ====
   if(action === 'createKey'){
     const tier = sanitize(body.tier || 'free');
-    const days = Math.min(Math.max(+body.days || 14, 1), 3650);
-
+    const days = Math.min(Math.max(+body.days || 6, 1), 3650);
     if(tier !== 'free' && tier !== 'pro' && tier !== 'elite'){
       return res.status(400).json({ error: 'tier tidak valid' });
     }
-
     const k = createKey({ tier: tier, days: days, owner: user });
     return res.json({ ok: true, key: k });
   }
@@ -51,9 +55,7 @@ export default async function handler(req, res){
 
   if(action === 'removeAdmin'){
     const target = sanitize(body.target || '').toLowerCase();
-    if(target === OWNER){
-      return res.status(403).json({ error: 'tidak bisa hapus owner' });
-    }
+    if(target === OWNER) return res.status(403).json({ error: 'tidak bisa hapus owner' });
     ADMINS.delete(target);
     return res.json({ ok: true, admins: [OWNER].concat(Array.from(ADMINS)) });
   }
