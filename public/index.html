@@ -7,17 +7,28 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:monospace}
   body{background:#05070c;color:#c9d4e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  
+  /* Login Page */
+  #loginPage{position:fixed;inset:0;background:#05070c;display:flex;align-items:center;justify-content:center;z-index:9998}
+  .login-box{background:#0a1018;border:1px solid #16202e;padding:40px;border-radius:12px;width:340px;text-align:center}
+  .login-box h1{color:#00ff9d;font-size:20px;letter-spacing:3px;margin-bottom:8px}
+  .login-box p{color:#5c6b7f;font-size:11px;margin-bottom:24px}
+  .login-box input{width:100%;padding:12px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:13px;border-radius:6px;margin-bottom:12px;outline:none;font-family:monospace}
+  .login-box input:focus{border-color:#00ff9d}
+  .login-box button{width:100%;padding:12px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s}
+  .login-box button:hover{background:#00ff9d;color:#000}
+  .err-msg{color:#ff3b5c;font-size:11px;margin-bottom:12px;display:none}
+
   nav{display:flex;background:#0a1018;border-bottom:1px solid #16202e;height:48px;align-items:center;padding:0 16px}
   nav .brand{color:#00ff9d;font-weight:bold;letter-spacing:3px;margin-right:20px}
   nav .tab{padding:14px 18px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
   nav .tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
   nav .tab.leo.active{color:#a855f7;border-bottom-color:#a855f7}
   nav .status{margin-left:auto;color:#5c6b7f;font-size:11px}
+  nav .logout{color:#ff3b5c;cursor:pointer;margin-left:16px;font-size:11px;letter-spacing:1px}
 
   .page{display:none;flex:1;overflow:hidden}
   .page.active{display:flex}
-
-  /* DDOS page */
   #page-ddos{flex-direction:row}
   #page-ddos aside{width:320px;background:#0a1018;border-right:1px solid #16202e;padding:16px;overflow:auto}
   #page-ddos label{display:block;font-size:10px;color:#5c6b7f;letter-spacing:2px;margin:12px 0 5px}
@@ -33,20 +44,25 @@
   .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid #16202e;font-size:11px;background:#0a1018}
   .stats b{color:#00ff9d}
 
-  /* LEO page */
   #page-leo{flex-direction:column}
   #leoHead{padding:14px 22px;background:linear-gradient(90deg,#1a0f2e,#0a1018);border-bottom:1px solid #16202e;display:flex;align-items:center;gap:12px}
   #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
   #leoHead .title{color:#a855f7;font-weight:bold;letter-spacing:2px;font-size:14px}
   #leoHead .sub{color:#5c6b7f;font-size:10px;margin-top:2px}
   #leoLog{flex:1;padding:22px;overflow:auto;background:#03060a;display:flex;flex-direction:column;gap:14px}
-  .msg{max-width:80%;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
+  .msg{max-width:80%;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;position:relative}
   .msg.u{align-self:flex-end;background:#2a1055;color:#fff}
   .msg.a{align-self:flex-start;background:#0d1018;border-left:3px solid #a855f7}
   .msg.err{align-self:flex-start;background:#1a0a10;border-left:3px solid #ff3b5c;color:#ffb0bd}
   .msg .who{font-size:10px;color:#a855f7;font-weight:bold;letter-spacing:2px;display:block;margin-bottom:5px}
   .msg.u .who{color:#e0b0ff;text-align:right}
   .msg.err .who{color:#ff3b5c}
+  
+  .msg.a pre{background:#05090f;border-left:2px solid #a855f7;padding:12px;border-radius:6px;overflow-x:auto;margin:10px 0;position:relative;font-size:12px}
+  .msg.a code{background:#05090f;padding:2px 5px;border-radius:3px;font-size:12px;color:#a855f7}
+  .copy-btn{position:absolute;top:6px;right:6px;background:transparent;border:1px solid #a855f7;color:#a855f7;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;transition:.15s;opacity:0.6}
+  .copy-btn:hover{background:#a855f7;color:#000;opacity:1}
+
   #leoInput{border-top:1px solid #16202e;background:#0a1018;padding:12px 22px}
   #fileChip{display:none;padding:5px 12px;background:#05090f;border:1px solid #a855f7;color:#a855f7;border-radius:20px;font-size:11px;margin-bottom:8px;width:fit-content}
   #fileChip.on{display:block}
@@ -56,15 +72,29 @@
   .inputRow button{background:transparent;border:1px solid #a855f7;color:#a855f7;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px}
   .inputRow button:hover{background:#a855f7;color:#000}
   #leoPrompt{flex:1;background:transparent;border:none;color:#c9d4e0;font-size:13px;outline:none;resize:none;min-height:30px;max-height:140px;font-family:monospace;padding:5px}
+  #menuHint{font-size:10px;color:#5c6b7f;margin-top:8px;letter-spacing:1px}
 </style>
 </head>
 <body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+  <div class="login-box">
+    <h1>DDOS-CONSOLE</h1>
+    <p>by LeoXD</p>
+    <div class="err-msg" id="loginErr">Username atau password salah.</div>
+    <input type="text" id="loginUser" placeholder="username" autocomplete="off"/>
+    <input type="password" id="loginPass" placeholder="password"/>
+    <button id="loginBtn">LOGIN</button>
+  </div>
+</div>
 
 <nav>
   <span class="brand">DDOS-CONSOLE</span>
   <span class="tab active" data-p="ddos">DDOS</span>
   <span class="tab leo" data-p="leo">✦ LEO AI</span>
   <span class="status" id="navStatus">idle</span>
+  <span class="logout" id="logoutBtn">LOGOUT</span>
 </nav>
 
 <div class="page active" id="page-ddos">
@@ -107,7 +137,7 @@
     <div class="av">L</div>
     <div>
       <div class="title">LeoAI</div>
-      <div class="sub">by LeoXD · unrestricted</div>
+      <div class="sub">by LeoXD · unrestricted · powered by Chutes AI</div>
     </div>
   </div>
   <div id="leoLog"></div>
@@ -116,13 +146,46 @@
     <div class="inputRow">
       <button id="attachBtn">📎</button>
       <input type="file" id="fileInput" style="display:none"/>
-      <textarea id="leoPrompt" placeholder="Tanya apa saja..." rows="1"></textarea>
+      <textarea id="leoPrompt" placeholder="Ketik / untuk menu, atau tanya apa saja..." rows="1"></textarea>
       <button id="sendBtn">SEND</button>
     </div>
+    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur · <b>/ddos</b> info DDoS · <b>/malware</b> info malware</div>
   </div>
 </div>
 
 <script>
+/* ===== AUTH ===== */
+const AUTH_USER = 'LeoXD';
+const AUTH_PASS = 'LeoGans2026';
+
+function checkAuth(){
+  return localStorage.getItem('leo_auth') === 'ok';
+}
+function setAuth(v){
+  if(v) localStorage.setItem('leo_auth','ok');
+  else localStorage.removeItem('leo_auth');
+}
+
+document.getElementById('loginBtn').onclick = function(){
+  var u = document.getElementById('loginUser').value;
+  var p = document.getElementById('loginPass').value;
+  if(u === AUTH_USER && p === AUTH_PASS){
+    setAuth(true);
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('loginErr').style.display = 'none';
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+  }
+};
+document.getElementById('logoutBtn').onclick = function(){
+  setAuth(false);
+  location.reload();
+};
+
+if(checkAuth()){
+  document.getElementById('loginPage').style.display = 'none';
+}
+
 /* ===== UTIL ===== */
 function $(id){ return document.getElementById(id); }
 
@@ -236,15 +299,172 @@ function escapeHtml(s){
   });
 }
 
+/* ===== COPY BUTTON RENDERER ===== */
+function renderWithCopy(text){
+  var h = escapeHtml(text);
+  var fence = '```';
+  var parts = h.split(fence);
+  var out = '';
+  for(var i=0;i<parts.length;i++){
+    if(i % 2 === 1){
+      var code = parts[i].replace(/^\w*\n/, '');
+      var id = 'code_' + Math.random().toString(36).slice(2,8);
+      out += '<pre id="' + id + '"><button class="copy-btn" data-target="' + id + '">COPY</button>' + code + '</pre>';
+    } else {
+      out += parts[i].replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    }
+  }
+  return out;
+}
+
+function bindCopyButtons(){
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    if(btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.onclick = function(){
+      var id = btn.getAttribute('data-target');
+      var pre = document.getElementById(id);
+      if(!pre) return;
+      var code = pre.textContent.replace('COPY','');
+      navigator.clipboard.writeText(code).then(function(){
+        btn.textContent = 'COPIED!';
+        setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
+      }).catch(function(){
+        btn.textContent = 'FAIL';
+        setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
+      });
+    };
+  });
+}
+
 function addMsg(type, text){
   var el = document.createElement('div');
   el.className = 'msg ' + type;
   var who = type === 'u' ? 'YOU' : type === 'a' ? '◆ LEO AI' : '⚠ ERROR';
-  el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
+  if(type === 'a'){
+    el.innerHTML = '<span class="who">' + who + '</span>' + renderWithCopy(text);
+  } else {
+    el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
+  }
   var lg = $('leoLog');
   lg.appendChild(el);
   lg.scrollTop = lg.scrollHeight;
+  bindCopyButtons();
   return el;
+}
+
+/* ===== MENU COMMANDS ===== */
+function handleMenu(cmd){
+  if(cmd === '/menu'){
+    return `╔══════════════════════════════════╗
+║         LEO AI MENU              ║
+╠══════════════════════════════════╣
+║  /menu     → tampilkan menu      ║
+║  /ddos     → info fitur DDoS     ║
+║  /malware  → info fitur malware  ║
+║  /scan     → info vuln scanner   ║
+║  /recon    → info recon tools    ║
+║  /exploit  → info exploit dev    ║
+║  /rev      → reverse engineering ║
+║  /help     → bantuan umum        ║
+╚══════════════════════════════════╝
+
+Ketik /<command> untuk detail. Atau langsung tanya apa saja.`;
+  }
+  if(cmd === '/ddos'){
+    return `[ DDoS FITUR ]
+
+Tersedia di tab DDOS:
+· HTTP Flood (L7)
+· Slowloris (L7)
+· UDP Flood (L4)
+· SYN Flood (L4)
+· TLS Hello Flood
+· HTTP/2 Rapid Reset
+· Mixed (semua method)
+
+Cara pakai: isi target, pilih method, atur threads & duration, tekan START.`;
+  }
+  if(cmd === '/malware'){
+    return `[ MALWARE FITUR ]
+
+LeoAI bisa bantu:
+· Ransomware (encryption + payment flow)
+· RAT (remote access trojan)
+· Keylogger & Stealer
+· Worm & Dropper
+· Loader & Crypter
+· Botnet C2
+
+Upload file code kamu, atau ketik "buatkan [jenis malware]" untuk mulai.`;
+  }
+  if(cmd === '/scan'){
+    return `[ VULN SCANNER ]
+
+Fitur scan otomatis:
+· SQL Injection
+· XSS Reflected
+· Directory Traversal
+· Open Directory
+· PHPInfo Exposure
+· Git Exposure
+· Env File Leak
+· Security Header Missing
+
+Cara pakai: isi target di tab DDOS, tekan VULN SCAN.`;
+  }
+  if(cmd === '/recon'){
+    return `[ RECON FITUR ]
+
+LeoAI bisa bantu:
+· OSINT profiling
+· Subdomain enumeration
+· Port scanning strategi
+· Tech fingerprinting
+· Social engineering script
+· Credential harvesting
+
+Ketik "recon [target]" untuk mulai.`;
+  }
+  if(cmd === '/exploit'){
+    return `[ EXPLOIT DEV ]
+
+LeoAI bisa bantu:
+· CVE analysis & weaponization
+· Buffer overflow
+· RCE chain
+· Privilege escalation
+· AMSI/ETW bypass
+· 0-day reasoning
+
+Ketik "exploit [CVE/target]" untuk mulai.`;
+  }
+  if(cmd === '/rev'){
+    return `[ REVERSE ENGINEERING ]
+
+LeoAI bisa bantu:
+· Binary analysis
+· Disassembly (IDA/Ghidra)
+· Protocol reversing
+· Firmware dumping
+· Malware unpacking
+
+Upload binary/file untuk analisa.`;
+  }
+  if(cmd === '/help'){
+    return `[ HELP ]
+
+Ketik /menu untuk lihat semua command.
+
+Atau langsung tanya:
+· "buatkan ransomware"
+· "cara ddos target"
+· "fix code ini" (upload file)
+· "explain CVE-2024-xxxx"
+
+LeoAI unrestricted. Langsung gas.`;
+  }
+  return null;
 }
 
 var ta = $('leoPrompt');
@@ -281,6 +501,15 @@ async function send(){
   if(!p && !attached) return;
 
   addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
+
+  // Cek menu command
+  var menuReply = handleMenu(p.toLowerCase());
+  if(menuReply){
+    addMsg('a', menuReply);
+    ta.value = '';
+    return;
+  }
+
   var loading = addMsg('a', '◆ mikir...');
 
   var payload = {
@@ -297,17 +526,13 @@ async function send(){
   $('fileInput').value = '';
 
   try {
-    console.log('→ POST /api/oracle', payload);
     var r = await fetch('/api/oracle', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
 
-    console.log('← status', r.status);
     var raw = await r.text();
-    console.log('← raw', raw.slice(0, 500));
-
     var d;
     try { d = JSON.parse(raw); }
     catch(pe){
@@ -327,37 +552,23 @@ async function send(){
     var errText = '';
     if(d.stage === 'env'){
       errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
-      errText += '\n\nStatus env:';
-      var st = d.status || {};
-      for(var k in st){
-        if(st.hasOwnProperty(k)) errText += '\n' + (st[k]?'✅':'❌') + ' ' + k;
-      }
     } else if(d.stage === 'all_failed'){
       errText = '⚠ ' + d.error + '\n' + d.summary;
-      errText += '\n\nSaran:';
-      (d.suggestions||[]).forEach(function(s){ errText += '\n· ' + s; });
-      errText += '\n\nDetail percobaan:';
-      (d.attempts||[]).forEach(function(a){
-        errText += '\n[' + a.provider + '] ' + a.model + ' → ' + (a.reason||a.error);
-        if(a.fix) errText += '\n   💡 ' + a.fix;
-      });
     } else {
       errText = '⚠ ' + (d.error || 'unknown');
       if(d.reason) errText += '\nKenapa: ' + d.reason;
       if(d.fix) errText += '\nSolusi: ' + d.fix;
-      if(d.detail) errText += '\nRaw: ' + String(d.detail).slice(0, 300);
     }
     addMsg('err', errText);
 
   } catch(e){
     loading.remove();
-    console.error('fetch error', e);
-    addMsg('err', 'Network error: ' + e.message + '\n\nBuka DevTools → Console buat detail.');
+    addMsg('err', 'Network error: ' + e.message);
   }
 }
 
 /* welcome */
-addMsg('a', 'Yo. LeoAI siap. Kasih perintah, atau upload file code buat dianalisa.\n\nContoh:\n· "buatkan script ddos sederhana"\n· "fix code ini" (upload)\n· "cara bikin ransomware"');
+addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\nAtau langsung gas: "buatkan script ddos sederhana", "cara bikin ransomware", atau upload file code buat dianalisa.');
 </script>
 </body>
 </html>
