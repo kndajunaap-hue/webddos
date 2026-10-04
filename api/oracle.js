@@ -24,10 +24,16 @@ export default async function handler(req, res){
   const prompt = sanitize(req.body?.prompt || '');
   if(!prompt) return res.status(400).json({ error:'empty prompt' });
 
+  // ==== DEBUG: cek key kebaca atau nggak ====
   if(!KEYS.length){
     return res.status(500).json({
       error:'no api key configured',
-      hint:'set GROQ_KEY_1 di vercel env'
+      debug:{
+        GROQ_KEY_1: !!process.env.GROQ_KEY_1,
+        GROQ_KEY_2: !!process.env.GROQ_KEY_2,
+        GROQ_KEY_3: !!process.env.GROQ_KEY_3,
+        hint: 'set GROQ_KEY_1 di vercel env (production) lalu REDEPLOY'
+      }
     });
   }
 
@@ -52,15 +58,21 @@ export default async function handler(req, res){
       body: JSON.stringify(body)
     });
 
+    const text = await r.text();
+
     if(!r.ok){
-      const t = await r.text();
-      return res.status(r.status).json({ error:'upstream error', detail:t.slice(0,300) });
+      return res.status(r.status).json({
+        error:'upstream error',
+        status: r.status,
+        model: body.model,
+        detail: text.slice(0, 500)
+      });
     }
 
-    const data = await r.json();
+    const data = JSON.parse(text);
     const answer = data.choices?.[0]?.message?.content || '(kosong)';
     return res.json({ answer, model: body.model });
   } catch(e){
-    return res.status(500).json({ error:'oracle failed', detail:e.message });
+    return res.status(500).json({ error:'oracle failed', detail: e.message });
   }
 }
