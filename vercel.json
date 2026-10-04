@@ -1,1 +1,6 @@
-
+{
+  "rewrites": [
+    { "source": "/api/attack", "destination": "/api/attack.js" },
+    { "source": "/api/scan",   "destination": "/api/scan.js" }
+  ]
+}
