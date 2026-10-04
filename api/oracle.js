@@ -1,6 +1,5 @@
-import { cors, ratelimit, originGuard, tokenGuard, sanitize } from './_guard.js';
+import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
 
-// Free-tier API key pool (rotasi otomatis)
 const KEYS = [
   process.env.GROQ_KEY_1,
   process.env.GROQ_KEY_2,
@@ -20,7 +19,6 @@ export default async function handler(req, res){
   if(!cors(req,res,'POST,OPTIONS')) return;
   if(!originGuard(req,res)) return;
   if(!ratelimit(req,res)) return;
-  if(!tokenGuard(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({ error:'POST only' });
 
   const prompt = sanitize(req.body?.prompt || '');
