@@ -1,7 +1,7 @@
 import https from 'https';
 import http from 'http';
 import { URL } from 'url';
-import { cors, ratelimit, originGuard, tokenGuard, validateTarget } from './_guard.js';
+import { cors, ratelimit, originGuard, validateTarget } from './_guard.js';
 
 const CHECKS = [
   { name:'SQL Injection',          sev:'high',   re:/sql syntax|mysql_fetch|ORA-\d{5}|PostgreSQL.*ERROR|ODBC.*Driver/i },
@@ -15,11 +15,11 @@ const CHECKS = [
 ];
 
 const HEADER_CHECKS = [
-  { name:'Missing HSTS',        sev:'medium', key:'strict-transport-security' },
-  { name:'Missing CSP',         sev:'medium', key:'content-security-policy' },
-  { name:'Missing X-Frame',     sev:'low',    key:'x-frame-options' },
-  { name:'Missing X-Content',   sev:'low',    key:'x-content-type-options' },
-  { name:'Missing Referrer',    sev:'low',    key:'referrer-policy' }
+  { name:'Missing HSTS',      sev:'medium', key:'strict-transport-security' },
+  { name:'Missing CSP',       sev:'medium', key:'content-security-policy' },
+  { name:'Missing X-Frame',   sev:'low',    key:'x-frame-options' },
+  { name:'Missing X-Content', sev:'low',    key:'x-content-type-options' },
+  { name:'Missing Referrer',  sev:'low',    key:'referrer-policy' }
 ];
 
 const PROBES = ['/admin','/login','/.git/','/.env','/phpinfo.php','/wp-admin/','/api/','/backup.zip','/config.php','/?id=1%27','/?q=<script>alert(1)</script>','/../../etc/passwd'];
@@ -49,7 +49,6 @@ export default async function handler(req,res){
   if(!cors(req,res,'POST,OPTIONS')) return;
   if(!originGuard(req,res)) return;
   if(!ratelimit(req,res)) return;
-  if(!tokenGuard(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({ error:'POST only' });
 
   const target = validateTarget(req.body?.target);
