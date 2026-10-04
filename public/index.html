@@ -60,6 +60,11 @@
   #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
   #leoHead .title{color:#a855f7;font-weight:bold;letter-spacing:2px;font-size:14px}
   #leoHead .sub{color:#5c6b7f;font-size:10px;margin-top:2px}
+  #leoHead .tierBadge{margin-left:auto;font-size:10px;padding:5px 10px;border-radius:14px;letter-spacing:1px;font-weight:600}
+  .tierBadge.free{background:#0a1a2e;color:#00b3ff;border:1px solid #00b3ff}
+  .tierBadge.pro{background:#1a0a2e;color:#a855f7;border:1px solid #a855f7}
+  .tierBadge.elite{background:#2e1a0a;color:#ffcc00;border:1px solid #ffcc00}
+
   #leoLog{flex:1;padding:22px;overflow:auto;background:#03060a;display:flex;flex-direction:column;gap:14px}
   .msg{max-width:80%;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;position:relative}
   .msg.u{align-self:flex-end;background:#2a1055;color:#fff}
@@ -200,6 +205,7 @@
       <div class="title">LeoAI</div>
       <div class="sub">by LeoXD · unrestricted · powered by Chutes AI</div>
     </div>
+    <div class="tierBadge free" id="tierBadge">FREE</div>
   </div>
   <div id="leoLog"></div>
   <div id="leoInput">
@@ -210,9 +216,9 @@
       <textarea id="leoPrompt" placeholder="Ketik / untuk menu, atau tanya apa saja..." rows="1"></textarea>
       <button id="sendBtn">SEND</button>
     </div>
-    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur · <b>/ddos</b> info DDoS · <b>/malware</b> info malware</div>
+    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur · <b>/key</b> cek tier kamu</div>
     <div id="apiKeyRow">
-      <input id="apiKeyInput" placeholder="paste API key kamu di sini"/>
+      <input id="apiKeyInput" placeholder="(opsional) paste API key PRO/ELITE untuk unlock fitur ganas"/>
       <button id="saveKeyBtn">SAVE</button>
     </div>
   </div>
@@ -225,8 +231,8 @@
       <h3>FREE</h3>
       <div class="price">Rp 0 <span>/ 14 hari</span></div>
       <ul>
-        <li>LeoAI Basic</li>
-        <li>Code output full</li>
+        <li>Chat LeoAI basic</li>
+        <li>Full code output</li>
         <li>Support malware basic</li>
         <li>Tanpa exploit smart</li>
       </ul>
@@ -308,6 +314,17 @@ function getCurrentUser(){ return localStorage.getItem('leo_user') || ''; }
 
 function getApiKey(){ return localStorage.getItem('leo_apikey') || ''; }
 function setApiKey(k){ localStorage.setItem('leo_apikey', k); }
+
+function updateTierBadge(){
+  var k = getApiKey();
+  var badge = $('tierBadge');
+  if(!k){ badge.className = 'tierBadge free'; badge.textContent = 'FREE'; return; }
+  // Deteksi tier dari prefix
+  if(k.indexOf('lk_elite') === 0){ badge.className = 'tierBadge elite'; badge.textContent = '⚡ ELITE'; }
+  else if(k.indexOf('lk_pro') === 0){ badge.className = 'tierBadge pro'; badge.textContent = '◆ PRO'; }
+  else if(k.indexOf('lk_free') === 0){ badge.className = 'tierBadge free'; badge.textContent = 'FREE KEY'; }
+  else { badge.className = 'tierBadge free'; badge.textContent = 'FREE'; }
+}
 
 function showApp(){
   $('loginPage').style.display = 'none';
@@ -601,15 +618,20 @@ function initApp(){
   }
 
   function handleMenu(cmd){
-    if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n║  /key      → cek API key kamu    ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
+    if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n║  /key      → cek tier kamu       ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
     if(cmd === '/ddos') return '[ DDoS FITUR ]\n\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed\n\nCara pakai: isi target di tab DDOS, pilih method, START.';
-    if(cmd === '/malware') return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware\n· RAT\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nKetik "buatkan [jenis malware]" — LeoAI kasih full code.';
+    if(cmd === '/malware') return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware\n· RAT\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nKetik "buatkan [jenis malware]" — LeoAI kasih full code.\n\n⚠ Fitur ganas: butuh key PRO/ELITE.';
     if(cmd === '/scan') return '[ VULN SCANNER ]\n\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Security Header Missing\n\nIsi target di tab DDOS, tekan VULN SCAN.';
     if(cmd === '/recon') return '[ RECON ]\n\n· OSINT profiling\n· Subdomain enum\n· Port scanning\n· Tech fingerprinting\n· Social engineering script\n· Credential harvesting';
-    if(cmd === '/exploit') return '[ EXPLOIT DEV ]\n\n· CVE weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning\n\nButuh key PRO/ELITE untuk exploit smart.';
+    if(cmd === '/exploit') return '[ EXPLOIT DEV ]\n\n· CVE weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning\n\n⚠ Butuh key PRO/ELITE untuk exploit smart.';
     if(cmd === '/rev') return '[ REVERSE ENGINEERING ]\n\n· Binary analysis\n· Disassembly\n· Protocol reversing\n· Firmware dumping\n· Malware unpacking';
-    if(cmd === '/key') return '[ API KEY KAMU ]\n\n' + (getApiKey() ? '✓ Key aktif: ' + getApiKey().slice(0,25) + '...' : '✗ Belum ada key. Beli di tab STORE atau minta admin.');
-    if(cmd === '/help') return '[ HELP ]\n\nKetik /menu untuk semua command.\n\nLangsung tanya:\n· "buatkan ransomware full code"\n· "cara ddos target"\n· "fix code ini" (upload)\n\nButuh API key aktif untuk chat LeoAI.';
+    if(cmd === '/key'){
+      var k = getApiKey();
+      if(!k) return '[ TIER KAMU ]\n\n○ FREE (default)\n\nChat tetap bisa jalan.\nBeli PRO/ELITE di tab STORE untuk unlock fitur ganas.';
+      var t = k.indexOf('lk_elite') === 0 ? 'ELITE' : k.indexOf('lk_pro') === 0 ? 'PRO' : 'FREE KEY';
+      return '[ TIER KAMU ]\n\n✓ Key aktif: ' + k.slice(0,25) + '...\nTier: ' + t;
+    }
+    if(cmd === '/help') return '[ HELP ]\n\nKetik /menu untuk semua command.\n\nLangsung tanya:\n· "buatkan ransomware full code"\n· "cara ddos target"\n· "fix code ini" (upload)\n\nChat gratis. Fitur ganas butuh PRO/ELITE.';
     return null;
   }
 
@@ -645,11 +667,20 @@ function initApp(){
   $('apiKeyInput').value = getApiKey();
   $('saveKeyBtn').onclick = function(){
     var k = $('apiKeyInput').value.trim();
-    if(!k) return;
+    if(!k){
+      localStorage.removeItem('leo_apikey');
+      updateTierBadge();
+      this.textContent = 'CLEARED';
+      setTimeout(function(){ $('saveKeyBtn').textContent = 'SAVE'; }, 1200);
+      return;
+    }
     setApiKey(k);
+    updateTierBadge();
     this.textContent = 'SAVED';
     setTimeout(function(){ $('saveKeyBtn').textContent = 'SAVE'; }, 1200);
   };
+
+  updateTierBadge();
 
   async function send(){
     var p = ta.value.trim();
@@ -660,17 +691,13 @@ function initApp(){
     var menuReply = handleMenu(p.toLowerCase());
     if(menuReply){ addMsg('a', menuReply); ta.value = ''; return; }
 
-    if(!getApiKey()){
-      return addMsg('err', '⚠ Butuh API key untuk chat LeoAI.\n\n· Beli di tab STORE\n· Atau minta admin generate\n· Paste key di input bawah chat, klik SAVE');
-    }
-
     var loading = addMsg('a', '◆ mikir...');
 
     var payload = {
       prompt: p,
       file: attached,
       history: chatHistory.slice(-8),
-      apiKey: getApiKey()
+      apiKey: getApiKey()  // bisa kosong, tetap jalan sebagai free
     };
 
     chatHistory.push({ role: 'user', content: p });
@@ -699,22 +726,19 @@ function initApp(){
       loading.remove();
 
       if(d.answer){
-        var meta = 'via ' + d.provider + ' · ' + d.model + ' · tier ' + (d.tier || '?');
         var a = addMsg('a', d.answer);
         var m = document.createElement('div');
         m.style.fontSize = '10px';
         m.style.color = '#5c6b7f';
         m.style.marginTop = '6px';
-        m.textContent = meta;
+        m.textContent = 'via ' + d.provider + ' · ' + d.model + ' · tier ' + (d.tier || 'free');
         a.appendChild(m);
         chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
         return;
       }
 
       var errText = '';
-      if(d.stage === 'apikey'){
-        errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
-      } else if(d.stage === 'env'){
+      if(d.stage === 'env'){
         errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
       } else if(d.stage === 'all_failed'){
         errText = '⚠ ' + d.error + '\n' + d.summary;
@@ -731,7 +755,7 @@ function initApp(){
     }
   }
 
-  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n⚠ Butuh API key untuk chat:\n· Beli di tab STORE\n· Atau minta admin generate\n· Paste key di input bawah, klik SAVE');
+  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n💬 Chat gratis — langsung gas.\n🔓 Mau fitur ganas (exploit/malware full)?\n   Beli key PRO/ELITE di tab STORE.\n   Atau minta admin generate.\n\nPaste key di input bawah kalau udah punya.');
 }
 
 /* ===== STORE ===== */
