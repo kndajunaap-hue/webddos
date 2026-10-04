@@ -1,6 +1,6 @@
 {
-  "name": "ddos-console-v2",
-  "version": "2.0.0",
+  "name": "ddos-console",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "dependencies": {}
