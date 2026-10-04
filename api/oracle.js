@@ -17,6 +17,13 @@ const PROVIDERS = [
     })
   },
   {
+    name: 'chutes',
+    url: 'https://llm.chutes.ai/v1/chat/completions',
+    key: process.env.CHUTES_KEY,
+    models: ['deepseek-ai/DeepSeek-V3.2-TEE'],
+    headers: k => ({ 'Authorization':'Bearer ' + k })
+  },
+  {
     name: 'groq',
     url: 'https://api.groq.com/openai/v1/chat/completions',
     key: process.env.GROQ_KEY_1,
