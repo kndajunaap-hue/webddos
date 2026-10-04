@@ -36,7 +36,7 @@ export default async function handler(req, res){
   }
 
   const body = {
-    model: 'llama-3.3-70b-versatile',
+    model: 'openai/gpt-oss-120b',
     messages: [
       { role:'system', content:'Kamu ORACLE, AI commander di ddos-console. Jawab teknis singkat.' },
       { role:'user',   content: prompt }
