@@ -3,86 +3,143 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>ddos-console</title>
+<title>ddos-console v2</title>
 <style>
   :root{
-    --bg:#0a0e14; --panel:#0f1520; --line:#1c2636;
-    --accent:#00ff9d; --accent2:#00b3ff; --danger:#ff3b5c;
+    --bg:#05070c; --panel:#0a1018; --line:#16202e;
+    --accent:#00ff9d; --accent2:#00b3ff; --danger:#ff3b5c; --warn:#ffcc00;
     --text:#c9d4e0; --dim:#5c6b7f;
   }
   *{box-sizing:border-box;margin:0;padding:0;font-family:'JetBrains Mono','Courier New',monospace}
-  body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+  body{background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+  #boot{
+    position:fixed;inset:0;background:var(--bg);z-index:999;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+    transition:opacity .6s;
+  }
+  #boot.done{opacity:0;pointer-events:none}
+  .radar{width:180px;height:180px;position:relative}
+  .radar::before{
+    content:'';position:absolute;inset:0;border-radius:50%;
+    border:1px solid var(--accent);opacity:.2;
+    box-shadow:0 0 60px var(--accent) inset;
+  }
+  .radar::after{
+    content:'';position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg, transparent 0deg, var(--accent) 30deg, transparent 60deg);
+    animation:sweep 1.4s linear infinite;
+    filter:blur(2px);
+  }
+  @keyframes sweep{to{transform:rotate(360deg)}}
+  .radar .ring{position:absolute;inset:20%;border-radius:50%;border:1px solid var(--accent);opacity:.3}
+  .radar .ring2{position:absolute;inset:40%;border-radius:50%;border:1px solid var(--accent);opacity:.4}
+  .radar .dot{position:absolute;width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent)}
+  #bootTxt{font-size:12px;letter-spacing:4px;color:var(--accent)}
+  #bootSub{font-size:10px;color:var(--dim);letter-spacing:2px}
+
   header{
-    padding:14px 22px;border-bottom:1px solid var(--line);
+    padding:12px 20px;border-bottom:1px solid var(--line);
     display:flex;align-items:center;gap:12px;background:var(--panel);
   }
   header .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
-  header h1{font-size:14px;letter-spacing:3px;font-weight:600}
+  header h1{font-size:13px;letter-spacing:3px;font-weight:600}
   header .status{margin-left:auto;font-size:11px;color:var(--dim)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-  main{flex:1;display:grid;grid-template-columns:320px 1fr;gap:0;min-height:0}
-  aside{border-right:1px solid var(--line);padding:18px;background:var(--panel);overflow:auto}
-  aside label{display:block;font-size:11px;letter-spacing:2px;color:var(--dim);margin:14px 0 6px}
-  aside input, aside select{
-    width:100%;padding:10px 12px;background:#0a1018;border:1px solid var(--line);
+  main{height:calc(100vh - 46px);display:grid;grid-template-columns:340px 1fr;min-height:0}
+  aside{border-right:1px solid var(--line);padding:16px;background:var(--panel);overflow:auto}
+  aside label{display:block;font-size:10px;letter-spacing:2px;color:var(--dim);margin:12px 0 5px}
+  aside input,aside select{
+    width:100%;padding:9px 11px;background:#05090f;border:1px solid var(--line);
     color:var(--text);font-size:12px;outline:none;border-radius:4px;
   }
-  aside input:focus, aside select:focus{border-color:var(--accent)}
-  .btns{display:flex;gap:8px;margin-top:18px}
+  aside input:focus,aside select:focus{border-color:var(--accent)}
+  .btns{display:flex;gap:8px;margin-top:14px}
   button{
     flex:1;padding:10px;border:1px solid var(--accent);background:transparent;
     color:var(--accent);font-size:11px;letter-spacing:2px;cursor:pointer;
-    border-radius:4px;transition:.15s;
+    border-radius:4px;transition:.15s;font-weight:600;
   }
   button:hover{background:var(--accent);color:#000}
   button.danger{border-color:var(--danger);color:var(--danger)}
   button.danger:hover{background:var(--danger);color:#000}
+  button.ai{border-color:var(--accent2);color:var(--accent2)}
+  button.ai:hover{background:var(--accent2);color:#000}
 
   .console{display:flex;flex-direction:column;min-height:0}
   .console-head{
     padding:10px 16px;border-bottom:1px solid var(--line);
     font-size:11px;letter-spacing:2px;color:var(--dim);display:flex;gap:16px;
   }
-  #log{
-    flex:1;padding:16px;overflow:auto;font-size:12px;line-height:1.6;
-    background:#070b11;white-space:pre-wrap;word-break:break-all;
-  }
+  #log{flex:1;padding:14px;overflow:auto;font-size:12px;line-height:1.6;background:#03060a;white-space:pre-wrap;word-break:break-all}
   #log .ok{color:var(--accent)}
-  #log .warn{color:#ffcc00}
+  #log .warn{color:var(--warn)}
   #log .err{color:var(--danger)}
   #log .info{color:var(--accent2)}
   #log .dim{color:var(--dim)}
   .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid var(--line);font-size:11px;background:var(--panel)}
   .stats b{color:var(--accent)}
-  @media(max-width:800px){main{grid-template-columns:1fr}aside{border-right:none;border-bottom:1px solid var(--line)}}
+
+  #aiPanel{
+    position:fixed;right:20px;bottom:20px;width:380px;max-height:70vh;
+    background:var(--panel);border:1px solid var(--accent2);border-radius:8px;
+    display:none;flex-direction:column;z-index:50;box-shadow:0 0 30px rgba(0,179,255,.2);
+  }
+  #aiPanel.open{display:flex}
+  #aiHead{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;color:var(--accent2)}
+  #aiHead .close{margin-left:auto;cursor:pointer;color:var(--dim)}
+  #aiLog{flex:1;padding:12px;overflow:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-word;max-height:50vh}
+  #aiLog .u{color:var(--accent2);margin-bottom:8px}
+  #aiLog .a{color:var(--text);margin-bottom:12px;border-left:2px solid var(--accent);padding-left:8px}
+  #aiInput{display:flex;border-top:1px solid var(--line)}
+  #aiInput input{flex:1;padding:10px;background:#05090f;border:none;color:var(--text);font-size:12px;outline:none}
+  #aiInput button{flex:0 0 70px;border:none;border-left:1px solid var(--line);border-radius:0}
+
+  @media(max-width:800px){
+    main{grid-template-columns:1fr}
+    aside{border-right:none;border-bottom:1px solid var(--line);max-height:45vh}
+    #aiPanel{width:calc(100vw - 40px);right:20px;bottom:20px}
+  }
 </style>
 </head>
 <body>
+
+<div id="boot">
+  <div class="radar">
+    <div class="ring"></div><div class="ring2"></div>
+    <div class="dot" style="top:20%;left:65%"></div>
+    <div class="dot" style="top:70%;left:30%"></div>
+    <div class="dot" style="top:45%;left:80%"></div>
+  </div>
+  <div id="bootTxt">INITIALIZING CONSOLE</div>
+  <div id="bootSub" id="bootSub">loading modules...</div>
+</div>
+
 <header>
   <div class="dot"></div>
-  <h1>DDOS // CONSOLE</h1>
+  <h1>DDOS // CONSOLE v2</h1>
   <div class="status" id="status">idle</div>
 </header>
 
 <main>
   <aside>
     <label>TARGET URL / IP</label>
-    <input id="target" placeholder="https://target.com atau 1.2.3.4:80"/>
+    <input id="target" placeholder="https://target.com"/>
 
     <label>METHOD</label>
     <select id="method">
-      <option value="http">HTTP FLOOD</option>
-      <option value="slowloris">SLOWLORIS</option>
-      <option value="udp">UDP FLOOD</option>
-      <option value="syn">SYN FLOOD</option>
+      <option value="http">HTTP FLOOD (L7)</option>
+      <option value="slowloris">SLOWLORIS (L7)</option>
+      <option value="udp">UDP FLOOD (L4)</option>
+      <option value="syn">SYN FLOOD (L4)</option>
+      <option value="tls">TLS HELLO FLOOD</option>
     </select>
 
     <label>THREADS</label>
-    <input id="threads" type="number" value="128" min="1" max="2000"/>
+    <input id="threads" type="number" value="512" min="1" max="5000"/>
 
     <label>DURATION (s)</label>
-    <input id="duration" type="number" value="30" min="1" max="600"/>
+    <input id="duration" type="number" value="30" min="1" max="300"/>
 
     <div class="btns">
       <button id="start">START</button>
@@ -92,6 +149,10 @@
     <div class="btns">
       <button id="scan">VULN SCAN</button>
     </div>
+
+    <div class="btns">
+      <button id="oracle" class="ai">ORACLE AI</button>
+    </div>
   </aside>
 
   <section class="console">
@@ -99,29 +160,79 @@
       <span>root@ddos-console:~#</span>
       <span id="uptime">00:00:00</span>
     </div>
-    <div id="log"><span class="dim">[system] ready. isi target lalu tekan START.</span>
-</div>
+    <div id="log"><div class="dim">[system] ready. isi target lalu tekan START.</div></div>
     <div class="stats">
       <span>REQ: <b id="s-req">0</b></span>
       <span>ERR: <b id="s-err">0</b></span>
       <span>RPS: <b id="s-rps">0</b></span>
       <span>THREADS: <b id="s-th">0</b></span>
+      <span>STATUS: <b id="s-st">idle</b></span>
     </div>
   </section>
 </main>
 
+<div id="aiPanel">
+  <div id="aiHead">
+    <span>◆ ORACLE AI</span>
+    <span class="close" id="aiClose">✕</span>
+  </div>
+  <div id="aiLog"></div>
+  <div id="aiInput">
+    <input id="aiPrompt" placeholder="tanya apa saja..."/>
+    <button id="aiSend">SEND</button>
+  </div>
+</div>
+
 <script>
 const $ = id => document.getElementById(id);
+const TOKEN_KEY = 'console_token';
+
+// === TOKEN GENERATOR (HMAC-SHA256 dari 'console-v2') ===
+// Client pakai token statis: harus sama dengan HMAC di server
+// Set CONSOLE_SECRET di vercel, lalu ganti TOKEN di bawah dengan nilai HMAC-nya
+// atau ambil via prompt ke user
+function getToken(){
+  let t = localStorage.getItem(TOKEN_KEY);
+  if(!t){
+    t = prompt('masukkan console token:');
+    if(t) localStorage.setItem(TOKEN_KEY, t);
+  }
+  return t || '';
+}
+const TOKEN = getToken();
+
+const api = (path, opts={}) => fetch(path, {
+  ...opts,
+  headers: { 'Content-Type':'application/json', 'x-console-token': TOKEN, ...(opts.headers||{}) }
+});
+
+// === BOOT ANIMATION ===
+const bootMsgs = ['loading modules...','connecting proxy pool...','syncing oracle...','ready.'];
+let bi = 0;
+const bootIv = setInterval(() => {
+  document.getElementById('bootSub').textContent = bootMsgs[bi] || 'ready.';
+  bi++;
+  if(bi >= bootMsgs.length){
+    clearInterval(bootIv);
+    setTimeout(() => document.getElementById('boot').classList.add('done'), 600);
+  }
+}, 500);
+
+// === LOG ===
 const log = (msg, cls='') => {
   const t = new Date().toLocaleTimeString();
   $('log').innerHTML += `<div class="${cls}">[${t}] ${msg}</div>`;
   $('log').scrollTop = $('log').scrollHeight;
 };
 
-let running = false, req = 0, err = 0, startTs = 0, timer, uptTimer;
+let running = false, startTs = 0, timer, uptTimer;
 
-function reset(){ req=0; err=0; $('s-req').textContent=0; $('s-err').textContent=0; $('s-rps').textContent=0; }
+function setStatus(s){
+  $('status').textContent = s;
+  $('s-st').textContent = s;
+}
 
+// === START ===
 $('start').onclick = () => {
   if(running) return log('attack sudah berjalan.','warn');
   const target = $('target').value.trim();
@@ -130,16 +241,16 @@ $('start').onclick = () => {
   const threads = +$('threads').value;
   const duration = +$('duration').value;
 
-  running = true; reset(); startTs = Date.now();
-  $('status').textContent = 'running';
+  running = true; startTs = Date.now();
+  setStatus('running');
   log(`memulai ${method.toUpperCase()} → ${target} | threads=${threads} durasi=${duration}s`, 'ok');
 
-  fetch('/api/attack', {
+  api('/api/attack', {
     method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({target, method, threads, duration})
+    body: JSON.stringify({ target, method, threads, duration })
   }).then(r => r.json()).then(d => {
-    log(`worker spawned: ${d.workers} | proxy pool: ${d.proxies}`,'info');
+    if(d.error) return log('error: '+d.error,'err');
+    log(`worker spawned: ${d.workers} | method: ${d.method}`,'info');
     pollStats();
   }).catch(e => log('gagal spawn: '+e.message,'err'));
 
@@ -149,40 +260,68 @@ $('start').onclick = () => {
   },1000);
 };
 
+// === STOP ===
 $('stop').onclick = () => {
   if(!running) return;
   running = false;
   clearInterval(timer); clearInterval(uptTimer);
-  $('status').textContent = 'stopped';
+  setStatus('stopped');
   log('attack dihentikan.','warn');
-  fetch('/api/attack',{method:'DELETE'}).catch(()=>{});
+  api('/api/attack',{ method:'DELETE' }).catch(()=>{});
 };
 
+// === SCAN ===
 $('scan').onclick = async () => {
   const target = $('target').value.trim();
   if(!target) return log('target kosong.','err');
   log(`scanning vuln → ${target}`,'info');
-  const r = await fetch('/api/scan',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({target})
-  });
-  const d = await r.json();
-  d.findings.forEach(f => log(`[${f.severity}] ${f.name} — ${f.detail}`, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok'));
-  log(`scan selesai. ${d.findings.length} temuan.`,'ok');
+  try {
+    const r = await api('/api/scan',{ method:'POST', body:JSON.stringify({ target }) });
+    const d = await r.json();
+    if(d.error) return log('scan error: '+d.error,'err');
+    d.findings.forEach(f => log(`[${f.severity.toUpperCase()}] ${f.name} — ${f.detail}`, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok'));
+    log(`scan selesai. ${d.count} temuan.`,'ok');
+  } catch(e){ log('scan gagal: '+e.message,'err'); }
 };
 
+// === POLL STATS ===
 function pollStats(){
   if(!running) return;
-  fetch('/api/attack').then(r=>r.json()).then(d=>{
-    req = d.req; err = d.err;
-    $('s-req').textContent = req;
-    $('s-err').textContent = err;
+  api('/api/attack').then(r=>r.json()).then(d=>{
+    $('s-req').textContent = d.req;
+    $('s-err').textContent = d.err;
     $('s-rps').textContent = d.rps;
     $('s-th').textContent = d.threads;
+    if(!d.running) { running = false; setStatus('stopped'); }
     if(d.logs) d.logs.forEach(l => log(l.msg, l.cls));
   }).catch(()=>{});
   timer = setTimeout(pollStats, 1000);
+}
+
+// === ORACLE AI ===
+$('oracle').onclick = () => $('aiPanel').classList.toggle('open');
+$('aiClose').onclick = () => $('aiPanel').classList.remove('open');
+$('aiSend').onclick = sendAi;
+$('aiPrompt').addEventListener('keydown', e => { if(e.key==='Enter') sendAi(); });
+
+async function sendAi(){
+  const p = $('aiPrompt').value.trim();
+  if(!p) return;
+  $('aiPrompt').value = '';
+  $('aiLog').innerHTML += `<div class="u">▸ ${p}</div>`;
+  $('aiLog').scrollTop = $('aiLog').scrollHeight;
+  const loading = document.createElement('div');
+  loading.className = 'a'; loading.textContent = '◆ oracle sedang berpikir...';
+  $('aiLog').appendChild(loading);
+
+  try {
+    const r = await api('/api/oracle',{ method:'POST', body:JSON.stringify({ prompt:p }) });
+    const d = await r.json();
+    loading.textContent = '◆ ' + (d.answer || d.error || 'gagal');
+  } catch(e){
+    loading.textContent = '◆ error: ' + e.message;
+  }
+  $('aiLog').scrollTop = $('aiLog').scrollHeight;
 }
 </script>
 </body>
