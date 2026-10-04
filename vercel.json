@@ -2,7 +2,8 @@
   "rewrites": [
     { "source": "/api/attack", "destination": "/api/attack.js" },
     { "source": "/api/scan",   "destination": "/api/scan.js"   },
-    { "source": "/api/oracle", "destination": "/api/oracle.js" }
+    { "source": "/api/oracle", "destination": "/api/oracle.js" },
+    { "source": "/api/auth",   "destination": "/api/auth.js"   }
   ],
   "headers": [
     {
@@ -12,8 +13,7 @@
         { "key": "X-Content-Type-Options",    "value": "nosniff" },
         { "key": "Referrer-Policy",           "value": "no-referrer" },
         { "key": "Permissions-Policy",        "value": "geolocation=(), microphone=(), camera=()" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Content-Security-Policy",   "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'" }
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
       ]
     }
   ]
