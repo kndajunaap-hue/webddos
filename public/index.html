@@ -40,11 +40,9 @@
   nav .tab.leo.active{color:var(--leo);border-bottom-color:var(--leo)}
   nav .status{margin-left:auto;font-size:11px;color:var(--dim)}
 
-  /* PAGES */
   .page{display:none;height:calc(100vh - 48px);overflow:hidden}
   .page.active{display:block}
 
-  /* ============ DDOS PAGE ============ */
   main{height:100%;display:grid;grid-template-columns:340px 1fr;min-height:0}
   aside{border-right:1px solid var(--line);padding:16px;background:var(--panel);overflow:auto}
   aside label{display:block;font-size:10px;letter-spacing:2px;color:var(--dim);margin:12px 0 5px}
@@ -66,7 +64,7 @@
   .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid var(--line);font-size:11px;background:var(--panel);flex-wrap:wrap}
   .stats b{color:var(--accent)}
 
-  /* ============ LEO AI PAGE ============ */
+  /* LEO PAGE */
   .leo-wrap{height:100%;display:grid;grid-template-columns:260px 1fr;min-height:0}
   .leo-side{background:var(--panel);border-right:1px solid var(--line);padding:14px;overflow:auto;display:flex;flex-direction:column;gap:14px}
   .leo-side h3{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:6px}
@@ -88,7 +86,7 @@
   .msg.err{align-self:flex-start;background:#1a0a10;border-left:3px solid var(--danger);color:#ffb0bd}
   .msg .who{font-size:10px;letter-spacing:2px;color:var(--leo);margin-bottom:6px;display:block;font-weight:700}
   .msg.u .who{color:#e0b0ff;text-align:right}
-  .msg pre{background:#05090f;padding:10px;border-radius:6px;overflow-x:auto;margin:8px 0;font-size:11px;border-left:2px solid var(--leo)}
+  .msg pre{background:#05090f;padding:10px;border-radius:6px;overflow-x:auto;margin:8px 0;font-size:11px;border-left:2px solid var(--leo);white-space:pre}
   .msg code{background:#05090f;padding:2px 5px;border-radius:3px;font-size:11px;color:var(--leo2)}
   .msg .meta{font-size:9px;color:var(--dim);margin-top:8px;letter-spacing:1px;display:block}
   .msg .fix{background:#0a1a0f;border-left:2px solid var(--accent);padding:8px 10px;margin-top:8px;font-size:11px;border-radius:4px}
@@ -99,7 +97,6 @@
   @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-7px);opacity:1}}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  /* Input area */
   .leo-input-wrap{border-top:1px solid var(--line);background:var(--panel);padding:12px 22px}
   .file-chip{display:none;align-items:center;gap:8px;padding:6px 12px;background:#05090f;border:1px solid var(--leo);border-radius:20px;font-size:11px;margin-bottom:8px;width:fit-content;color:var(--leo)}
   .file-chip.on{display:flex}
@@ -142,7 +139,6 @@
   <div class="status" id="status">idle</div>
 </nav>
 
-<!-- PAGE: DDOS -->
 <div class="page active" id="page-ddos">
   <main>
     <aside>
@@ -191,7 +187,6 @@
   </main>
 </div>
 
-<!-- PAGE: LEO AI -->
 <div class="page" id="page-leo">
   <div class="leo-wrap">
     <div class="leo-side">
@@ -255,257 +250,314 @@
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
+/* ============ SAFE BOOT — JALAN PERTAMA ============ */
+(function forceBoot(){
+  // paksa hilangkan loading screen setelah 3 detik, apapun yang terjadi
+  setTimeout(function(){
+    var b = document.getElementById('boot');
+    if(b) b.classList.add('done');
+  }, 3000);
+})();
 
-const api = (path, opts={}) => fetch(path, {
-  ...opts,
-  headers: { 'Content-Type':'application/json', ...(opts.headers||{}) }
-});
+try {
 
-/* BOOT */
-const bootMsgs = ['loading modules...','connecting proxy pool...','mounting LeoAI core...','ready.'];
-let bi = 0;
-const bootIv = setInterval(() => {
-  $('bootSub').textContent = bootMsgs[bi] || 'ready.';
-  bi++;
-  if(bi >= bootMsgs.length){ clearInterval(bootIv); setTimeout(() => $('boot').classList.add('done'), 600); }
-}, 500);
+  var $ = function(id){ return document.getElementById(id); };
 
-/* NAV */
-document.querySelectorAll('.tab').forEach(t => {
-  t.onclick = () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    $('page-' + t.dataset.page).classList.add('active');
+  var api = function(path, opts){
+    opts = opts || {};
+    return fetch(path, {
+      method: opts.method || 'GET',
+      headers: Object.assign({ 'Content-Type':'application/json' }, opts.headers || {}),
+      body: opts.body
+    });
   };
-});
 
-/* ============ DDOS ============ */
-const log = (msg, cls='') => {
-  const t = new Date().toLocaleTimeString();
-  $('log').innerHTML += `<div class="${cls}">[${t}] ${msg}</div>`;
-  $('log').scrollTop = $('log').scrollHeight;
-};
+  /* BOOT */
+  var bootMsgs = ['loading modules...','connecting proxy pool...','mounting LeoAI core...','ready.'];
+  var bi = 0;
+  var bootIv = setInterval(function(){
+    var sub = $('bootSub');
+    if(sub) sub.textContent = bootMsgs[bi] || 'ready.';
+    bi++;
+    if(bi >= bootMsgs.length){
+      clearInterval(bootIv);
+      setTimeout(function(){ var b = $('boot'); if(b) b.classList.add('done'); }, 600);
+    }
+  }, 500);
 
-let running = false, startTs = 0, timer, uptTimer;
-
-function setStatus(s){ $('status').textContent = s; $('s-st').textContent = s; }
-
-$('start').onclick = () => {
-  if(running) return log('attack sudah berjalan.','warn');
-  const target = $('target').value.trim();
-  if(!target) return log('target kosong.','err');
-  const method = $('method').value;
-  const threads = +$('threads').value;
-  const duration = +$('duration').value;
-  const spoof = $('spoof').value === 'on';
-
-  running = true; startTs = Date.now();
-  setStatus('running');
-  log(`memulai ${method.toUpperCase()} → ${target} | t=${threads} d=${duration}s spoof=${spoof}`, 'ok');
-
-  api('/api/attack', {
-    method:'POST',
-    body: JSON.stringify({ target, method, threads, duration, spoof })
-  }).then(r => r.json()).then(d => {
-    if(d.error) return log('error: '+d.error,'err');
-    log(`worker spawned: ${d.workers} | method: ${d.method}`,'info');
-    pollStats();
-  }).catch(e => log('gagal spawn: '+e.message,'err'));
-
-  uptTimer = setInterval(() => {
-    const s = Math.floor((Date.now()-startTs)/1000);
-    $('uptime').textContent = new Date(s*1000).toISOString().substr(11,8);
-  },1000);
-};
-
-$('stop').onclick = () => {
-  if(!running) return;
-  running = false;
-  clearInterval(timer); clearInterval(uptTimer);
-  setStatus('stopped');
-  log('attack dihentikan.','warn');
-  api('/api/attack',{ method:'DELETE' }).catch(()=>{});
-};
-
-$('scan').onclick = async () => {
-  const target = $('target').value.trim();
-  if(!target) return log('target kosong.','err');
-  log(`scanning vuln → ${target}`,'info');
-  try {
-    const r = await api('/api/scan',{ method:'POST', body:JSON.stringify({ target }) });
-    const d = await r.json();
-    if(d.error) return log('scan error: '+d.error,'err');
-    d.findings.forEach(f => log(`[${f.severity.toUpperCase()}] ${f.name} — ${f.detail}`, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok'));
-    log(`scan selesai. ${d.count} temuan.`,'ok');
-  } catch(e){ log('scan gagal: '+e.message,'err'); }
-};
-
-function pollStats(){
-  if(!running) return;
-  api('/api/attack').then(r=>r.json()).then(d=>{
-    $('s-req').textContent = d.req;
-    $('s-err').textContent = d.err;
-    $('s-rps').textContent = d.rps;
-    $('s-th').textContent = d.threads;
-    if(!d.running) { running = false; setStatus('stopped'); }
-    if(d.logs) d.logs.forEach(l => log(l.msg, l.cls));
-  }).catch(()=>{});
-  timer = setTimeout(pollStats, 1000);
-}
-
-/* ============ LEO AI CHAT ============ */
-let history = [];
-let attachedFile = null;
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function renderMarkdown(txt){
-  let h = escapeHtml(txt);
-  h = h.replace(/
-```(\w*)\n([\s\S]*?)```
-/g, (m, lang, code) => `<pre>${code}</pre>`);
-  h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
-  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-  h = h.replace(/\n/g, '<br>');
-  return h;
-}
-
-function addMsg(type, content, meta){
-  const d = document.createElement('div');
-  d.className = 'msg ' + type;
-  if(type === 'u'){
-    d.innerHTML = `<span class="who">YOU</span>${escapeHtml(content)}`;
-  } else if(type === 'a'){
-    d.innerHTML = `<span class="who">◆ LEO AI</span>${renderMarkdown(content)}${meta?`<span class="meta">${meta}</span>`:''}`;
-  } else {
-    d.innerHTML = `<span class="who">⚠ ERROR</span>${content}`;
+  /* NAV */
+  var tabs = document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){
+    (function(t){
+      t.onclick = function(){
+        var allTabs = document.querySelectorAll('.tab');
+        var allPages = document.querySelectorAll('.page');
+        for(var j=0;j<allTabs.length;j++) allTabs[j].classList.remove('active');
+        for(var k=0;k<allPages.length;k++) allPages[k].classList.remove('active');
+        t.classList.add('active');
+        var pg = $('page-' + t.dataset.page);
+        if(pg) pg.classList.add('active');
+      };
+    })(tabs[i]);
   }
-  $('leoLog').appendChild(d);
-  $('leoLog').scrollTop = $('leoLog').scrollHeight;
-  return d;
-}
 
-function addTyping(){
-  const d = document.createElement('div');
-  d.className = 'typing';
-  d.innerHTML = '<span></span><span></span><span></span>';
-  $('leoLog').appendChild(d);
-  $('leoLog').scrollTop = $('leoLog').scrollHeight;
-  return d;
-}
+  /* DDOS */
+  function log(msg, cls){
+    cls = cls || '';
+    var t = new Date().toLocaleTimeString();
+    var el = $('log');
+    if(!el) return;
+    el.innerHTML += '<div class="' + cls + '">[' + t + '] ' + msg + '</div>';
+    el.scrollTop = el.scrollHeight;
+  }
 
-/* textarea auto-resize */
-const ta = $('leoPrompt');
-ta.addEventListener('input', () => {
-  ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
-});
+  var running = false, startTs = 0, timer, uptTimer;
 
-/* enter to send */
-ta.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendLeo(); }
-});
+  function setStatus(s){
+    if($('status')) $('status').textContent = s;
+    if($('s-st')) $('s-st').textContent = s;
+  }
 
-$('leoBtn').onclick = sendLeo;
+  var startBtn = $('start');
+  if(startBtn) startBtn.onclick = function(){
+    if(running) return log('attack sudah berjalan.','warn');
+    var target = $('target').value.trim();
+    if(!target) return log('target kosong.','err');
+    var method = $('method').value;
+    var threads = +$('threads').value;
+    var duration = +$('duration').value;
+    var spoof = $('spoof').value === 'on';
 
-/* file attach */
-$('attachBtn').onclick = () => $('fileInput').click();
-$('fileInput').onchange = e => {
-  const f = e.target.files[0];
-  if(!f) return;
-  if(f.size > 200*1024){ alert('File terlalu besar (max 200KB)'); return; }
-  const r = new FileReader();
-  r.onload = ev => {
-    attachedFile = { name:f.name, size:f.size, content:ev.target.result };
-    $('fileName').textContent = f.name + ' (' + (f.size/1024).toFixed(1) + 'KB)';
-    $('fileChip').classList.add('on');
-  };
-  r.readAsText(f);
-};
-$('fileClear').onclick = () => {
-  attachedFile = null;
-  $('fileInput').value = '';
-  $('fileChip').classList.remove('on');
-};
+    running = true; startTs = Date.now();
+    setStatus('running');
+    log('memulai ' + method.toUpperCase() + ' → ' + target + ' | t=' + threads + ' d=' + duration + 's spoof=' + spoof, 'ok');
 
-/* new chat */
-$('newChat').onclick = () => {
-  history = [];
-  attachedFile = null;
-  $('fileChip').classList.remove('on');
-  $('leoLog').innerHTML = '';
-  addMsg('a', 'Session baru dimulai. Siap eksekusi. Kasih target, code, atau file — langsung gas.\n\n_Kemampuan: code fixing, malware dev, exploit, recon, DDoS strategy, reverse engineering, dan lainnya._', 'LeoAI v3 · fresh session');
-};
+    api('/api/attack', {
+      method:'POST',
+      body: JSON.stringify({ target: target, method: method, threads: threads, duration: duration, spoof: spoof })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if(d.error) return log('error: ' + d.error,'err');
+      log('worker spawned: ' + d.workers + ' | method: ' + d.method,'info');
+      pollStats();
+    }).catch(function(e){ log('gagal spawn: ' + e.message,'err'); });
 
-async function sendLeo(){
-  const p = ta.value.trim();
-  if(!p && !attachedFile) return;
-
-  const userText = p || '(file only)';
-  addMsg('u', userText + (attachedFile ? `\n📎 ${attachedFile.name}` : ''));
-
-  const payload = {
-    prompt: p,
-    file: attachedFile,
-    history: history.slice(-8)
+    uptTimer = setInterval(function(){
+      var s = Math.floor((Date.now()-startTs)/1000);
+      if($('uptime')) $('uptime').textContent = new Date(s*1000).toISOString().substr(11,8);
+    },1000);
   };
 
-  history.push({ role:'user', content: userText + (attachedFile ? ` [file: ${attachedFile.name}]` : '') });
-  ta.value = ''; ta.style.height = 'auto';
-  attachedFile = null; $('fileChip').classList.remove('on'); $('fileInput').value = '';
+  var stopBtn = $('stop');
+  if(stopBtn) stopBtn.onclick = function(){
+    if(!running) return;
+    running = false;
+    clearInterval(timer); clearInterval(uptTimer);
+    setStatus('stopped');
+    log('attack dihentikan.','warn');
+    api('/api/attack',{ method:'DELETE' }).catch(function(){});
+  };
 
-  const typing = addTyping();
-
-  try {
-    const r = await api('/api/oracle',{ method:'POST', body:JSON.stringify(payload) });
-    const d = await r.json();
-    typing.remove();
-
-    if(d.answer){
-      addMsg('a', d.answer, `via ${d.provider} · ${d.model}`);
-      history.push({ role:'assistant', content: d.answer.slice(0,2000) });
-      return;
-    }
-
-    // error
-    if(d.stage === 'env'){
-      let html = `<b>${d.error}</b><br><br><b>Kenapa:</b> ${d.reason}<br><b>Solusi:</b> ${d.fix}<br><br><b>Status env:</b><br>`;
-      for(const [k,v] of Object.entries(d.status||{})) html += `${v?'✅':'❌'} ${k}<br>`;
-      addMsg('err', html);
-      return;
-    }
-    if(d.stage === 'all_failed'){
-      let html = `<b>${d.error}</b><br><span style="color:var(--dim)">${d.summary}</span><br><br><b>Saran:</b><br>`;
-      (d.suggestions||[]).forEach(s => html += `· ${s}<br>`);
-      html += '<br><b>Detail percobaan:</b><br>';
-      (d.attempts||[]).forEach(a => {
-        html += `<div style="margin:5px 0;padding:8px;background:#05090f;border-radius:5px;font-size:11px">`;
-        html += `<b>${a.provider}</b> → <code>${a.model}</code><br>`;
-        html += `<span style="color:var(--danger)">${a.reason||a.error}</span>`;
-        if(a.fix) html += `<div class="fix">💡 ${a.fix}</div>`;
-        html += `</div>`;
+  var scanBtn = $('scan');
+  if(scanBtn) scanBtn.onclick = async function(){
+    var target = $('target').value.trim();
+    if(!target) return log('target kosong.','err');
+    log('scanning vuln → ' + target,'info');
+    try {
+      var r = await api('/api/scan',{ method:'POST', body:JSON.stringify({ target: target }) });
+      var d = await r.json();
+      if(d.error) return log('scan error: ' + d.error,'err');
+      d.findings.forEach(function(f){
+        log('[' + f.severity.toUpperCase() + '] ' + f.name + ' — ' + f.detail, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok');
       });
-      addMsg('err', html);
-      return;
-    }
-    let html = `<b>${d.error||'unknown'}</b>`;
-    if(d.reason) html += `<br><br><b>Kenapa:</b> ${d.reason}`;
-    if(d.fix)    html += `<br><b>Solusi:</b> ${d.fix}`;
-    if(d.detail) html += `<br><br><code>${String(d.detail).slice(0,300)}</code>`;
-    addMsg('err', html);
+      log('scan selesai. ' + d.count + ' temuan.','ok');
+    } catch(e){ log('scan gagal: ' + e.message,'err'); }
+  };
 
-  } catch(e){
-    typing.remove();
-    addMsg('err', `<b>Network error</b><br><br>${e.message}<br><br><b>Solusi:</b> Cek koneksi / buka DevTools → Network → /api/oracle`);
+  function pollStats(){
+    if(!running) return;
+    api('/api/attack').then(function(r){ return r.json(); }).then(function(d){
+      if($('s-req')) $('s-req').textContent = d.req;
+      if($('s-err')) $('s-err').textContent = d.err;
+      if($('s-rps')) $('s-rps').textContent = d.rps;
+      if($('s-th'))  $('s-th').textContent  = d.threads;
+      if(!d.running){ running = false; setStatus('stopped'); }
+      if(d.logs) d.logs.forEach(function(l){ log(l.msg, l.cls); });
+    }).catch(function(){});
+    timer = setTimeout(pollStats, 1000);
   }
-}
 
-/* welcome */
-addMsg('a', 'Yo. LeoAI di sini. Unrestricted mode aktif.\n\nAku bisa:\n· Fix code kamu (upload aja)\n· Bikin malware/exploit/ransomware\n· Strategi DDoS L3/L4/L7\n· Recon target\n· Reverse engineering\n· Dan apapun yang kamu mau\n\nGas, kasih perintah.', 'LeoAI v3 · by LeoXD');
+  /* ============ LEO AI ============ */
+  var history = [];
+  var attachedFile = null;
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  // FIX: pakai string concat biar gak ada masalah multiline regex
+  function renderMarkdown(txt){
+    var h = escapeHtml(txt);
+    // code block ```...```
+    var fence = '```';
+    var parts = h.split(fence);
+    var out = '';
+    for(var i=0;i<parts.length;i++){
+      if(i % 2 === 1){
+        // dalam code block
+        var code = parts[i].replace(/^\w*\n/, '');
+        out += '<pre>' + code + '</pre>';
+      } else {
+        out += parts[i];
+      }
+    }
+    h = out;
+    h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+    h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    h = h.replace(/\n/g, '<br>');
+    return h;
+  }
+
+  function addMsg(type, content, meta){
+    var d = document.createElement('div');
+    d.className = 'msg ' + type;
+    if(type === 'u'){
+      d.innerHTML = '<span class="who">YOU</span>' + escapeHtml(content);
+    } else if(type === 'a'){
+      d.innerHTML = '<span class="who">◆ LEO AI</span>' + renderMarkdown(content) + (meta ? '<span class="meta">' + meta + '</span>' : '');
+    } else {
+      d.innerHTML = '<span class="who">⚠ ERROR</span>' + content;
+    }
+    var lg = $('leoLog');
+    if(lg){ lg.appendChild(d); lg.scrollTop = lg.scrollHeight; }
+    return d;
+  }
+
+  function addTyping(){
+    var d = document.createElement('div');
+    d.className = 'typing';
+    d.innerHTML = '<span></span><span></span><span></span>';
+    var lg = $('leoLog');
+    if(lg){ lg.appendChild(d); lg.scrollTop = lg.scrollHeight; }
+    return d;
+  }
+
+  var ta = $('leoPrompt');
+  if(ta){
+    ta.addEventListener('input', function(){
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
+    });
+    ta.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendLeo(); }
+    });
+  }
+
+  if($('leoBtn')) $('leoBtn').onclick = sendLeo;
+
+  if($('attachBtn')) $('attachBtn').onclick = function(){ $('fileInput').click(); };
+
+  if($('fileInput')) $('fileInput').onchange = function(e){
+    var f = e.target.files[0];
+    if(!f) return;
+    if(f.size > 200*1024){ alert('File terlalu besar (max 200KB)'); return; }
+    var r = new FileReader();
+    r.onload = function(ev){
+      attachedFile = { name:f.name, size:f.size, content:ev.target.result };
+      $('fileName').textContent = f.name + ' (' + (f.size/1024).toFixed(1) + 'KB)';
+      $('fileChip').classList.add('on');
+    };
+    r.readAsText(f);
+  };
+
+  if($('fileClear')) $('fileClear').onclick = function(){
+    attachedFile = null;
+    $('fileInput').value = '';
+    $('fileChip').classList.remove('on');
+  };
+
+  if($('newChat')) $('newChat').onclick = function(){
+    history = [];
+    attachedFile = null;
+    $('fileChip').classList.remove('on');
+    $('leoLog').innerHTML = '';
+    addMsg('a', 'Session baru dimulai. Siap eksekusi. Kasih target, code, atau file — langsung gas.', 'LeoAI v3 · fresh session');
+  };
+
+  async function sendLeo(){
+    var p = ta.value.trim();
+    if(!p && !attachedFile) return;
+
+    var userText = p || '(file only)';
+    addMsg('u', userText + (attachedFile ? '\n📎 ' + attachedFile.name : ''));
+
+    var payload = {
+      prompt: p,
+      file: attachedFile,
+      history: history.slice(-8)
+    };
+
+    history.push({ role:'user', content: userText + (attachedFile ? ' [file: ' + attachedFile.name + ']' : '') });
+    ta.value = ''; ta.style.height = 'auto';
+    attachedFile = null; $('fileChip').classList.remove('on'); $('fileInput').value = '';
+
+    var typing = addTyping();
+
+    try {
+      var r = await api('/api/oracle',{ method:'POST', body:JSON.stringify(payload) });
+      var d = await r.json();
+      typing.remove();
+
+      if(d.answer){
+        addMsg('a', d.answer, 'via ' + d.provider + ' · ' + d.model);
+        history.push({ role:'assistant', content: d.answer.slice(0,2000) });
+        return;
+      }
+
+      if(d.stage === 'env'){
+        var html = '<b>' + d.error + '</b><br><br><b>Kenapa:</b> ' + d.reason + '<br><b>Solusi:</b> ' + d.fix + '<br><br><b>Status env:</b><br>';
+        var st = d.status || {};
+        for(var k in st){ if(st.hasOwnProperty(k)) html += (st[k]?'✅':'❌') + ' ' + k + '<br>'; }
+        addMsg('err', html);
+        return;
+      }
+      if(d.stage === 'all_failed'){
+        var h2 = '<b>' + d.error + '</b><br><span style="color:var(--dim)">' + d.summary + '</span><br><br><b>Saran:</b><br>';
+        (d.suggestions||[]).forEach(function(s){ h2 += '· ' + s + '<br>'; });
+        h2 += '<br><b>Detail percobaan:</b><br>';
+        (d.attempts||[]).forEach(function(a){
+          h2 += '<div style="margin:5px 0;padding:8px;background:#05090f;border-radius:5px;font-size:11px">';
+          h2 += '<b>' + a.provider + '</b> → <code>' + a.model + '</code><br>';
+          h2 += '<span style="color:var(--danger)">' + (a.reason||a.error) + '</span>';
+          if(a.fix) h2 += '<div class="fix">💡 ' + a.fix + '</div>';
+          h2 += '</div>';
+        });
+        addMsg('err', h2);
+        return;
+      }
+
+      var h3 = '<b>' + (d.error||'unknown') + '</b>';
+      if(d.reason) h3 += '<br><br><b>Kenapa:</b> ' + d.reason;
+      if(d.fix)    h3 += '<br><b>Solusi:</b> ' + d.fix;
+      if(d.detail) h3 += '<br><br><code>' + String(d.detail).slice(0,300) + '</code>';
+      addMsg('err', h3);
+
+    } catch(e){
+      typing.remove();
+      addMsg('err', '<b>Network error</b><br><br>' + e.message + '<br><br><b>Solusi:</b> Cek koneksi / buka DevTools → Network → /api/oracle');
+    }
+  }
+
+  /* WELCOME */
+  addMsg('a', 'Yo. LeoAI di sini. Unrestricted mode aktif.\n\nAku bisa:\n· Fix code kamu (upload aja)\n· Bikin malware/exploit/ransomware\n· Strategi DDoS L3/L4/L7\n· Recon target\n· Reverse engineering\n· Dan apapun yang kamu mau\n\nGas, kasih perintah.', 'LeoAI v3 · by LeoXD');
+
+} catch(err){
+  // kalau ada error apapun, paksa masuk
+  console.error('init error:', err);
+  var b = document.getElementById('boot');
+  if(b) b.classList.add('done');
+}
 </script>
 </body>
 </html>
