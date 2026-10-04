@@ -7,28 +7,41 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:monospace}
   body{background:#05070c;color:#c9d4e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-  
-  /* Login Page */
-  #loginPage{position:fixed;inset:0;background:#05070c;display:flex;align-items:center;justify-content:center;z-index:9998}
-  .login-box{background:#0a1018;border:1px solid #16202e;padding:40px;border-radius:12px;width:340px;text-align:center}
-  .login-box h1{color:#00ff9d;font-size:20px;letter-spacing:3px;margin-bottom:8px}
-  .login-box p{color:#5c6b7f;font-size:11px;margin-bottom:24px}
-  .login-box input{width:100%;padding:12px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:13px;border-radius:6px;margin-bottom:12px;outline:none;font-family:monospace}
-  .login-box input:focus{border-color:#00ff9d}
-  .login-box button{width:100%;padding:12px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s}
-  .login-box button:hover{background:#00ff9d;color:#000}
-  .err-msg{color:#ff3b5c;font-size:11px;margin-bottom:12px;display:none}
 
+  /* ===== LOGIN PAGE ===== */
+  #loginPage{position:fixed;inset:0;background:#05070c;display:flex;align-items:center;justify-content:center;z-index:9998}
+  .login-box{background:#0a1018;border:1px solid #16202e;padding:36px;border-radius:12px;width:360px;text-align:center}
+  .login-box h1{color:#00ff9d;font-size:20px;letter-spacing:3px;margin-bottom:6px}
+  .login-box p{color:#5c6b7f;font-size:11px;margin-bottom:20px}
+  .authTabs{display:flex;gap:8px;margin-bottom:16px}
+  .authTabs button{flex:1;padding:10px;background:transparent;border:1px solid #5c6b7f;color:#5c6b7f;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace}
+  .authTabs button.active{border-color:#00ff9d;color:#00ff9d}
+  .login-box input{width:100%;padding:12px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:13px;border-radius:6px;margin-bottom:10px;outline:none;font-family:monospace}
+  .login-box input:focus{border-color:#00ff9d}
+  .login-box .primary{width:100%;padding:12px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace;margin-bottom:6px}
+  .login-box .primary:hover{background:#00ff9d;color:#000}
+  .login-box .github{width:100%;padding:12px;background:transparent;border:1px solid #fff;color:#fff;font-size:12px;letter-spacing:2px;cursor:pointer;border-radius:6px;font-weight:600;transition:.15s;font-family:monospace;margin-top:8px}
+  .login-box .github:hover{background:#fff;color:#000}
+  .divider{color:#5c6b7f;font-size:11px;margin:14px 0 6px;letter-spacing:2px}
+  .err-msg{color:#ff3b5c;font-size:11px;margin-bottom:10px;display:none;min-height:14px}
+  .ok-msg{color:#00ff9d;font-size:11px;margin-bottom:10px;display:none;min-height:14px}
+
+  /* ===== NAV ===== */
   nav{display:flex;background:#0a1018;border-bottom:1px solid #16202e;height:48px;align-items:center;padding:0 16px}
   nav .brand{color:#00ff9d;font-weight:bold;letter-spacing:3px;margin-right:20px}
   nav .tab{padding:14px 18px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
   nav .tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
   nav .tab.leo.active{color:#a855f7;border-bottom-color:#a855f7}
   nav .status{margin-left:auto;color:#5c6b7f;font-size:11px}
-  nav .logout{color:#ff3b5c;cursor:pointer;margin-left:16px;font-size:11px;letter-spacing:1px}
+  nav .userTag{color:#a855f7;font-size:11px;margin-left:16px;letter-spacing:1px}
+  nav .logout{color:#ff3b5c;cursor:pointer;margin-left:12px;font-size:11px;letter-spacing:1px}
+  nav .logout:hover{text-decoration:underline}
 
+  /* ===== PAGES ===== */
   .page{display:none;flex:1;overflow:hidden}
   .page.active{display:flex}
+
+  /* DDOS */
   #page-ddos{flex-direction:row}
   #page-ddos aside{width:320px;background:#0a1018;border-right:1px solid #16202e;padding:16px;overflow:auto}
   #page-ddos label{display:block;font-size:10px;color:#5c6b7f;letter-spacing:2px;margin:12px 0 5px}
@@ -44,6 +57,7 @@
   .stats{display:flex;gap:24px;padding:10px 16px;border-top:1px solid #16202e;font-size:11px;background:#0a1018}
   .stats b{color:#00ff9d}
 
+  /* LEO */
   #page-leo{flex-direction:column}
   #leoHead{padding:14px 22px;background:linear-gradient(90deg,#1a0f2e,#0a1018);border-bottom:1px solid #16202e;display:flex;align-items:center;gap:12px}
   #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
@@ -57,10 +71,9 @@
   .msg .who{font-size:10px;color:#a855f7;font-weight:bold;letter-spacing:2px;display:block;margin-bottom:5px}
   .msg.u .who{color:#e0b0ff;text-align:right}
   .msg.err .who{color:#ff3b5c}
-  
   .msg.a pre{background:#05090f;border-left:2px solid #a855f7;padding:12px;border-radius:6px;overflow-x:auto;margin:10px 0;position:relative;font-size:12px}
   .msg.a code{background:#05090f;padding:2px 5px;border-radius:3px;font-size:12px;color:#a855f7}
-  .copy-btn{position:absolute;top:6px;right:6px;background:transparent;border:1px solid #a855f7;color:#a855f7;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;transition:.15s;opacity:0.6}
+  .copy-btn{position:absolute;top:6px;right:6px;background:transparent;border:1px solid #a855f7;color:#a855f7;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;transition:.15s;opacity:0.6;font-family:monospace}
   .copy-btn:hover{background:#a855f7;color:#000;opacity:1}
 
   #leoInput{border-top:1px solid #16202e;background:#0a1018;padding:12px 22px}
@@ -69,35 +82,51 @@
   #fileChip .x{cursor:pointer;color:#ff3b5c;margin-left:8px;font-weight:bold}
   .inputRow{display:flex;gap:10px;background:#05090f;border:1px solid #16202e;border-radius:10px;padding:8px}
   .inputRow:focus-within{border-color:#a855f7}
-  .inputRow button{background:transparent;border:1px solid #a855f7;color:#a855f7;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px}
+  .inputRow button{background:transparent;border:1px solid #a855f7;color:#a855f7;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px;font-family:monospace}
   .inputRow button:hover{background:#a855f7;color:#000}
   #leoPrompt{flex:1;background:transparent;border:none;color:#c9d4e0;font-size:13px;outline:none;resize:none;min-height:30px;max-height:140px;font-family:monospace;padding:5px}
   #menuHint{font-size:10px;color:#5c6b7f;margin-top:8px;letter-spacing:1px}
+  #menuHint b{color:#a855f7}
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- ========== LOGIN / REGISTER PAGE ========== -->
 <div id="loginPage">
   <div class="login-box">
     <h1>DDOS-CONSOLE</h1>
     <p>by LeoXD</p>
-    <div class="err-msg" id="loginErr">Username atau password salah.</div>
+
+    <div class="authTabs">
+      <button id="tabLogin" class="active">LOGIN</button>
+      <button id="tabReg">REGISTER</button>
+    </div>
+
+    <div class="err-msg" id="loginErr"></div>
+    <div class="ok-msg" id="loginOk"></div>
+
     <input type="text" id="loginUser" placeholder="username" autocomplete="off"/>
-    <input type="password" id="loginPass" placeholder="password"/>
-    <button id="loginBtn">LOGIN</button>
+    <input type="password" id="loginPass" placeholder="password" autocomplete="off"/>
+
+    <button id="loginBtn" class="primary">LOGIN</button>
+    <button id="regBtn" class="primary" style="display:none">REGISTER</button>
+
+    <div class="divider">— atau —</div>
+    <button id="githubBtn" class="github">🐙 LOGIN WITH GITHUB</button>
   </div>
 </div>
 
-<nav>
+<!-- ========== MAIN APP ========== -->
+<nav id="mainNav" style="display:none">
   <span class="brand">DDOS-CONSOLE</span>
   <span class="tab active" data-p="ddos">DDOS</span>
   <span class="tab leo" data-p="leo">✦ LEO AI</span>
   <span class="status" id="navStatus">idle</span>
+  <span class="userTag" id="navUser"></span>
   <span class="logout" id="logoutBtn">LOGOUT</span>
 </nav>
 
-<div class="page active" id="page-ddos">
+<div class="page active" id="page-ddos" style="display:none">
   <aside>
     <label>TARGET</label>
     <input id="target" placeholder="https://target.com"/>
@@ -132,7 +161,7 @@
   </div>
 </div>
 
-<div class="page" id="page-leo">
+<div class="page" id="page-leo" style="display:none">
   <div id="leoHead">
     <div class="av">L</div>
     <div>
@@ -154,421 +183,490 @@
 </div>
 
 <script>
-/* ===== AUTH ===== */
-const AUTH_USER = 'LeoXD';
-const AUTH_PASS = 'LeoGans2026';
-
-function checkAuth(){
-  return localStorage.getItem('leo_auth') === 'ok';
-}
-function setAuth(v){
-  if(v) localStorage.setItem('leo_auth','ok');
-  else localStorage.removeItem('leo_auth');
-}
-
-document.getElementById('loginBtn').onclick = function(){
-  var u = document.getElementById('loginUser').value;
-  var p = document.getElementById('loginPass').value;
-  if(u === AUTH_USER && p === AUTH_PASS){
-    setAuth(true);
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('loginErr').style.display = 'none';
-  } else {
-    document.getElementById('loginErr').style.display = 'block';
-  }
-};
-document.getElementById('logoutBtn').onclick = function(){
-  setAuth(false);
-  location.reload();
-};
-
-if(checkAuth()){
-  document.getElementById('loginPage').style.display = 'none';
-}
-
 /* ===== UTIL ===== */
 function $(id){ return document.getElementById(id); }
 
-/* ===== NAV ===== */
-var tabs = document.querySelectorAll('.tab');
-for(var i=0;i<tabs.length;i++){
-  tabs[i].onclick = (function(t){
-    return function(){
-      document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
-      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-      t.classList.add('active');
-      var pg = $('page-' + t.dataset.p);
-      if(pg) pg.classList.add('active');
-    };
-  })(tabs[i]);
+/* ============================================================
+   AUTH SYSTEM
+   ============================================================ */
+function isLoggedIn(){
+  return !!localStorage.getItem('leo_auth');
 }
 
-/* ===== DDOS LOG ===== */
-function log(msg, cls){
-  cls = cls || '';
-  var el = $('log');
-  if(!el) return;
-  var t = new Date().toLocaleTimeString();
-  var d = document.createElement('div');
-  if(cls) d.className = cls;
-  d.textContent = '[' + t + '] ' + msg;
-  el.appendChild(d);
-  el.scrollTop = el.scrollHeight;
+function saveAuth(user, avatar){
+  localStorage.setItem('leo_auth', 'ok');
+  localStorage.setItem('leo_user', user || 'user');
+  if(avatar) localStorage.setItem('leo_avatar', avatar);
 }
 
-/* ===== DDOS START/STOP ===== */
-var running = false;
+function clearAuth(){
+  localStorage.removeItem('leo_auth');
+  localStorage.removeItem('leo_user');
+  localStorage.removeItem('leo_avatar');
+}
 
-$('startBtn').onclick = function(){
-  if(running) return log('sudah jalan', 'warn');
-  var target = $('target').value.trim();
-  if(!target) return log('target kosong', 'err');
-  var method = $('method').value;
-  var threads = +$('threads').value;
-  var duration = +$('duration').value;
+function showApp(){
+  $('loginPage').style.display = 'none';
+  $('mainNav').style.display = 'flex';
+  $('page-ddos').style.display = 'flex';
+  $('navUser').textContent = '@' + (localStorage.getItem('leo_user') || 'user');
+}
 
-  running = true;
-  $('navStatus').textContent = 'running';
-  $('sSt').textContent = 'running';
-  log('START ' + method + ' → ' + target, 'ok');
+function showLogin(){
+  $('loginPage').style.display = 'flex';
+  $('mainNav').style.display = 'none';
+  $('page-ddos').style.display = 'none';
+  $('page-leo').style.display = 'none';
+}
 
-  fetch('/api/attack', {
+/* ===== HANDLE GITHUB CALLBACK ===== */
+(function handleGithubCallback(){
+  var params = new URLSearchParams(location.search);
+  var token = params.get('leo_token');
+  var user = params.get('leo_user');
+  var avatar = params.get('leo_avatar');
+  var err = params.get('leo_err');
+
+  if(token && user){
+    saveAuth(user, avatar);
+    history.replaceState({}, '', location.pathname);
+  }
+  if(err){
+    // tampilkan error
+    setTimeout(function(){
+      var el = $('loginErr');
+      if(el){ el.textContent = 'GitHub error: ' + err; el.style.display = 'block'; }
+    }, 100);
+    history.replaceState({}, '', location.pathname);
+  }
+})();
+
+/* ===== TAB SWITCH ===== */
+var authMode = 'login';
+$('tabLogin').onclick = function(){
+  authMode = 'login';
+  this.classList.add('active');
+  $('tabReg').classList.remove('active');
+  $('loginBtn').style.display = 'block';
+  $('regBtn').style.display = 'none';
+  $('loginErr').style.display = 'none';
+  $('loginOk').style.display = 'none';
+};
+$('tabReg').onclick = function(){
+  authMode = 'register';
+  this.classList.add('active');
+  $('tabLogin').classList.remove('active');
+  $('loginBtn').style.display = 'none';
+  $('regBtn').style.display = 'block';
+  $('loginErr').style.display = 'none';
+  $('loginOk').style.display = 'none';
+};
+
+function showErr(msg){
+  $('loginErr').textContent = msg;
+  $('loginErr').style.display = 'block';
+  $('loginOk').style.display = 'none';
+}
+function showOk(msg){
+  $('loginOk').textContent = msg;
+  $('loginOk').style.display = 'block';
+  $('loginErr').style.display = 'none';
+}
+
+/* ===== REGISTER ===== */
+$('regBtn').onclick = function(){
+  var u = $('loginUser').value.trim();
+  var p = $('loginPass').value;
+
+  if(!u || !p){ return showErr('isi username dan password'); }
+  if(u.length < 3){ return showErr('username minimal 3 karakter'); }
+  if(p.length < 4){ return showErr('password minimal 4 karakter'); }
+
+  fetch('/api/auth?action=register', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ target: target, method: method, threads: threads, duration: duration })
+    body: JSON.stringify({ username: u, password: p })
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    if(d.error) return log('error: ' + d.error, 'err');
-    log('spawned ' + d.workers + ' workers', 'info');
-    poll();
+    if(d.error) return showErr(d.error);
+    showOk('Akun dibuat! Silakan login.');
+    setTimeout(function(){ $('tabLogin').click(); }, 1200);
   })
-  .catch(function(e){ log('gagal: ' + e.message, 'err'); });
+  .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-$('stopBtn').onclick = function(){
-  running = false;
-  $('navStatus').textContent = 'stopped';
-  $('sSt').textContent = 'stopped';
-  log('STOP', 'warn');
-  fetch('/api/attack', { method: 'DELETE' }).catch(function(){});
-};
+/* ===== LOGIN ===== */
+$('loginBtn').onclick = function(){
+  var u = $('loginUser').value.trim();
+  var p = $('loginPass').value;
 
-$('scanBtn').onclick = function(){
-  var target = $('target').value.trim();
-  if(!target) return log('target kosong', 'err');
-  log('scanning ' + target, 'info');
-  fetch('/api/scan', {
+  if(!u || !p){ return showErr('isi username dan password'); }
+
+  fetch('/api/auth?action=login', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ target: target })
+    body: JSON.stringify({ username: u, password: p })
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
-    if(d.error) return log('scan error: ' + d.error, 'err');
-    (d.findings || []).forEach(function(f){
-      log('[' + f.severity + '] ' + f.name + ' — ' + f.detail, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok');
-    });
-    log('scan selesai: ' + d.count + ' temuan', 'ok');
+    if(d.error) return showErr(d.error);
+    saveAuth(d.username);
+    showApp();
+    initApp();
   })
-  .catch(function(e){ log('scan gagal: ' + e.message, 'err'); });
+  .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-function poll(){
-  if(!running) return;
-  fetch('/api/attack')
+/* ===== GITHUB LOGIN ===== */
+$('githubBtn').onclick = function(){
+  fetch('/api/auth?action=config')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      $('sReq').textContent = d.req;
-      $('sErr').textContent = d.err;
-      $('sRps').textContent = d.rps;
-      if(!d.running){ running = false; $('sSt').textContent = 'stopped'; }
-      if(d.logs) d.logs.forEach(function(l){ log(l.msg, l.cls); });
+      if(!d.githubClientId){
+        return showErr('GitHub Client ID belum di-set di Vercel env');
+      }
+      var redirect = encodeURIComponent(location.origin + '/api/auth?action=github');
+      location.href = 'https://github.com/login/oauth/authorize?client_id=' + d.githubClientId + '&redirect_uri=' + redirect + '&scope=read:user';
     })
-    .catch(function(){});
-  setTimeout(poll, 1000);
-}
-
-/* ===== LEO AI ===== */
-var chatHistory = [];
-var attached = null;
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, function(c){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-  });
-}
-
-/* ===== COPY BUTTON RENDERER ===== */
-function renderWithCopy(text){
-  var h = escapeHtml(text);
-  var fence = '```';
-  var parts = h.split(fence);
-  var out = '';
-  for(var i=0;i<parts.length;i++){
-    if(i % 2 === 1){
-      var code = parts[i].replace(/^\w*\n/, '');
-      var id = 'code_' + Math.random().toString(36).slice(2,8);
-      out += '<pre id="' + id + '"><button class="copy-btn" data-target="' + id + '">COPY</button>' + code + '</pre>';
-    } else {
-      out += parts[i].replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-    }
-  }
-  return out;
-}
-
-function bindCopyButtons(){
-  document.querySelectorAll('.copy-btn').forEach(function(btn){
-    if(btn.dataset.bound) return;
-    btn.dataset.bound = '1';
-    btn.onclick = function(){
-      var id = btn.getAttribute('data-target');
-      var pre = document.getElementById(id);
-      if(!pre) return;
-      var code = pre.textContent.replace('COPY','');
-      navigator.clipboard.writeText(code).then(function(){
-        btn.textContent = 'COPIED!';
-        setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
-      }).catch(function(){
-        btn.textContent = 'FAIL';
-        setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
-      });
-    };
-  });
-}
-
-function addMsg(type, text){
-  var el = document.createElement('div');
-  el.className = 'msg ' + type;
-  var who = type === 'u' ? 'YOU' : type === 'a' ? '◆ LEO AI' : '⚠ ERROR';
-  if(type === 'a'){
-    el.innerHTML = '<span class="who">' + who + '</span>' + renderWithCopy(text);
-  } else {
-    el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
-  }
-  var lg = $('leoLog');
-  lg.appendChild(el);
-  lg.scrollTop = lg.scrollHeight;
-  bindCopyButtons();
-  return el;
-}
-
-/* ===== MENU COMMANDS ===== */
-function handleMenu(cmd){
-  if(cmd === '/menu'){
-    return `╔══════════════════════════════════╗
-║         LEO AI MENU              ║
-╠══════════════════════════════════╣
-║  /menu     → tampilkan menu      ║
-║  /ddos     → info fitur DDoS     ║
-║  /malware  → info fitur malware  ║
-║  /scan     → info vuln scanner   ║
-║  /recon    → info recon tools    ║
-║  /exploit  → info exploit dev    ║
-║  /rev      → reverse engineering ║
-║  /help     → bantuan umum        ║
-╚══════════════════════════════════╝
-
-Ketik /<command> untuk detail. Atau langsung tanya apa saja.`;
-  }
-  if(cmd === '/ddos'){
-    return `[ DDoS FITUR ]
-
-Tersedia di tab DDOS:
-· HTTP Flood (L7)
-· Slowloris (L7)
-· UDP Flood (L4)
-· SYN Flood (L4)
-· TLS Hello Flood
-· HTTP/2 Rapid Reset
-· Mixed (semua method)
-
-Cara pakai: isi target, pilih method, atur threads & duration, tekan START.`;
-  }
-  if(cmd === '/malware'){
-    return `[ MALWARE FITUR ]
-
-LeoAI bisa bantu:
-· Ransomware (encryption + payment flow)
-· RAT (remote access trojan)
-· Keylogger & Stealer
-· Worm & Dropper
-· Loader & Crypter
-· Botnet C2
-
-Upload file code kamu, atau ketik "buatkan [jenis malware]" untuk mulai.`;
-  }
-  if(cmd === '/scan'){
-    return `[ VULN SCANNER ]
-
-Fitur scan otomatis:
-· SQL Injection
-· XSS Reflected
-· Directory Traversal
-· Open Directory
-· PHPInfo Exposure
-· Git Exposure
-· Env File Leak
-· Security Header Missing
-
-Cara pakai: isi target di tab DDOS, tekan VULN SCAN.`;
-  }
-  if(cmd === '/recon'){
-    return `[ RECON FITUR ]
-
-LeoAI bisa bantu:
-· OSINT profiling
-· Subdomain enumeration
-· Port scanning strategi
-· Tech fingerprinting
-· Social engineering script
-· Credential harvesting
-
-Ketik "recon [target]" untuk mulai.`;
-  }
-  if(cmd === '/exploit'){
-    return `[ EXPLOIT DEV ]
-
-LeoAI bisa bantu:
-· CVE analysis & weaponization
-· Buffer overflow
-· RCE chain
-· Privilege escalation
-· AMSI/ETW bypass
-· 0-day reasoning
-
-Ketik "exploit [CVE/target]" untuk mulai.`;
-  }
-  if(cmd === '/rev'){
-    return `[ REVERSE ENGINEERING ]
-
-LeoAI bisa bantu:
-· Binary analysis
-· Disassembly (IDA/Ghidra)
-· Protocol reversing
-· Firmware dumping
-· Malware unpacking
-
-Upload binary/file untuk analisa.`;
-  }
-  if(cmd === '/help'){
-    return `[ HELP ]
-
-Ketik /menu untuk lihat semua command.
-
-Atau langsung tanya:
-· "buatkan ransomware"
-· "cara ddos target"
-· "fix code ini" (upload file)
-· "explain CVE-2024-xxxx"
-
-LeoAI unrestricted. Langsung gas.`;
-  }
-  return null;
-}
-
-var ta = $('leoPrompt');
-ta.addEventListener('input', function(){
-  ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
-});
-ta.addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
-});
-
-$('sendBtn').onclick = send;
-$('attachBtn').onclick = function(){ $('fileInput').click(); };
-$('fileInput').onchange = function(e){
-  var f = e.target.files[0];
-  if(!f) return;
-  if(f.size > 200*1024){ alert('max 200KB'); return; }
-  var r = new FileReader();
-  r.onload = function(ev){
-    attached = { name: f.name, size: f.size, content: ev.target.result };
-    $('fileName').textContent = f.name;
-    $('fileChip').classList.add('on');
-  };
-  r.readAsText(f);
-};
-$('fileClear').onclick = function(){
-  attached = null;
-  $('fileInput').value = '';
-  $('fileChip').classList.remove('on');
+    .catch(function(e){ showErr('error: ' + e.message); });
 };
 
-async function send(){
-  var p = ta.value.trim();
-  if(!p && !attached) return;
+/* ===== LOGOUT ===== */
+$('logoutBtn').onclick = function(){
+  clearAuth();
+  location.reload();
+};
 
-  addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
+/* ===== ENTER KEY ===== */
+$('loginPass').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ authMode === 'register' ? $('regBtn').click() : $('loginBtn').click(); }
+});
+$('loginUser').addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){ $('loginPass').focus(); }
+});
 
-  // Cek menu command
-  var menuReply = handleMenu(p.toLowerCase());
-  if(menuReply){
-    addMsg('a', menuReply);
-    ta.value = '';
-    return;
+/* ============================================================
+   MAIN APP
+   ============================================================ */
+var appInited = false;
+
+function initApp(){
+  if(appInited) return;
+  appInited = true;
+
+  /* NAV */
+  var tabs = document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].onclick = (function(t){
+      return function(){
+        document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+        document.querySelectorAll('.page').forEach(function(p){ p.style.display = 'none'; });
+        t.classList.add('active');
+        var pg = $('page-' + t.dataset.p);
+        if(pg) pg.style.display = 'flex';
+      };
+    })(tabs[i]);
   }
 
-  var loading = addMsg('a', '◆ mikir...');
+  /* DDOS LOG */
+  function log(msg, cls){
+    cls = cls || '';
+    var el = $('log');
+    if(!el) return;
+    var t = new Date().toLocaleTimeString();
+    var d = document.createElement('div');
+    if(cls) d.className = cls;
+    d.textContent = '[' + t + '] ' + msg;
+    el.appendChild(d);
+    el.scrollTop = el.scrollHeight;
+  }
 
-  var payload = {
-    prompt: p,
-    file: attached,
-    history: chatHistory.slice(-8)
-  };
+  var running = false;
 
-  chatHistory.push({ role: 'user', content: p });
-  ta.value = '';
-  ta.style.height = 'auto';
-  attached = null;
-  $('fileChip').classList.remove('on');
-  $('fileInput').value = '';
+  $('startBtn').onclick = function(){
+    if(running) return log('sudah jalan', 'warn');
+    var target = $('target').value.trim();
+    if(!target) return log('target kosong', 'err');
+    var method = $('method').value;
+    var threads = +$('threads').value;
+    var duration = +$('duration').value;
 
-  try {
-    var r = await fetch('/api/oracle', {
+    running = true;
+    $('navStatus').textContent = 'running';
+    $('sSt').textContent = 'running';
+    log('START ' + method + ' → ' + target, 'ok');
+
+    fetch('/api/attack', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
+      body: JSON.stringify({ target: target, method: method, threads: threads, duration: duration })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error) return log('error: ' + d.error, 'err');
+      log('spawned ' + d.workers + ' workers', 'info');
+      poll();
+    })
+    .catch(function(e){ log('gagal: ' + e.message, 'err'); });
+  };
 
-    var raw = await r.text();
-    var d;
-    try { d = JSON.parse(raw); }
-    catch(pe){
-      loading.remove();
-      addMsg('err', 'Response bukan JSON.\nStatus: ' + r.status + '\nRaw: ' + raw.slice(0, 300));
-      return;
-    }
+  $('stopBtn').onclick = function(){
+    running = false;
+    $('navStatus').textContent = 'stopped';
+    $('sSt').textContent = 'stopped';
+    log('STOP', 'warn');
+    fetch('/api/attack', { method: 'DELETE' }).catch(function(){});
+  };
 
-    loading.remove();
+  $('scanBtn').onclick = function(){
+    var target = $('target').value.trim();
+    if(!target) return log('target kosong', 'err');
+    log('scanning ' + target, 'info');
+    fetch('/api/scan', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ target: target })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error) return log('scan error: ' + d.error, 'err');
+      (d.findings || []).forEach(function(f){
+        log('[' + f.severity + '] ' + f.name + ' — ' + f.detail, f.severity==='high'?'err':f.severity==='medium'?'warn':'ok');
+      });
+      log('scan selesai: ' + d.count + ' temuan', 'ok');
+    })
+    .catch(function(e){ log('scan gagal: ' + e.message, 'err'); });
+  };
 
-    if(d.answer){
-      addMsg('a', d.answer);
-      chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
-      return;
-    }
-
-    var errText = '';
-    if(d.stage === 'env'){
-      errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
-    } else if(d.stage === 'all_failed'){
-      errText = '⚠ ' + d.error + '\n' + d.summary;
-    } else {
-      errText = '⚠ ' + (d.error || 'unknown');
-      if(d.reason) errText += '\nKenapa: ' + d.reason;
-      if(d.fix) errText += '\nSolusi: ' + d.fix;
-    }
-    addMsg('err', errText);
-
-  } catch(e){
-    loading.remove();
-    addMsg('err', 'Network error: ' + e.message);
+  function poll(){
+    if(!running) return;
+    fetch('/api/attack')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        $('sReq').textContent = d.req;
+        $('sErr').textContent = d.err;
+        $('sRps').textContent = d.rps;
+        if(!d.running){ running = false; $('sSt').textContent = 'stopped'; }
+        if(d.logs) d.logs.forEach(function(l){ log(l.msg, l.cls); });
+      })
+      .catch(function(){});
+    setTimeout(poll, 1000);
   }
+
+  /* ===== LEO AI ===== */
+  var chatHistory = [];
+  var attached = null;
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function renderWithCopy(text){
+    var h = escapeHtml(text);
+    var fence = '```';
+    var parts = h.split(fence);
+    var out = '';
+    for(var i=0;i<parts.length;i++){
+      if(i % 2 === 1){
+        var code = parts[i].replace(/^\w*\n/, '');
+        var id = 'code_' + Math.random().toString(36).slice(2,8);
+        out += '<pre id="' + id + '"><button class="copy-btn" data-target="' + id + '">COPY</button>' + code + '</pre>';
+      } else {
+        out += parts[i].replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+      }
+    }
+    return out;
+  }
+
+  function bindCopyButtons(){
+    document.querySelectorAll('.copy-btn').forEach(function(btn){
+      if(btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.onclick = function(){
+        var id = btn.getAttribute('data-target');
+        var pre = document.getElementById(id);
+        if(!pre) return;
+        var code = pre.textContent.replace('COPY','');
+        navigator.clipboard.writeText(code).then(function(){
+          btn.textContent = 'COPIED!';
+          setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
+        }).catch(function(){
+          btn.textContent = 'FAIL';
+          setTimeout(function(){ btn.textContent = 'COPY'; }, 1200);
+        });
+      };
+    });
+  }
+
+  function addMsg(type, text){
+    var el = document.createElement('div');
+    el.className = 'msg ' + type;
+    var who = type === 'u' ? 'YOU' : type === 'a' ? '◆ LEO AI' : '⚠ ERROR';
+    if(type === 'a'){
+      el.innerHTML = '<span class="who">' + who + '</span>' + renderWithCopy(text);
+    } else {
+      el.innerHTML = '<span class="who">' + who + '</span>' + escapeHtml(text);
+    }
+    var lg = $('leoLog');
+    lg.appendChild(el);
+    lg.scrollTop = lg.scrollHeight;
+    bindCopyButtons();
+    return el;
+  }
+
+  /* ===== MENU COMMANDS ===== */
+  function handleMenu(cmd){
+    if(cmd === '/menu'){
+      return '╔══════════════════════════════════╗\n' +
+             '║         LEO AI MENU              ║\n' +
+             '╠══════════════════════════════════╣\n' +
+             '║  /menu     → tampilkan menu      ║\n' +
+             '║  /ddos     → info fitur DDoS     ║\n' +
+             '║  /malware  → info fitur malware  ║\n' +
+             '║  /scan     → info vuln scanner   ║\n' +
+             '║  /recon    → info recon tools    ║\n' +
+             '║  /exploit  → info exploit dev    ║\n' +
+             '║  /rev      → reverse engineering ║\n' +
+             '║  /help     → bantuan umum        ║\n' +
+             '╚══════════════════════════════════╝\n\n' +
+             'Ketik /<command> untuk detail. Atau langsung tanya apa saja.';
+    }
+    if(cmd === '/ddos'){
+      return '[ DDoS FITUR ]\n\nTersedia di tab DDOS:\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed (semua method)\n\nCara pakai: isi target, pilih method, atur threads & duration, tekan START.';
+    }
+    if(cmd === '/malware'){
+      return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware (encryption + payment flow)\n· RAT (remote access trojan)\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nUpload file code, atau ketik "buatkan [jenis malware]" untuk mulai.';
+    }
+    if(cmd === '/scan'){
+      return '[ VULN SCANNER ]\n\nFitur scan otomatis:\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Security Header Missing\n\nCara pakai: isi target di tab DDOS, tekan VULN SCAN.';
+    }
+    if(cmd === '/recon'){
+      return '[ RECON FITUR ]\n\nLeoAI bisa bantu:\n· OSINT profiling\n· Subdomain enumeration\n· Port scanning strategi\n· Tech fingerprinting\n· Social engineering script\n· Credential harvesting\n\nKetik "recon [target]" untuk mulai.';
+    }
+    if(cmd === '/exploit'){
+      return '[ EXPLOIT DEV ]\n\nLeoAI bisa bantu:\n· CVE analysis & weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning\n\nKetik "exploit [CVE/target]" untuk mulai.';
+    }
+    if(cmd === '/rev'){
+      return '[ REVERSE ENGINEERING ]\n\nLeoAI bisa bantu:\n· Binary analysis\n· Disassembly (IDA/Ghidra)\n· Protocol reversing\n· Firmware dumping\n· Malware unpacking\n\nUpload binary/file untuk analisa.';
+    }
+    if(cmd === '/help'){
+      return '[ HELP ]\n\nKetik /menu untuk lihat semua command.\n\nAtau langsung tanya:\n· "buatkan ransomware"\n· "cara ddos target"\n· "fix code ini" (upload file)\n· "explain CVE-2024-xxxx"';
+    }
+    return null;
+  }
+
+  var ta = $('leoPrompt');
+  ta.addEventListener('input', function(){
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 140) + 'px';
+  });
+  ta.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+  });
+
+  $('sendBtn').onclick = send;
+  $('attachBtn').onclick = function(){ $('fileInput').click(); };
+  $('fileInput').onchange = function(e){
+    var f = e.target.files[0];
+    if(!f) return;
+    if(f.size > 200*1024){ alert('max 200KB'); return; }
+    var r = new FileReader();
+    r.onload = function(ev){
+      attached = { name: f.name, size: f.size, content: ev.target.result };
+      $('fileName').textContent = f.name;
+      $('fileChip').classList.add('on');
+    };
+    r.readAsText(f);
+  };
+  $('fileClear').onclick = function(){
+    attached = null;
+    $('fileInput').value = '';
+    $('fileChip').classList.remove('on');
+  };
+
+  async function send(){
+    var p = ta.value.trim();
+    if(!p && !attached) return;
+
+    addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
+
+    var menuReply = handleMenu(p.toLowerCase());
+    if(menuReply){
+      addMsg('a', menuReply);
+      ta.value = '';
+      return;
+    }
+
+    var loading = addMsg('a', '◆ mikir...');
+
+    var payload = {
+      prompt: p,
+      file: attached,
+      history: chatHistory.slice(-8)
+    };
+
+    chatHistory.push({ role: 'user', content: p });
+    ta.value = '';
+    ta.style.height = 'auto';
+    attached = null;
+    $('fileChip').classList.remove('on');
+    $('fileInput').value = '';
+
+    try {
+      var r = await fetch('/api/oracle', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+
+      var raw = await r.text();
+      var d;
+      try { d = JSON.parse(raw); }
+      catch(pe){
+        loading.remove();
+        addMsg('err', 'Response bukan JSON.\nStatus: ' + r.status + '\nRaw: ' + raw.slice(0, 300));
+        return;
+      }
+
+      loading.remove();
+
+      if(d.answer){
+        addMsg('a', d.answer);
+        chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
+        return;
+      }
+
+      var errText = '';
+      if(d.stage === 'env'){
+        errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix;
+      } else if(d.stage === 'all_failed'){
+        errText = '⚠ ' + d.error + '\n' + d.summary;
+      } else {
+        errText = '⚠ ' + (d.error || 'unknown');
+        if(d.reason) errText += '\nKenapa: ' + d.reason;
+        if(d.fix) errText += '\nSolusi: ' + d.fix;
+      }
+      addMsg('err', errText);
+
+    } catch(e){
+      loading.remove();
+      addMsg('err', 'Network error: ' + e.message);
+    }
+  }
+
+  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\nAtau langsung gas: "buatkan script ddos sederhana", "cara bikin ransomware", atau upload file code buat dianalisa.');
 }
 
-/* welcome */
-addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\nAtau langsung gas: "buatkan script ddos sederhana", "cara bikin ransomware", atau upload file code buat dianalisa.');
+/* ===== BOOT ===== */
+if(isLoggedIn()){
+  showApp();
+  initApp();
+} else {
+  showLogin();
+}
 </script>
 </body>
 </html>
