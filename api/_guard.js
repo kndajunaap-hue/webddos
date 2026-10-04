@@ -1,8 +1,6 @@
-import crypto from 'crypto';
-
-const BUCKETS = new Map(); // ip -> {count, ts}
-const WINDOW = 60_000;     // 60s
-const LIMIT  = 120;        // 120 req/menit
+const BUCKETS = new Map();
+const WINDOW = 60_000;
+const LIMIT  = 150;
 
 export function ratelimit(req, res){
   const ip = (req.headers['x-forwarded-for']||'').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
@@ -30,15 +28,6 @@ export function originGuard(req, res){
   return false;
 }
 
-export function tokenGuard(req, res){
-  const secret = process.env.CONSOLE_SECRET || 'lynqo-default-secret';
-  const token  = req.headers['x-console-token'];
-  if(!token){ res.status(401).json({ error:'missing token' }); return false; }
-  const expected = crypto.createHmac('sha256', secret).update('console-v2').digest('hex');
-  if(token !== expected){ res.status(401).json({ error:'invalid token' }); return false; }
-  return true;
-}
-
 export function sanitize(str){
   if(typeof str !== 'string') return '';
   return str.replace(/[<>&"'`;]/g,'').slice(0,512);
@@ -54,7 +43,7 @@ export function validateTarget(t){
 export function cors(req, res, methods='GET,POST,DELETE,OPTIONS'){
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', methods);
-  res.setHeader('Access-Control-Allow-Headers','Content-Type,x-console-token');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type');
   res.setHeader('Access-Control-Allow-Credentials','true');
   res.setHeader('Vary','Origin');
   if(req.method==='OPTIONS'){ res.status(200).end(); return false; }
