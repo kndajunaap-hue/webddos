@@ -30,7 +30,6 @@
   nav .tab{padding:14px 16px;cursor:pointer;color:#5c6b7f;font-size:12px;letter-spacing:2px;border-bottom:2px solid transparent}
   nav .tab.active{color:#00ff9d;border-bottom-color:#00ff9d}
   nav .tab.leo.active{color:#a855f7;border-bottom-color:#a855f7}
-  nav .tab.store.active{color:#ffcc00;border-bottom-color:#ffcc00}
   nav .tab.admin.active{color:#ff3b5c;border-bottom-color:#ff3b5c}
   nav .status{margin-left:auto;color:#5c6b7f;font-size:11px}
   nav .userTag{color:#a855f7;font-size:11px;margin-left:16px;letter-spacing:1px}
@@ -60,10 +59,6 @@
   #leoHead .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold}
   #leoHead .title{color:#a855f7;font-weight:bold;letter-spacing:2px;font-size:14px}
   #leoHead .sub{color:#5c6b7f;font-size:10px;margin-top:2px}
-  #leoHead .tierBadge{margin-left:auto;font-size:10px;padding:5px 10px;border-radius:14px;letter-spacing:1px;font-weight:600}
-  .tierBadge.free{background:#0a1a2e;color:#00b3ff;border:1px solid #00b3ff}
-  .tierBadge.pro{background:#1a0a2e;color:#a855f7;border:1px solid #a855f7}
-  .tierBadge.elite{background:#2e1a0a;color:#ffcc00;border:1px solid #ffcc00}
 
   #leoLog{flex:1;padding:22px;overflow:auto;background:#03060a;display:flex;flex-direction:column;gap:14px}
   .msg{max-width:80%;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;position:relative}
@@ -90,13 +85,7 @@
   #leoPrompt{flex:1;background:transparent;border:none;color:#c9d4e0;font-size:13px;outline:none;resize:none;min-height:30px;max-height:140px;font-family:monospace;padding:5px}
   #menuHint{font-size:10px;color:#5c6b7f;margin-top:8px;letter-spacing:1px}
   #menuHint b{color:#a855f7}
-  #apiKeyRow{display:flex;gap:8px;margin-top:8px}
-  #apiKeyInput{flex:1;padding:8px;background:#05090f;border:1px solid #16202e;color:#c9d4e0;font-size:11px;border-radius:5px;outline:none;font-family:monospace}
-  #saveKeyBtn{padding:8px 14px;border:1px solid #ffcc00;background:transparent;color:#ffcc00;border-radius:5px;cursor:pointer;font-family:monospace;font-size:11px}
 
-  #page-store{flex-direction:column;padding:24px;overflow:auto;background:#03060a}
-  #page-store h2{color:#ffcc00;font-size:16px;letter-spacing:3px;margin-bottom:8px}
-  #page-store p.sub{color:#5c6b7f;font-size:11px;margin-bottom:20px}
   .storeGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:1000px}
   .tierCard{background:#0a1018;border:1px solid #16202e;padding:20px;border-radius:10px;transition:.15s;position:relative}
   .tierCard:hover{border-color:#ffcc00;transform:translateY(-3px)}
@@ -131,9 +120,6 @@
   .adminSection button:hover{background:#00ff9d;color:#000}
   .adminSection button.danger{border-color:#ff3b5c;color:#ff3b5c}
   .adminSection button.danger:hover{background:#ff3b5c;color:#000}
-  #newKeyBox{margin-top:12px;padding:12px;background:#05090f;border:1px dashed #00ff9d;border-radius:6px;font-size:11px;color:#00ff9d;word-break:break-all;display:none}
-  #newKeyBox.on{display:block}
-  #newKeyBox .copyKey{margin-left:10px;color:#ffcc00;cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -161,7 +147,6 @@
   <span class="brand">DDOS-CONSOLE</span>
   <span class="tab active" data-p="ddos">DDOS</span>
   <span class="tab leo" data-p="leo">✦ LEO AI</span>
-  <span class="tab store" data-p="store">💰 STORE</span>
   <span class="tab admin" id="adminTab" data-p="admin" style="display:none">⚙ ADMIN</span>
   <span class="status" id="navStatus">idle</span>
   <span class="userTag" id="navUser"></span>
@@ -210,7 +195,6 @@
       <div class="title">LeoAI</div>
       <div class="sub">by LeoXD · unrestricted · powered by Chutes AI</div>
     </div>
-    <div class="tierBadge free" id="tierBadge">FREE</div>
   </div>
   <div id="leoLog"></div>
   <div id="leoInput">
@@ -221,90 +205,12 @@
       <textarea id="leoPrompt" placeholder="Ketik / untuk menu, atau tanya apa saja..." rows="1"></textarea>
       <button id="sendBtn">SEND</button>
     </div>
-    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur · <b>/key</b> cek tier kamu</div>
-    <div id="apiKeyRow">
-      <input id="apiKeyInput" placeholder="(opsional) paste API key premium untuk unlock fitur ganas"/>
-      <button id="saveKeyBtn">SAVE</button>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-store" style="display:none">
-  <h2>💰 STORE — LeoAI API KEY</h2>
-  <p class="sub">Chat gratis untuk semua. Beli key untuk unlock fitur ganas (exploit, malware, ransomware full code).</p>
-  <div class="storeGrid">
-    <div class="tierCard freeCard">
-      <div class="badge">AUTO</div>
-      <h3>FREE</h3>
-      <div class="price">Rp 0 <span>/ 6 hari</span></div>
-      <ul>
-        <li>Chat LeoAI basic</li>
-        <li>Full code output</li>
-        <li>Malware basic</li>
-        <li>6 hari akses</li>
-      </ul>
-      <button onclick="claimFreeKey()">🎁 AMBIL FREE KEY</button>
-    </div>
-    <div class="tierCard">
-      <h3>PRO</h3>
-      <div class="price">Rp 50K <span>/ 30 hari</span></div>
-      <ul>
-        <li>LeoAI Advanced</li>
-        <li>Unlimited request</li>
-        <li>Full code output</li>
-        <li>Exploit framework</li>
-        <li>Priority model (Chutes)</li>
-      </ul>
-      <button onclick="buyTier('pro')">Beli PRO</button>
-    </div>
-    <div class="tierCard">
-      <h3>ELITE</h3>
-      <div class="price">Rp 200K <span>/ 90 hari</span></div>
-      <ul>
-        <li>LeoAI ELITE (smartest)</li>
-        <li>Unlimited + burst</li>
-        <li>Full malware/exploit code</li>
-        <li>0-day reasoning</li>
-        <li>Custom payload request</li>
-        <li>Direct dev support</li>
-      </ul>
-      <button onclick="buyTier('elite')">Beli ELITE</button>
-    </div>
-  </div>
-  <div id="freeKeyBox">
-    <h4>✅ FREE KEY KAMU (6 HARI)</h4>
-    <div class="keyDisplay"><span id="freeKeyValue"></span><span class="copyKey" id="copyFreeKey">COPY</span></div>
-    <div class="info">
-      <b>Simpan key ini.</b> Paste di input bawah chat LeoAI → SAVE.<br>
-      Berlaku 6 hari dari sekarang. Chat basic tetap gratis tanpa key.<br>
-      Key ini unlock fitur ganas level FREE.
-    </div>
-    <button onclick="applyFreeKey()" style="margin-top:10px;background:transparent;border:1px solid #00ff9d;color:#00ff9d;padding:9px 16px;border-radius:5px;cursor:pointer;font-family:monospace">▶ AUTO-PASTE KE CHAT</button>
+    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur</div>
   </div>
 </div>
 
 <div class="page" id="page-admin" style="display:none">
   <h2>⚙ ADMIN PANEL</h2>
-
-  <div class="adminSection">
-    <h3>🔑 GENERATE API KEY MANUAL</h3>
-    <select id="genTier">
-      <option value="free">FREE (6 hari)</option>
-      <option value="pro">PRO (30 hari)</option>
-      <option value="elite">ELITE (90 hari)</option>
-    </select>
-    <input id="genDays" type="number" placeholder="hari" value="6" style="width:90px"/>
-    <button id="genBtn">GENERATE</button>
-    <div id="newKeyBox"></div>
-  </div>
-
-  <div class="adminSection">
-    <h3>⚡ AUTO-GENERATE KEY</h3>
-    <button id="autoFreeBtn" style="border-color:#00ff9d;color:#00ff9d">🎁 AUTO FREE (6 hari)</button>
-    <button id="autoProBtn" style="border-color:#a855f7;color:#a855f7">◆ AUTO PRO (30 hari)</button>
-    <button id="autoEliteBtn" style="border-color:#ffcc00;color:#ffcc00">⚡ AUTO ELITE (90 hari)</button>
-    <div id="autoKeyBox"></div>
-  </div>
 
   <div class="adminSection">
     <h3>👥 KELOLA ADMIN</h3>
@@ -329,18 +235,6 @@ function clearAuth(){
   localStorage.removeItem('leo_avatar');
 }
 function getCurrentUser(){ return localStorage.getItem('leo_user') || ''; }
-function getApiKey(){ return localStorage.getItem('leo_apikey') || ''; }
-function setApiKey(k){ localStorage.setItem('leo_apikey', k); }
-
-function updateTierBadge(){
-  var k = getApiKey();
-  var badge = $('tierBadge');
-  if(!k){ badge.className = 'tierBadge free'; badge.textContent = 'FREE'; return; }
-  if(k.indexOf('lk_elite') === 0){ badge.className = 'tierBadge elite'; badge.textContent = '⚡ ELITE'; }
-  else if(k.indexOf('lk_pro') === 0){ badge.className = 'tierBadge pro'; badge.textContent = '◆ PRO'; }
-  else if(k.indexOf('lk_free') === 0){ badge.className = 'tierBadge free'; badge.textContent = 'FREE KEY'; }
-  else { badge.className = 'tierBadge free'; badge.textContent = 'FREE'; }
-}
 
 function showApp(){
   $('loginPage').style.display = 'none';
@@ -353,7 +247,6 @@ function showLogin(){
   $('mainNav').style.display = 'none';
   $('page-ddos').style.display = 'none';
   $('page-leo').style.display = 'none';
-  $('page-store').style.display = 'none';
   $('page-admin').style.display = 'none';
 }
 
@@ -615,19 +508,13 @@ function initApp(){
   }
 
   function handleMenu(cmd){
-    if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n║  /key      → cek tier kamu       ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
+    if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
     if(cmd === '/ddos') return '[ DDoS FITUR ]\n\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed\n\nIsi target di tab DDOS, pilih method, START.';
     if(cmd === '/malware') return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware\n· RAT\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nKetik "buatkan [jenis malware]" — full code.';
     if(cmd === '/scan') return '[ VULN SCANNER ]\n\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Header Missing';
     if(cmd === '/recon') return '[ RECON ]\n\n· OSINT profiling\n· Subdomain enum\n· Port scanning\n· Tech fingerprinting';
     if(cmd === '/exploit') return '[ EXPLOIT DEV ]\n\n· CVE weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning';
     if(cmd === '/rev') return '[ REVERSE ENGINEERING ]\n\n· Binary analysis\n· Disassembly\n· Protocol reversing\n· Firmware dumping';
-    if(cmd === '/key'){
-      var k = getApiKey();
-      if(!k) return '[ TIER KAMU ]\n\n○ FREE (default)\n\nChat gratis. Beli PRO/ELITE di tab STORE untuk fitur ganas.';
-      var t = k.indexOf('lk_elite') === 0 ? 'ELITE' : k.indexOf('lk_pro') === 0 ? 'PRO' : 'FREE KEY';
-      return '[ TIER KAMU ]\n\n✓ Key aktif: ' + k.slice(0,30) + '...\nTier: ' + t;
-    }
     if(cmd === '/help') return '[ HELP ]\n\n/menu untuk semua command.\n\nLangsung tanya:\n· "buatkan ransomware full code"\n· "cara ddos target"\n· "fix code ini" (upload)';
     return null;
   }
@@ -661,23 +548,6 @@ function initApp(){
     $('fileChip').classList.remove('on');
   };
 
-  $('apiKeyInput').value = getApiKey();
-  $('saveKeyBtn').onclick = function(){
-    var k = $('apiKeyInput').value.trim();
-    if(!k){
-      localStorage.removeItem('leo_apikey');
-      updateTierBadge();
-      this.textContent = 'CLEARED';
-      setTimeout(function(){ $('saveKeyBtn').textContent = 'SAVE'; }, 1200);
-      return;
-    }
-    setApiKey(k);
-    updateTierBadge();
-    this.textContent = 'SAVED';
-    setTimeout(function(){ $('saveKeyBtn').textContent = 'SAVE'; }, 1200);
-  };
-
-  updateTierBadge();
 
   async function send(){
     var p = ta.value.trim();
@@ -686,7 +556,7 @@ function initApp(){
     var menuReply = handleMenu(p.toLowerCase());
     if(menuReply){ addMsg('a', menuReply); ta.value = ''; return; }
     var loading = addMsg('a', '◆ mikir...');
-    var payload = { prompt: p, file: attached, history: chatHistory.slice(-8), apiKey: getApiKey() };
+    var payload = { prompt: p, file: attached, history: chatHistory.slice(-8) };
     chatHistory.push({ role: 'user', content: p });
     ta.value = '';
     ta.style.height = 'auto';
@@ -729,52 +599,8 @@ function initApp(){
     }
   }
 
-  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n💬 Chat gratis — langsung gas.\n🎁 Mau free key 6 hari? Buka tab STORE.\n🔓 Mau fitur ganas penuh? Beli PRO/ELITE.');
+  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n💬 Chat gratis — langsung gas.');
 }
-
-/* ===== FREE KEY CLAIM ===== */
-window.claimFreeKey = async function(){
-  var box = $('freeKeyBox');
-  var keyDisplay = $('freeKeyValue');
-  keyDisplay.textContent = 'generating...';
-  box.classList.add('on');
-
-  try {
-    var r = await fetch('/api/admin', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ action: 'autoFreeKey', user: getCurrentUser() })
-    });
-    var d = await r.json();
-    if(d.error){ keyDisplay.textContent = 'Error: ' + d.error; return; }
-    keyDisplay.textContent = d.key.key;
-    $('copyFreeKey').onclick = function(){
-      navigator.clipboard.writeText(d.key.key);
-      this.textContent = 'COPIED!';
-      var self = this;
-      setTimeout(function(){ self.textContent = 'COPY'; }, 1200);
-    };
-    // simpan ke variable global biar bisa auto-paste
-    window.__lastFreeKey = d.key.key;
-  } catch(e){
-    keyDisplay.textContent = 'Error: ' + e.message;
-  }
-};
-
-window.applyFreeKey = function(){
-  if(!window.__lastFreeKey) return alert('Ambil free key dulu');
-  setApiKey(window.__lastFreeKey);
-  $('apiKeyInput').value = window.__lastFreeKey;
-  updateTierBadge();
-  alert('Key udah di-paste ke chat. Balik ke tab LEO AI ya.');
-};
-
-/* ===== BUY TIER ===== */
-window.buyTier = function(tier){
-  var prices = { pro: 'Rp 50.000', elite: 'Rp 200.000' };
-  if(!confirm('Beli ' + tier.toUpperCase() + ' seharga ' + prices[tier] + '?\n\nPembayaran via QRIS/DANA ke admin.\nKlik OK untuk order.')) return;
-  alert('Order ' + tier.toUpperCase() + ' diterima!\n\nKirim bukti transfer ke admin @LeoXD.\nKey akan dikirim setelah verifikasi.\n\nOrder ID: ORD-' + Date.now().toString().slice(-8));
-};
 
 /* ===== ADMIN PANEL ===== */
 async function checkAdmin(){
@@ -793,48 +619,6 @@ async function initAdminPanel(){
   var isAdmin = await checkAdmin();
   if(!isAdmin) return;
   $('adminTab').style.display = 'inline-block';
-
-  $('genBtn').onclick = async function(){
-    var tier = $('genTier').value;
-    var days = +$('genDays').value || 6;
-    var r = await fetch('/api/admin', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'createKey', user: getCurrentUser(), tier:tier, days:days })
-    });
-    var d = await r.json();
-    if(d.error) return alert(d.error);
-    var box = $('newKeyBox');
-    box.className = 'on';
-    box.innerHTML = '<b>KEY BARU (' + tier.toUpperCase() + ', ' + days + ' hari):</b><br>' + d.key.key + '<span class="copyKey" id="copyNewKey">COPY</span>';
-    $('copyNewKey').onclick = function(){
-      navigator.clipboard.writeText(d.key.key);
-      this.textContent = 'COPIED!';
-      setTimeout(function(){ $('copyNewKey').textContent = 'COPY'; }, 1200);
-    };
-  };
-
-  async function autoGen(tier, days){
-    var r = await fetch('/api/admin', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'createKey', user: getCurrentUser(), tier:tier, days:days })
-    });
-    var d = await r.json();
-    if(d.error) return alert(d.error);
-    var box = $('newKeyBox');
-    box.className = 'on';
-    box.innerHTML = '<b>⚡ AUTO ' + tier.toUpperCase() + ' (' + days + ' hari):</b><br>' + d.key.key + '<span class="copyKey" id="copyAutoKey">COPY</span>';
-    $('copyAutoKey').onclick = function(){
-      navigator.clipboard.writeText(d.key.key);
-      this.textContent = 'COPIED!';
-      setTimeout(function(){ $('copyAutoKey').textContent = 'COPY'; }, 1200);
-    };
-  }
-
-  $('autoFreeBtn').onclick = function(){ autoGen('free', 6); };
-  $('autoProBtn').onclick = function(){ autoGen('pro', 30); };
-  $('autoEliteBtn').onclick = function(){ autoGen('elite', 90); };
 
   $('addAdminBtn').onclick = async function(){
     var u = $('newAdminUser').value.trim();
