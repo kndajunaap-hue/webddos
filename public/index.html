@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DDOS-CONSOLE // LeoXD</title>
+<title>Leo Security Workspace</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:monospace}
   body{background:#05070c;color:#c9d4e0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -120,34 +120,84 @@
   .adminSection button:hover{background:#00ff9d;color:#000}
   .adminSection button.danger{border-color:#ff3b5c;color:#ff3b5c}
   .adminSection button.danger:hover{background:#ff3b5c;color:#000}
+:root{color-scheme:dark;--bg:#080b12;--line:#232d3c;--muted:#8995a7;--text:#edf2f8;--mint:#6ee7c2;--purple:#bb9aff;--red:#ff7b8b;--radius:18px}
+  *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  body{height:100vh;min-height:100vh;background:radial-gradient(ellipse at 18% 0%,#172337 0%,transparent 35%),var(--bg);color:var(--text)}
+  button,input,select,textarea{font:inherit}
+  #loginPage{display:grid;grid-template-columns:minmax(420px,1fr) minmax(400px,1fr);align-items:stretch;justify-content:stretch;background:#0a0e16}
+  .login-side{display:flex;align-items:center;justify-content:center;padding:clamp(24px,6vw,88px)}
+  .login-box{width:min(100%,420px);text-align:left;border:0;background:transparent;padding:0}
+  .login-brand{display:flex;align-items:center;gap:12px;margin-bottom:54px}.brand-mark{width:44px;height:44px;display:grid;place-items:center;border:1px solid #6ee7c277;border-radius:15px;background:#6ee7c21c;color:var(--mint);font-weight:800}.brand-name{font-weight:750;letter-spacing:.13em;font-size:13px}.brand-caption{color:var(--muted);font-size:11px;margin-top:3px}
+  .login-box h1{font-size:clamp(30px,4vw,43px);line-height:1.12;letter-spacing:-.04em;margin-bottom:12px}.login-intro{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:30px}
+  .authTabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;border:1px solid var(--line);border-radius:13px;background:#0c111a;margin-bottom:20px}
+  .authTabs button{padding:11px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}.authTabs button.active{background:#1b2633;color:var(--text)}
+  .field-label{display:block;color:#c2cbd8;font-size:12px;font-weight:600;margin:14px 0 7px}
+  .login-box input{width:100%;padding:14px 15px;background:#0c111a;border:1px solid #283344;color:var(--text);font-size:14px;border-radius:11px;margin-bottom:0}.login-box input:focus{border-color:var(--mint);box-shadow:0 0 0 3px #6ee7c21a}
+  .login-box .primary,.login-box .github{width:100%;padding:13px 16px;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}.login-box .primary{margin-top:20px;border:0;background:linear-gradient(100deg,#6ee7c2,#92f0d4);color:#07110f}.login-box .primary:hover{transform:translateY(-1px);filter:brightness(1.05)}.login-box .github{margin-top:12px;border:1px solid #303b4b;background:#111722;color:var(--text)}
+  .divider{display:flex;align-items:center;gap:12px;color:#778396;font-size:11px;margin:17px 0 4px}.divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}
+  .err-msg,.ok-msg{font-size:12px;margin:10px 0;min-height:16px}.err-msg{color:var(--red)}.ok-msg{color:var(--mint)}
+  .login-art{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;padding:60px;background:radial-gradient(ellipse at 55% 40%,#25364a 0%,#111a27 42%,#0d111a 77%);border-left:1px solid #ffffff0c}
+  .art-copy{position:absolute;z-index:2;left:clamp(32px,6vw,84px);top:clamp(36px,7vh,82px);max-width:390px}.art-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #6ee7c244;border-radius:99px;color:#a7f0d9;font-size:11px;background:#6ee7c20d}.art-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px var(--mint)}.art-copy h2{font-size:clamp(30px,4vw,50px);letter-spacing:-.045em;line-height:1.1;margin:23px 0 14px}.art-copy p{font-size:14px;line-height:1.7;color:#aab6c6;max-width:350px}.person-art{width:min(88%,560px);height:auto;position:relative;z-index:1;filter:drop-shadow(0 30px 70px #05070d88)}
+  nav{height:72px;flex:0 0 72px;gap:8px;padding:0 28px;background:#0c111adf;backdrop-filter:blur(18px);border-bottom:1px solid #ffffff10}
+  nav .brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:750;letter-spacing:.1em;font-size:12px;margin-right:22px}nav .brand:before{content:"L";width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,#6ee7c2,#80c8ff);color:#08120f;font-weight:850;letter-spacing:0}
+  nav .tab{height:42px;display:flex;align-items:center;padding:0 15px;border:1px solid transparent;border-radius:11px;color:#a1adbd;font-size:13px;font-weight:600;transition:.2s}nav .tab:hover{background:#ffffff08;color:var(--text)}nav .tab.active{background:#6ee7c216;border-color:#6ee7c22e;color:var(--mint)}nav .tab.leo.active{background:#bb9aff17;border-color:#bb9aff33;color:var(--purple)}nav .tab.admin.active{background:#ff7b8b17;border-color:#ff7b8b33;color:var(--red)}
+  nav .status{margin-left:auto;color:var(--muted);font-size:12px}nav .userTag{color:#c8d1de;font-size:12px;margin-left:14px;padding:8px 11px;background:#ffffff08;border:1px solid #ffffff0d;border-radius:9px}nav .logout{color:#ff9aa5;margin-left:8px;font-size:12px;padding:9px 11px;border-radius:9px}nav .logout:hover{background:#ff7b8b16}
+  .page{min-height:0}.page.active{display:flex}
+  #page-ddos{gap:18px;padding:22px}#page-ddos aside{width:310px;flex:0 0 310px;background:linear-gradient(160deg,#151e2a,#101621);border:1px solid var(--line);padding:22px;border-radius:var(--radius);box-shadow:0 12px 36px #0002}#page-ddos aside:before{content:"Workspace";display:block;font-size:18px;font-weight:700;margin-bottom:4px}#page-ddos aside:after{content:"Uji keamanan lingkungan terotorisasi";display:block;color:var(--muted);font-size:11px;margin-bottom:18px}
+  #page-ddos label{font-size:11px;color:#aab6c6;font-weight:600;margin:15px 0 7px}#page-ddos input,#page-ddos select{padding:11px 12px;background:#0b1018;border:1px solid #2a3545;color:var(--text);font-size:13px;border-radius:10px}#page-ddos input:focus,#page-ddos select:focus{border-color:var(--mint);box-shadow:0 0 0 3px #6ee7c214}
+  #page-ddos button{padding:11px;border:1px solid #6ee7c255;background:#6ee7c211;color:var(--mint);font-size:12px;font-weight:700;border-radius:10px;transition:.2s}#page-ddos button:hover{background:#6ee7c222}#page-ddos button.danger{border-color:#ff7b8b55;background:#ff7b8b12;color:#ff9aa5}#page-ddos .btns{gap:9px;margin-top:12px}#page-ddos .main{background:#0c111a;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}#log{background:transparent;padding:20px;line-height:1.8}#log .ok{color:var(--mint)}#log .err{color:var(--red)}#log .warn{color:#f7c976}#log .info{color:#82b8ff}.stats{gap:clamp(12px,3vw,30px);padding:15px 20px;border-top:1px solid var(--line);background:#111722}.stats b{color:var(--mint)}
+  #page-leo{flex-direction:row;padding:18px;gap:16px}#chatSidebar{width:260px;flex:0 0 260px;display:flex;flex-direction:column;padding:15px;background:#101621;border:1px solid var(--line);border-radius:var(--radius);min-height:0}.history-title{padding:7px 8px 13px;color:#aab6c6;font-size:12px;font-weight:700}
+  #newChatBtn{padding:11px 12px;border:1px solid #bb9aff44;border-radius:11px;background:#bb9aff13;color:#d3bdff;text-align:left;font-size:12px;font-weight:700;cursor:pointer}#chatHistoryList{overflow:auto;display:flex;flex-direction:column;gap:5px;margin-top:14px}.history-item{display:flex;align-items:center;gap:6px;padding:9px;border:1px solid transparent;border-radius:10px;color:#aab6c6;font-size:12px}.history-item.active{background:#ffffff0a;border-color:#ffffff0c;color:var(--text)}.history-open{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}.history-delete{opacity:.55;border:0;background:transparent;color:inherit;cursor:pointer;padding:3px 5px;border-radius:6px}.history-delete:hover{opacity:1;background:#ff7b8b20;color:var(--red)}
+  #chatMain{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:#0c111a;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}#leoHead{min-height:72px;padding:13px 22px;background:#111722;border-bottom:1px solid var(--line)}#leoHead .av{width:40px;height:40px;border-radius:14px;background:linear-gradient(145deg,#c2a4ff,#7e8cff);display:grid;place-items:center;color:#151024;font-weight:850}#leoHead .title{color:var(--text);font-weight:700;font-size:14px}#leoHead .sub{color:var(--muted);font-size:11px;margin-top:3px}
+  #leoLog{padding:24px clamp(18px,5vw,72px);background:radial-gradient(ellipse at 50% 0%,#1b23331d,transparent 62%);gap:15px}.msg{max-width:min(82%,780px);padding:13px 16px;border-radius:15px;font-size:13px;line-height:1.7;overflow-wrap:anywhere}.msg.u{background:#28213a;border:1px solid #b89cff23;color:#f1eaff;border-bottom-right-radius:5px}.msg.a{background:#151c28;border:1px solid #ffffff0b;color:#dbe3ee;border-bottom-left-radius:5px}.msg.err{background:#29181e;border:1px solid #ff7b8b30;color:#ffd0d5}.msg .who{color:#c5a9ff;font-size:10px;font-weight:750;letter-spacing:.09em}.msg.u .who{color:#d9caff}.msg.err .who{color:var(--red)}.msg.a pre{background:#0a0e15;border:1px solid #2c3543;padding:15px;border-radius:10px}.msg.a code{background:#0a0e15;color:#d4bfff}.copy-btn{background:#171d28;border:1px solid #3a4555;color:#bec8d6;padding:5px 8px;border-radius:7px}
+  #leoInput{border-top:1px solid var(--line);background:#111722;padding:14px clamp(14px,4vw,58px) 17px}#fileChip{background:#1c1730;border-color:#bb9aff44;color:#d3bdff;border-radius:10px;padding:7px 11px}.inputRow{align-items:flex-end;gap:9px;background:#0b1018;border:1px solid #303a4a;border-radius:15px;padding:8px}.inputRow:focus-within{border-color:#bb9aff88;box-shadow:0 0 0 3px #bb9aff12}.inputRow button{min-height:40px;border:0;border-radius:10px;background:#1a2230;color:#b9c5d5;padding:0 13px;font-weight:700}.inputRow #sendBtn{background:#bb9aff;color:#171121;padding:0 17px}#leoPrompt{font-family:inherit;font-size:14px;min-height:40px;padding:10px}#menuHint{color:#7f8b9d;margin:9px 4px 0}#menuHint b{color:#d3bdff}
+  #page-admin{padding:26px}#page-admin h2{font-size:24px;letter-spacing:-.03em;margin-bottom:20px}.adminSection{background:#111722;border:1px solid var(--line);padding:20px;border-radius:16px;margin-bottom:15px}.adminSection h3{color:#c3a7ff;font-size:13px;margin-bottom:14px}.adminSection input,.adminSection select{background:#0b1018;border:1px solid #2a3545;color:var(--text);padding:11px;border-radius:9px}.adminSection button{background:#6ee7c214;border:1px solid #6ee7c244;color:var(--mint);padding:10px 14px;border-radius:9px}
+  @media(max-width:900px){#loginPage{grid-template-columns:1fr}.login-art{display:none}.login-side{padding:30px 24px}.login-brand{margin-bottom:36px}#page-ddos{padding:13px;gap:12px}#page-ddos aside{width:270px;flex-basis:270px}#chatSidebar{width:210px;flex-basis:210px}}
+  @media(max-width:650px){body{height:100dvh}nav{height:auto;min-height:62px;flex-basis:auto;padding:8px 12px;gap:4px;flex-wrap:wrap}nav .brand{width:100%;margin:0 0 3px}nav .tab{height:34px;padding:0 10px;font-size:11px}.status{display:none}nav .userTag{margin-left:auto}#page-ddos{flex-direction:column;overflow:auto}#page-ddos aside{width:auto;flex:auto}#page-ddos .main{min-height:300px}#page-leo{padding:8px;gap:8px}#chatSidebar{width:48px;flex-basis:48px;padding:8px}#chatSidebar .history-title,#chatSidebar #newChatBtn{font-size:0;text-align:center;padding:10px 3px}#chatSidebar #newChatBtn:after{content:"+";font-size:20px}#chatHistoryList{margin-top:8px}.history-item{padding:7px 3px}.history-open{font-size:0}.history-open:before{content:"•";font-size:20px}.history-delete{display:none}#leoHead{padding:10px 13px}#leoLog{padding:16px 12px}.msg{max-width:94%}#leoInput{padding:10px}#attachBtn{font-size:0}#attachBtn:after{content:"+";font-size:18px}}
 </style>
 </head>
 <body>
 
 <div id="loginPage">
-  <div class="login-box">
-    <h1>DDOS-CONSOLE</h1>
-    <p>by LeoXD</p>
-    <div class="authTabs">
-      <button id="tabLogin" class="active">LOGIN</button>
-      <button id="tabReg">REGISTER</button>
+  <div class="login-side">
+    <div class="login-box">
+      <div class="login-brand"><div class="brand-mark">L</div><div><div class="brand-name">LEO SECURITY</div><div class="brand-caption">Workspace keamanan digital</div></div></div>
+      <h1>Selamat datang.</h1>
+      <p class="login-intro">Masuk ke ruang kerjamu untuk menganalisis, belajar, dan memperkuat sistem.</p>
+      <div class="authTabs">
+        <button id="tabLogin" class="active">Masuk</button>
+        <button id="tabReg">Buat akun</button>
+      </div>
+      <div class="err-msg" id="loginErr"></div>
+      <div class="ok-msg" id="loginOk"></div>
+      <label class="field-label" for="loginUser">Username</label>
+      <input type="text" id="loginUser" placeholder="Nama pengguna" autocomplete="username"/>
+      <label class="field-label" for="loginPass">Password</label>
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password"/>
+      <button id="loginBtn" class="primary">Masuk ke workspace</button>
+      <button id="regBtn" class="primary" style="display:none">Buat akun</button>
+      <div class="divider">atau lanjutkan dengan</div>
+      <button id="githubBtn" class="github">◉ &nbsp; GitHub</button>
     </div>
-    <div class="err-msg" id="loginErr"></div>
-    <div class="ok-msg" id="loginOk"></div>
-    <input type="text" id="loginUser" placeholder="username" autocomplete="off"/>
-    <input type="password" id="loginPass" placeholder="password" autocomplete="off"/>
-    <button id="loginBtn" class="primary">LOGIN</button>
-    <button id="regBtn" class="primary" style="display:none">REGISTER</button>
-    <div class="divider">— atau —</div>
-    <button id="githubBtn" class="github">🐙 LOGIN WITH GITHUB</button>
+  </div>
+  <div class="login-art">
+    <div class="art-copy"><span class="art-pill"><span class="art-dot"></span> Ruang kerja siap digunakan</span><h2>Keamanan yang<br/>terasa jelas.</h2><p>Analisis yang terarah, alat yang tertata, dan AI untuk membantumu bergerak lebih cepat.</p></div>
+    <svg class="person-art" viewBox="0 0 560 530" role="img" aria-label="Ilustrasi analis keamanan bekerja di depan komputer">
+      <defs><linearGradient id="deskGlow" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#6ee7c2" stop-opacity=".35"/><stop offset="1" stop-color="#9c82ff" stop-opacity=".04"/></linearGradient><linearGradient id="shirt" x1="0" x2="1"><stop stop-color="#8d75d8"/><stop offset="1" stop-color="#4a4d86"/></linearGradient></defs>
+      <circle cx="286" cy="280" r="205" fill="url(#deskGlow)"/><circle cx="286" cy="280" r="165" fill="#111a28" stroke="#7ce8cb" stroke-opacity=".13"/>
+      <path d="M78 426h414" stroke="#718196" stroke-opacity=".45" stroke-width="3"/><path d="M120 428h340l-35 20H150z" fill="#253244"/>
+      <rect x="326" y="270" width="137" height="105" rx="12" fill="#101722" stroke="#94a8bc" stroke-opacity=".55" stroke-width="3"/><rect x="337" y="282" width="115" height="80" rx="5" fill="#152a35"/><path d="M350 306h51m-51 12h76m-76 12h60" stroke="#73dfc0" stroke-opacity=".8" stroke-width="4" stroke-linecap="round"/><path d="M389 376v23m-31 2h63" stroke="#788ba0" stroke-width="5" stroke-linecap="round"/>
+      <path d="M145 414c7-79 43-130 117-139 74 8 104 57 111 139H145z" fill="url(#shirt)"/><path d="M224 276c-3 22 1 35 14 49l28 21 32-24c12-13 15-28 10-51" fill="#b77762"/><path d="M211 196c2-53 33-83 78-78 43 4 66 35 59 83l-8 49c-4 27-30 52-58 55-31 2-60-20-67-49z" fill="#d7987d"/><path d="M211 212c-15-58 11-108 64-116 35-5 69 13 81 49 7 21 3 51-4 71l-12-39-8-30c-26 18-62 26-103 21l-7 46-11-2z" fill="#202330"/><path d="M232 226h18m37 0h18" stroke="#442f34" stroke-width="4" stroke-linecap="round"/><path d="M263 256c10 8 21 8 31-1" fill="none" stroke="#915b58" stroke-width="3" stroke-linecap="round"/><path d="M211 296l-38 42 45 24m117-65 34 41-34 24" fill="none" stroke="#d7987d" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="150" cy="168" r="5" fill="#6ee7c2"/><circle cx="445" cy="205" r="4" fill="#bb9aff"/><path d="M117 236h32m-16-16v32M452 130h25m-12-13v26" stroke="#b9c9d9" stroke-opacity=".55" stroke-width="2"/>
+    </svg>
   </div>
 </div>
 
 <nav id="mainNav" style="display:none">
-  <span class="brand">DDOS-CONSOLE</span>
-  <span class="tab active" data-p="ddos">DDOS</span>
-  <span class="tab leo" data-p="leo">✦ LEO AI</span>
-  <span class="tab admin" id="adminTab" data-p="admin" style="display:none">⚙ ADMIN</span>
+  <span class="brand">LEO SECURITY</span>
+  <span class="tab active" data-p="ddos">◈ Console</span>
+  <span class="tab leo" data-p="leo">✦ Leo AI</span>
+  <span class="tab admin" id="adminTab" data-p="admin" style="display:none">⚙ Admin</span>
   <span class="status" id="navStatus">idle</span>
   <span class="userTag" id="navUser"></span>
   <span class="logout" id="logoutBtn">LOGOUT</span>
@@ -189,23 +239,30 @@
 </div>
 
 <div class="page" id="page-leo" style="display:none">
-  <div id="leoHead">
-    <div class="av">L</div>
-    <div>
-      <div class="title">LeoAI</div>
-      <div class="sub">by LeoXD · security research assistant</div>
+  <aside id="chatSidebar">
+    <div class="history-title">Percakapan</div>
+    <button id="newChatBtn">＋ &nbsp; Chat baru</button>
+    <div id="chatHistoryList"></div>
+  </aside>
+  <div id="chatMain">
+    <div id="leoHead">
+      <div class="av">L</div>
+      <div>
+        <div class="title">LeoAI</div>
+        <div class="sub">Asisten keamanan digital</div>
+      </div>
     </div>
-  </div>
-  <div id="leoLog"></div>
-  <div id="leoInput">
-    <div id="fileChip"><span id="fileName"></span><span class="x" id="fileClear">✕</span></div>
-    <div class="inputRow">
-      <button id="attachBtn">📎</button>
-      <input type="file" id="fileInput" style="display:none"/>
-      <textarea id="leoPrompt" placeholder="Ketik / untuk menu, atau tanya apa saja..." rows="1"></textarea>
-      <button id="sendBtn">SEND</button>
+    <div id="leoLog"></div>
+    <div id="leoInput">
+      <div id="fileChip"><span id="fileName"></span><span class="x" id="fileClear">✕</span></div>
+      <div class="inputRow">
+        <button id="attachBtn" title="Lampirkan file">📎</button>
+        <input type="file" id="fileInput" style="display:none"/>
+        <textarea id="leoPrompt" placeholder="Tulis pesan untuk LeoAI..." rows="1"></textarea>
+        <button id="sendBtn">Kirim&nbsp; ↑</button>
+      </div>
+      <div id="menuHint">Enter untuk kirim · Shift + Enter untuk baris baru · <b>/menu</b> untuk bantuan</div>
     </div>
-    <div id="menuHint">Ketik <b>/menu</b> untuk lihat fitur</div>
   </div>
 </div>
 
@@ -447,7 +504,100 @@ function initApp(){
   }
 
   var chatHistory = [];
+  var conversations = [];
+  var currentConversationId = null;
+  var chatStoreKey = 'leo_chat_history_v1_' + (getCurrentUser().toLowerCase() || 'guest');
   var attached = null;
+
+  function persistConversations(){
+    try { localStorage.setItem(chatStoreKey, JSON.stringify(conversations.slice(0,50))); }
+    catch(e){ console.warn('Riwayat chat tidak dapat disimpan di browser ini.', e); }
+  }
+
+  function getCurrentConversation(){
+    return conversations.find(function(c){ return c.id === currentConversationId; }) || null;
+  }
+
+  function renderConversationList(){
+    var list = $('chatHistoryList');
+    list.textContent = '';
+    conversations.sort(function(a,b){ return b.updatedAt - a.updatedAt; });
+    conversations.forEach(function(conversation){
+      var row = document.createElement('div');
+      row.className = 'history-item' + (conversation.id === currentConversationId ? ' active' : '');
+      var open = document.createElement('button');
+      open.className = 'history-open';
+      open.textContent = conversation.title || 'Percakapan baru';
+      open.title = open.textContent;
+      open.onclick = function(){ openConversation(conversation.id); };
+      var remove = document.createElement('button');
+      remove.className = 'history-delete';
+      remove.textContent = '×';
+      remove.title = 'Hapus percakapan';
+      remove.setAttribute('aria-label','Hapus percakapan');
+      remove.onclick = function(){
+        conversations = conversations.filter(function(c){ return c.id !== conversation.id; });
+        if(currentConversationId === conversation.id){
+          currentConversationId = null;
+          chatHistory = [];
+          $('leoLog').textContent = '';
+          createConversation();
+        } else {
+          persistConversations();
+          renderConversationList();
+        }
+      };
+      row.appendChild(open);
+      row.appendChild(remove);
+      list.appendChild(row);
+    });
+  }
+
+  function openConversation(id){
+    var conversation = conversations.find(function(c){ return c.id === id; });
+    if(!conversation) return;
+    currentConversationId = id;
+    chatHistory = conversation.messages.map(function(m){ return { role:m.role, content:m.content }; });
+    $('leoLog').textContent = '';
+    if(!conversation.messages.length){
+      addMsg('a','Halo, ' + (getCurrentUser() || 'teman') + '. Saya LeoAI. Ceritakan apa yang sedang kamu kerjakan.');
+    } else {
+      conversation.messages.forEach(function(m){ addMsg(m.role === 'user' ? 'u' : 'a', m.content); });
+    }
+    renderConversationList();
+  }
+
+  function createConversation(){
+    var now = Date.now();
+    var conversation = { id:'chat_' + now + '_' + Math.random().toString(36).slice(2,7), title:'Percakapan baru', updatedAt:now, messages:[] };
+    conversations.unshift(conversation);
+    currentConversationId = conversation.id;
+    chatHistory = [];
+    persistConversations();
+    openConversation(conversation.id);
+  }
+
+  function saveMessage(role, content, conversationId){
+    var conversation = conversationId ? conversations.find(function(c){ return c.id === conversationId; }) : getCurrentConversation();
+    if(!conversation) return;
+    conversation.messages.push({ role:role, content:String(content).slice(0,8000) });
+    conversation.updatedAt = Date.now();
+    if(role === 'user' && conversation.title === 'Percakapan baru'){
+      conversation.title = String(content).replace(/\s+/g,' ').slice(0,42) || 'Percakapan baru';
+    }
+    persistConversations();
+    renderConversationList();
+  }
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(chatStoreKey) || '[]');
+    if(Array.isArray(saved)) conversations = saved.filter(function(c){ return c && c.id && Array.isArray(c.messages); }).slice(0,50);
+  } catch(e){ conversations = []; }
+  $('newChatBtn').onclick = createConversation;
+  if(conversations.length){
+    conversations.sort(function(a,b){ return b.updatedAt - a.updatedAt; });
+    openConversation(conversations[0].id);
+  } else createConversation();
 
   function escapeHtml(s){
     return String(s).replace(/[&<>"']/g, function(c){
@@ -552,12 +702,16 @@ function initApp(){
   async function send(){
     var p = ta.value.trim();
     if(!p && !attached) return;
-    addMsg('u', p + (attached ? '\n📎 ' + attached.name : ''));
+    var sendingConversationId = currentConversationId;
+    var userText = p + (attached ? '\n📎 ' + attached.name : '');
+    addMsg('u', userText);
+    var previousMessages = chatHistory.slice(-8);
+    chatHistory.push({ role:'user', content:userText });
+    saveMessage('user', userText, sendingConversationId);
     var menuReply = handleMenu(p.toLowerCase());
-    if(menuReply){ addMsg('a', menuReply); ta.value = ''; return; }
+    if(menuReply){ addMsg('a', menuReply); if(currentConversationId === sendingConversationId) chatHistory.push({ role:'assistant', content:menuReply }); saveMessage('assistant', menuReply, sendingConversationId); ta.value = ''; return; }
     var loading = addMsg('a', '◆ mikir...');
-    var payload = { prompt: p, file: attached, history: chatHistory.slice(-8) };
-    chatHistory.push({ role: 'user', content: p });
+    var payload = { prompt: p, file: attached, history: previousMessages };
     ta.value = '';
     ta.style.height = 'auto';
     attached = null;
@@ -585,7 +739,8 @@ function initApp(){
         m.style.fontSize = '10px'; m.style.color = '#5c6b7f'; m.style.marginTop = '6px';
         m.textContent = 'via ' + d.provider + ' · ' + d.model + ' · tier ' + (d.tier || 'free');
         a.appendChild(m);
-        chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 2000) });
+        if(currentConversationId === sendingConversationId) chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 4000) });
+        saveMessage('assistant', d.answer, sendingConversationId);
         return;
       }
       var errText = '';
@@ -599,7 +754,6 @@ function initApp(){
     }
   }
 
-  addMsg('a', 'Yo. LeoAI siap. by LeoXD.\n\nKetik /menu untuk lihat fitur.\n\n💬 Chat gratis — langsung gas.');
 }
 
 /* ===== ADMIN PANEL ===== */
