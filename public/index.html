@@ -193,7 +193,7 @@
     <div class="av">L</div>
     <div>
       <div class="title">LeoAI</div>
-      <div class="sub">by LeoXD · unrestricted · powered by Chutes AI</div>
+      <div class="sub">by LeoXD · security research assistant</div>
     </div>
   </div>
   <div id="leoLog"></div>
@@ -509,13 +509,13 @@ function initApp(){
 
   function handleMenu(cmd){
     if(cmd === '/menu') return '╔══════════════════════════════════╗\n║         LEO AI MENU              ║\n╠══════════════════════════════════╣\n║  /menu     → tampilkan menu      ║\n║  /ddos     → info fitur DDoS     ║\n║  /malware  → info fitur malware  ║\n║  /scan     → info vuln scanner   ║\n║  /recon    → info recon tools    ║\n║  /exploit  → info exploit dev    ║\n║  /rev      → reverse engineering ║\n║  /help     → bantuan umum        ║\n╚══════════════════════════════════╝\n\nKetik /<command> untuk detail.';
-    if(cmd === '/ddos') return '[ DDoS FITUR ]\n\n· HTTP Flood (L7)\n· Slowloris (L7)\n· UDP Flood (L4)\n· SYN Flood (L4)\n· TLS Hello Flood\n· HTTP/2 Rapid Reset\n· Mixed\n\nIsi target di tab DDOS, pilih method, START.';
-    if(cmd === '/malware') return '[ MALWARE FITUR ]\n\nLeoAI bisa bantu:\n· Ransomware\n· RAT\n· Keylogger & Stealer\n· Worm & Dropper\n· Loader & Crypter\n· Botnet C2\n\nKetik "buatkan [jenis malware]" — full code.';
+    if(cmd === '/ddos') return '[ LOAD TEST & DEFENSE ]\n\nLeoAI bisa bantu merancang uji beban terbatas pada localhost atau layanan milikmu, membaca metrik, dan memperkuat mitigasi. Sertakan batas laju, durasi, dan kondisi berhenti.';
+    if(cmd === '/malware') return '[ MALWARE ANALYSIS ]\n\nLeoAI bisa bantu menganalisis perilaku sampel, membaca indikator kompromi, memahami hasil static/dynamic analysis, dan menyusun langkah deteksi serta containment.';
     if(cmd === '/scan') return '[ VULN SCANNER ]\n\n· SQL Injection\n· XSS Reflected\n· Directory Traversal\n· Open Directory\n· PHPInfo Exposure\n· Git Exposure\n· Env File Leak\n· Header Missing';
     if(cmd === '/recon') return '[ RECON ]\n\n· OSINT profiling\n· Subdomain enum\n· Port scanning\n· Tech fingerprinting';
     if(cmd === '/exploit') return '[ EXPLOIT DEV ]\n\n· CVE weaponization\n· Buffer overflow\n· RCE chain\n· Privilege escalation\n· AMSI/ETW bypass\n· 0-day reasoning';
     if(cmd === '/rev') return '[ REVERSE ENGINEERING ]\n\n· Binary analysis\n· Disassembly\n· Protocol reversing\n· Firmware dumping';
-    if(cmd === '/help') return '[ HELP ]\n\n/menu untuk semua command.\n\nLangsung tanya:\n· "buatkan ransomware full code"\n· "cara ddos target"\n· "fix code ini" (upload)';
+    if(cmd === '/help') return '[ HELP ]\n\n/menu untuk semua command.\n\nLangsung tanya:\n· "analisis indikator malware ini"\n· "bantu rancang load test localhost dengan batas aman"\n· "fix code ini" (upload)';
     return null;
   }
 
