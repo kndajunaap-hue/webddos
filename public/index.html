@@ -152,8 +152,18 @@
   #leoLog{padding:24px clamp(18px,5vw,72px);background:radial-gradient(ellipse at 50% 0%,#1b23331d,transparent 62%);gap:15px}.msg{max-width:min(82%,780px);padding:13px 16px;border-radius:15px;font-size:13px;line-height:1.7;overflow-wrap:anywhere}.msg.u{background:#28213a;border:1px solid #b89cff23;color:#f1eaff;border-bottom-right-radius:5px}.msg.a{background:#151c28;border:1px solid #ffffff0b;color:#dbe3ee;border-bottom-left-radius:5px}.msg.err{background:#29181e;border:1px solid #ff7b8b30;color:#ffd0d5}.msg .who{color:#c5a9ff;font-size:10px;font-weight:750;letter-spacing:.09em}.msg.u .who{color:#d9caff}.msg.err .who{color:var(--red)}.msg.a pre{background:#0a0e15;border:1px solid #2c3543;padding:15px;border-radius:10px}.msg.a code{background:#0a0e15;color:#d4bfff}.copy-btn{background:#171d28;border:1px solid #3a4555;color:#bec8d6;padding:5px 8px;border-radius:7px}
   #leoInput{border-top:1px solid var(--line);background:#111722;padding:14px clamp(14px,4vw,58px) 17px}#fileChip{background:#1c1730;border-color:#bb9aff44;color:#d3bdff;border-radius:10px;padding:7px 11px}.inputRow{align-items:flex-end;gap:9px;background:#0b1018;border:1px solid #303a4a;border-radius:15px;padding:8px}.inputRow:focus-within{border-color:#bb9aff88;box-shadow:0 0 0 3px #bb9aff12}.inputRow button{min-height:40px;border:0;border-radius:10px;background:#1a2230;color:#b9c5d5;padding:0 13px;font-weight:700}.inputRow #sendBtn{background:#bb9aff;color:#171121;padding:0 17px}#leoPrompt{font-family:inherit;font-size:14px;min-height:40px;padding:10px}#menuHint{color:#7f8b9d;margin:9px 4px 0}#menuHint b{color:#d3bdff}
   #page-admin{padding:26px}#page-admin h2{font-size:24px;letter-spacing:-.03em;margin-bottom:20px}.adminSection{background:#111722;border:1px solid var(--line);padding:20px;border-radius:16px;margin-bottom:15px}.adminSection h3{color:#c3a7ff;font-size:13px;margin-bottom:14px}.adminSection input,.adminSection select{background:#0b1018;border:1px solid #2a3545;color:var(--text);padding:11px;border-radius:9px}.adminSection button{background:#6ee7c214;border:1px solid #6ee7c244;color:var(--mint);padding:10px 14px;border-radius:9px}
-  @media(max-width:900px){#loginPage{grid-template-columns:1fr}.login-art{display:none}.login-side{padding:30px 24px}.login-brand{margin-bottom:36px}#page-ddos{padding:13px;gap:12px}#page-ddos aside{width:270px;flex-basis:270px}#chatSidebar{width:210px;flex-basis:210px}}
-  @media(max-width:650px){body{height:100dvh}nav{height:auto;min-height:62px;flex-basis:auto;padding:8px 12px;gap:4px;flex-wrap:wrap}nav .brand{width:100%;margin:0 0 3px}nav .tab{height:34px;padding:0 10px;font-size:11px}.status{display:none}nav .userTag{margin-left:auto}#page-ddos{flex-direction:column;overflow:auto}#page-ddos aside{width:auto;flex:auto}#page-ddos .main{min-height:300px}#page-leo{padding:8px;gap:8px}#chatSidebar{width:48px;flex-basis:48px;padding:8px}#chatSidebar .history-title,#chatSidebar #newChatBtn{font-size:0;text-align:center;padding:10px 3px}#chatSidebar #newChatBtn:after{content:"+";font-size:20px}#chatHistoryList{margin-top:8px}.history-item{padding:7px 3px}.history-open{font-size:0}.history-open:before{content:"•";font-size:20px}.history-delete{display:none}#leoHead{padding:10px 13px}#leoLog{padding:16px 12px}.msg{max-width:94%}#leoInput{padding:10px}#attachBtn{font-size:0}#attachBtn:after{content:"+";font-size:18px}}
+  #page-ddos aside:before,#page-ddos aside:after{content:none}.workspace-title{font-size:18px;font-weight:700;margin-bottom:4px}.workspace-subtitle{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-bottom:18px}
+  #page-dashboard,#page-subdomain,#page-api,#page-share{overflow:auto;padding:clamp(16px,3vw,34px)}
+  .dashboard-wrap,.content-page{width:min(1180px,100%);margin:0 auto}.dashboard-hero{display:flex;align-items:center;justify-content:space-between;padding:clamp(22px,4vw,40px);border:1px solid #ffffff0d;border-radius:22px;background:radial-gradient(ellipse at 85% 20%,#77dcb31a,transparent 40%),linear-gradient(115deg,#151e2b,#101620)}
+  .eyebrow,.tag{color:#9babc0;font-size:10px;font-weight:750;letter-spacing:.15em}.dashboard-hero h1,.page-heading h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;margin:11px 0}.dashboard-hero h1 span{color:var(--mint)}.dashboard-hero p,.page-heading p{color:var(--muted);font-size:13px;line-height:1.7;max-width:650px}.hero-orb{width:88px;height:88px;flex:0 0 88px;display:grid;place-items:center;border-radius:28px;background:linear-gradient(145deg,#6ee7c2,#82b8ff);color:#0c1717;font-weight:850;font-size:32px;box-shadow:0 15px 50px #6ee7c222}
+  .dashboard-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}.dashboard-card,.dashboard-panel,.feature-card,.steps-card,.notice-card,.code-card{background:#111722;border:1px solid var(--line);border-radius:16px}.dashboard-card{min-height:145px;padding:18px;display:grid;grid-template-columns:38px 1fr;column-gap:12px;align-content:start}.card-icon,.feature-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;font-weight:800}.mint{color:var(--mint);background:#6ee7c218}.purple{color:#cfb9ff;background:#bb9aff1a}.blue{color:#9dcaff;background:#82b8ff1a}.card-label{align-self:center;color:#aab6c6;font-size:12px}.dashboard-card strong{grid-column:2;font-size:25px;margin-top:14px}.dashboard-card small{grid-column:2;color:var(--muted);font-size:10px;margin-top:3px;line-height:1.5}
+  .dashboard-lower{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.dashboard-panel{padding:20px}.panel-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.panel-heading h2,.steps-card h2,.feature-copy h2,.notice-card h2{font-size:15px}.panel-heading p{font-size:11px;color:var(--muted);margin-top:4px}.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick-link{display:grid;grid-template-columns:28px 1fr;text-align:left;align-items:center;column-gap:8px;padding:13px;background:#0c111a;border:1px solid #ffffff0b;border-radius:12px;cursor:pointer}.quick-link:hover{border-color:#6ee7c244;background:#141e29}.quick-link>span{grid-row:span 2;color:var(--mint);font-size:17px}.quick-link b{font-size:12px}.quick-link small{color:var(--muted);font-size:10px;margin-top:4px}.text-action{background:transparent;border:0;color:#c7b2ff;font-size:11px;cursor:pointer}.recent-list{display:flex;flex-direction:column;gap:7px}.recent-item{display:flex;width:100%;justify-content:space-between;gap:10px;text-align:left;padding:10px;border:1px solid transparent;border-radius:9px;background:#0c111a;color:#d7dfeb;cursor:pointer}.recent-item:hover{border-color:#ffffff1a}.recent-item small{color:var(--muted);white-space:nowrap;font-size:10px}.recent-empty{color:var(--muted);font-size:12px;padding:10px 2px}
+  .page-heading{margin:8px 0 24px}.page-heading p{max-width:720px}.feature-card{display:flex;gap:18px;padding:22px;max-width:850px}.feature-icon{width:48px;height:48px;flex:0 0 48px;font-size:22px}.feature-copy p,.notice-card p,.code-card p{color:#a9b5c5;font-size:12px;line-height:1.8;margin:9px 0 15px}.feature-copy .tag{margin:2px 0 9px;color:var(--mint)}.primary-link,.secondary-link{display:inline-flex;text-decoration:none;font-size:12px;font-weight:700;margin:4px 12px 0 0}.primary-link{padding:10px 13px;border-radius:9px;background:#6ee7c2;color:#0c1714}.secondary-link{padding:10px 3px;color:#c9b5ff}.steps-card,.code-card{max-width:850px;padding:20px;margin-top:14px}.steps-card ol{padding-left:21px;color:#a9b5c5;font-size:12px;line-height:2;margin-top:12px}.muted-note{color:#7f8b9d;font-size:11px;margin:14px 2px}.notice-card{max-width:850px;display:flex;gap:14px;padding:20px}.notice-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;background:#f3c76c18;color:#f3c76c}.notice-card h2{margin:2px 0 6px}.notice-card p{margin:0}.code-title{color:#8794a7;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}.code-card code{color:var(--mint);font-size:13px}.code-card p{margin-bottom:0}
+  @media(max-width:900px){#loginPage{grid-template-columns:1fr}.login-art{display:none}.login-side{padding:30px 24px}.login-brand{margin-bottom:36px}#page-ddos{padding:13px;gap:12px}#page-ddos aside{width:270px;flex-basis:270px}#chatSidebar{width:210px;flex-basis:210px}.dashboard-lower{grid-template-columns:1fr}}
+  @media(max-width:650px){body{height:100dvh}nav{height:auto;min-height:62px;flex-basis:auto;padding:8px 12px;gap:4px;flex-wrap:wrap}nav .brand{width:100%;margin:0 0 3px}nav .tab{height:34px;padding:0 10px;font-size:11px}.status{display:none}nav .userTag{margin-left:auto}#page-ddos{flex-direction:column;overflow:auto}#page-ddos aside{width:auto;flex:auto}#page-ddos .main{min-height:300px}#page-leo{padding:8px;gap:8px}#chatSidebar{width:48px;flex-basis:48px;padding:8px}#chatSidebar .history-title,#chatSidebar #newChatBtn{font-size:0;text-align:center;padding:10px 3px}#chatSidebar #newChatBtn:after{content:"+";font-size:20px}#chatHistoryList{margin-top:8px}.history-item{padding:7px 3px}.history-open{font-size:0}.history-open:before{content:"•";font-size:20px}.history-delete{display:none}#leoHead{padding:10px 13px}#leoLog{padding:16px 12px}.msg{max-width:94%}#leoInput{padding:10px}#attachBtn{font-size:0}#attachBtn:after{content:"+";font-size:18px}.dashboard-cards{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.hero-orb{width:56px;height:56px;flex-basis:56px;border-radius:18px}.feature-card{padding:16px}.dashboard-hero{padding:22px 18px}}
+  .sample-code{white-space:pre;overflow:auto;background:#0b1018;border:1px solid #263140;border-radius:10px;padding:15px;color:#dce5f0;font-size:11px;line-height:1.7}.sample-code code{color:inherit}
+  .key-create-panel{max-width:850px;margin-bottom:15px}.key-create-panel h2,.upload-panel h2{font-size:15px}.key-create-panel p{color:var(--muted);font-size:11px;margin-top:5px}.key-create-row{display:flex;gap:9px;margin:15px 0}.key-create-row input,.upload-fields textarea,.comment-form input{flex:1;min-width:0;background:#0b1018;border:1px solid #2a3545;border-radius:9px;color:var(--text);padding:11px 12px;font-size:12px;outline:none}.key-create-row input:focus,.upload-fields textarea:focus,.comment-form input:focus{border-color:var(--purple)}.key-create-row button,.upload-fields>button,.comment-form button{border:0;border-radius:9px;background:#bb9aff;color:#171121;padding:10px 15px;font-size:12px;font-weight:750;cursor:pointer}.key-create-row button:disabled,.upload-fields>button:disabled{opacity:.55;cursor:wait}.api-key-list{display:grid;gap:8px}.api-key-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid #ffffff0d;border-radius:10px;background:#0c111a}.api-key-row>div{display:grid;gap:5px}.api-key-row b{font-size:12px}.api-key-row code{color:#c8b2ff;font-size:11px}.api-key-row small{color:var(--muted);font-size:10px}.api-key-row.revoked{opacity:.5}.revoke-key{border:1px solid #ff7b8b44;background:#ff7b8b12;color:#ff9aa5;padding:7px 10px;border-radius:8px;font-size:11px;cursor:pointer}.new-key-box{grid-template-columns:1fr auto;gap:9px;align-items:center;padding:13px;background:#13231f;border:1px solid #6ee7c255;border-radius:10px;margin:12px 0;overflow-wrap:anywhere}.new-key-box b{grid-column:1/-1;color:var(--mint);font-size:11px}.new-key-box code{color:#e8fff7;font-size:11px;user-select:all}.new-key-box button{border:1px solid #6ee7c255;color:var(--mint);background:#6ee7c211;padding:7px 10px;border-radius:8px;cursor:pointer}
+  .upload-panel{max-width:850px;margin-bottom:20px}.upload-fields{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:14px}.upload-file{grid-column:1/-1;display:grid;grid-template-columns:36px 1fr;align-items:center;padding:14px;border:1px dashed #9aa8ba55;border-radius:11px;background:#0c111a;cursor:pointer}.upload-file>span{grid-row:span 2;color:var(--purple);font-size:22px}.upload-file b{font-size:12px}.upload-file small{color:var(--muted);font-size:10px;margin-top:4px}.upload-fields textarea{grid-column:1/-1;resize:vertical}.upload-fields>button{justify-self:end}.hub-toolbar{display:flex;align-items:center;justify-content:space-between;margin:18px 2px 10px}.hub-toolbar h2{font-size:16px}.hub-toolbar .muted-note{margin:0}.script-feed{max-width:850px;display:grid;gap:12px}.script-card{padding:17px;background:#111722;border:1px solid var(--line);border-radius:15px}.script-meta,.script-actions{display:flex;align-items:center;gap:9px}.script-meta{justify-content:space-between;color:#b8c3d1;font-size:10px}.script-meta time{color:var(--muted)}.script-caption{font-size:13px;line-height:1.6;margin:12px 0 8px;white-space:pre-wrap}.script-file{color:#c4adff;font-size:10px}.script-source{margin-top:12px}.script-source summary{color:#aebaca;font-size:11px;cursor:pointer}.script-source pre{max-height:340px;overflow:auto;padding:13px;margin-top:8px;background:#0a0e15;border:1px solid #263140;border-radius:9px;color:#d8e0eb;font-size:11px;line-height:1.6;white-space:pre}.script-actions{margin-top:13px;flex-wrap:wrap}.script-actions button{border:1px solid #303b4a;background:#151d29;color:#b9c5d4;padding:7px 10px;border-radius:8px;font-size:10px;cursor:pointer}.script-actions button:hover{background:#202a38}.script-actions button.liked{color:#ff91a1;border-color:#ff7b8b44}.script-actions button.delete-script{margin-left:auto;color:#ff9aa5}.script-comments{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.script-comment{font-size:11px;color:#bdc8d5;line-height:1.6;padding:7px 0;border-bottom:1px solid #ffffff0a;overflow-wrap:anywhere}.script-comment b{color:#cbb5ff}.comment-form{display:flex;gap:8px;margin-top:10px}.comment-form button{padding:8px 12px}
 </style>
 </head>
 <body>
@@ -170,8 +180,8 @@
       </div>
       <div class="err-msg" id="loginErr"></div>
       <div class="ok-msg" id="loginOk"></div>
-      <label class="field-label" for="loginUser">Username</label>
-      <input type="text" id="loginUser" placeholder="Nama pengguna" autocomplete="username"/>
+      <label class="field-label" for="loginUser">Email</label>
+      <input type="email" id="loginUser" placeholder="nama@email.com" autocomplete="email"/>
       <label class="field-label" for="loginPass">Password</label>
       <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       <button id="loginBtn" class="primary">Masuk ke workspace</button>
@@ -195,18 +205,71 @@
 
 <nav id="mainNav" style="display:none">
   <span class="brand">LEO SECURITY</span>
-  <span class="tab active" data-p="ddos">◈ Console</span>
+  <span class="tab active" data-p="dashboard">◈ Dashboard</span>
+  <span class="tab" data-p="ddos">Console</span>
   <span class="tab leo" data-p="leo">✦ Leo AI</span>
+  <span class="tab" data-p="subdomain">Subdomain</span>
+  <span class="tab" data-p="api">API Access</span>
+  <span class="tab" data-p="share">Script Hub</span>
   <span class="tab admin" id="adminTab" data-p="admin" style="display:none">⚙ Admin</span>
   <span class="status" id="navStatus">idle</span>
   <span class="userTag" id="navUser"></span>
   <span class="logout" id="logoutBtn">LOGOUT</span>
 </nav>
 
+<div class="page active" id="page-dashboard" style="display:none">
+  <div class="dashboard-wrap">
+    <div class="dashboard-hero"><div><div class="eyebrow">LEO SECURITY WORKSPACE</div><h1>Halo, <span id="dashboardUser">teman</span>.</h1><p>Ruang kerjamu untuk analisis, percakapan AI, dan proyek keamanan.</p></div><div class="hero-orb">L</div></div>
+    <div class="dashboard-cards">
+      <div class="dashboard-card"><span class="card-icon mint">✦</span><span class="card-label">Percakapan AI</span><strong id="dashboardChatCount">0</strong><small>Tersimpan di browser ini</small></div>
+      <div class="dashboard-card"><span class="card-icon purple">⌘</span><span class="card-label">Script Hub</span><strong id="dashboardScriptCount">—</strong><small>Menunggu database komunitas</small></div>
+      <div class="dashboard-card"><span class="card-icon blue">◎</span><span class="card-label">API access</span><strong>Setup</strong><small>Menunggu autentikasi dan penyimpanan aman</small></div>
+    </div>
+    <div class="dashboard-lower">
+      <section class="dashboard-panel"><div class="panel-heading"><div><h2>Mulai cepat</h2><p>Pilih ruang kerja yang ingin kamu buka.</p></div></div><div class="quick-grid"><button class="quick-link" data-go="leo"><span>✦</span><b>Buka Leo AI</b><small>Lanjutkan atau mulai percakapan</small></button><button class="quick-link" data-go="subdomain"><span>⌁</span><b>Subdomain gratis</b><small>Petunjuk setup DuckDNS</small></button><button class="quick-link" data-go="share"><span>⇧</span><b>Script Hub</b><small>Siapkan draft berbagi</small></button><button class="quick-link" data-go="api"><span>⌘</span><b>API Access</b><small>Lihat status integrasi</small></button></div></section>
+      <section class="dashboard-panel"><div class="panel-heading"><div><h2>Aktivitas terbaru</h2><p>Riwayat tersimpan di perangkat ini.</p></div><button class="text-action" data-go="leo">Lihat chat →</button></div><div id="dashboardRecent" class="recent-list"></div></section>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-subdomain" style="display:none">
+  <div class="content-page"><div class="page-heading"><div class="eyebrow">NETWORK TOOLS</div><h1>Subdomain gratis</h1><p>Gunakan DDNS untuk memberi nama tetap pada IP yang berubah. Setup dilakukan di provider, token tidak diminta atau disimpan oleh aplikasi ini.</p></div>
+    <section class="feature-card"><div class="feature-icon mint">⌁</div><div class="feature-copy"><div class="tag">PILIHAN GRATIS</div><h2>DuckDNS</h2><p>DuckDNS menyediakan subdomain DDNS gratis dan endpoint HTTPS untuk memperbarui alamat IP. Daftarkan nama subdomain di situsnya, lalu pasang updater pada server atau router milikmu.</p><a class="primary-link" href="https://www.duckdns.org/" target="_blank" rel="noopener noreferrer">Buka DuckDNS ↗</a><a class="secondary-link" href="https://www.duckdns.org/spec.jsp" target="_blank" rel="noopener noreferrer">Dokumentasi API</a></div></section>
+    <section class="steps-card"><h2>Alur setup</h2><ol><li>Buat akun dan pilih nama subdomain di DuckDNS.</li><li>Pasang updater resmi pada mesin atau router milikmu.</li><li>Simpan token hanya di perangkat/server sendiri; jangan kirim ke chat atau unggah ke repositori publik.</li><li>Pastikan layanan yang kamu publikasikan memakai autentikasi dan firewall yang sesuai.</li></ol></section>
+    <p class="muted-note">Fitur ini memberi panduan saja. Pembuatan otomatis dan pengelolaan DNS belum terhubung ke akun provider.</p>
+  </div>
+</div>
+
+<div class="page" id="page-api" style="display:none">
+  <div class="content-page"><div class="page-heading"><div class="eyebrow">DEVELOPER</div><h1>API Access</h1><p>Buat key rahasia untuk menghubungkan LeoAI ke aplikasi lain melalui format chat completions.</p></div>
+    <section class="dashboard-panel key-create-panel"><div><h2>Buat API key</h2><p>Key hanya ditampilkan sekali. Simpan di backend aplikasimu sebagai secret.</p></div><div class="key-create-row"><input id="apiKeyLabel" maxlength="80" placeholder="Nama aplikasi, mis. Website chatbot"/><button id="createApiKeyBtn">＋ Buat key</button></div><div id="newApiKeyBox" class="new-key-box" style="display:none"></div><div id="apiKeyList" class="api-key-list"></div></section>
+    <div class="code-card"><div class="code-title">OpenAI-compatible request</div><pre class="sample-code"><code>fetch('https://YOUR-DOMAIN/api/oracle', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_LEO_API_KEY'
+  },
+  body: JSON.stringify({
+    model: 'leoai-free',
+    messages: [{ role: 'user', content: 'Halo!' }]
+  })
+});</code></pre><p>Panggil endpoint dari server milikmu, bukan langsung dari browser. Jangan pernah commit API key ke source control.</p></div>
+  </div>
+</div>
+
+<div class="page" id="page-share" style="display:none">
+  <div class="content-page"><div class="page-heading"><div class="eyebrow">COMMUNITY</div><h1>Script Hub</h1><p>Bagikan utilitas, script defensif, dan contoh kode. Maksimal 50 KB per file.</p></div>
+    <section class="dashboard-panel upload-panel"><h2>Bagikan script</h2><div class="upload-fields"><label class="upload-file" for="scriptFileInput"><span>＋</span><b id="scriptFileName">Pilih file kode</b><small>.js · .py · .ps1 · .sh · .html · dan lainnya</small></label><input type="file" id="scriptFileInput" accept=".js,.ts,.jsx,.tsx,.py,.ps1,.sh,.json,.html,.css,.go,.rs,.cpp,.c,.h,.cs,.java,.php,.rb,.sql,.md" style="display:none"/><textarea id="scriptCaption" maxlength="500" placeholder="Tulis caption: apa fungsi script ini?" rows="2"></textarea><button id="uploadScriptBtn">⇧ &nbsp; Unggah script</button></div></section>
+    <div class="hub-toolbar"><h2>Terbaru</h2><span id="scriptHubStatus" class="muted-note">Memuat komunitas…</span></div><div id="scriptFeed" class="script-feed"></div>
+  </div>
+</div>
+
 <div class="page active" id="page-ddos" style="display:none">
   <aside>
+    <div class="workspace-title">Security Console</div>
+    <p class="workspace-subtitle">Gunakan hanya pada sistem yang kamu miliki atau kelola.</p>
     <label>TARGET</label>
-    <input id="target" placeholder="https://target.com"/>
+    <input id="target" placeholder="https://your-lab.example"/>
     <label>METHOD</label>
     <select id="method">
       <option value="http">HTTP FLOOD</option>
@@ -271,7 +334,7 @@
 
   <div class="adminSection">
     <h3>👥 KELOLA ADMIN</h3>
-    <input id="newAdminUser" placeholder="username admin baru"/>
+    <input id="newAdminUser" placeholder="email admin baru"/>
     <button id="addAdminBtn">TAMBAH ADMIN</button>
     <div id="adminsList" style="margin-top:12px;font-size:12px;color:#c9d4e0"></div>
   </div>
@@ -280,46 +343,46 @@
 <script>
 function $(id){ return document.getElementById(id); }
 
-function isLoggedIn(){ return !!localStorage.getItem('leo_auth'); }
-function saveAuth(user, avatar){
+function isLoggedIn(){ return !!localStorage.getItem('leo_access_token'); }
+function saveAuth(user, token, refreshToken, avatar){
   localStorage.setItem('leo_auth', 'ok');
   localStorage.setItem('leo_user', user || 'user');
+  if(token) localStorage.setItem('leo_access_token', token);
+  if(refreshToken) localStorage.setItem('leo_refresh_token', refreshToken);
   if(avatar) localStorage.setItem('leo_avatar', avatar);
 }
 function clearAuth(){
   localStorage.removeItem('leo_auth');
   localStorage.removeItem('leo_user');
   localStorage.removeItem('leo_avatar');
+  localStorage.removeItem('leo_access_token');
+  localStorage.removeItem('leo_refresh_token');
 }
 function getCurrentUser(){ return localStorage.getItem('leo_user') || ''; }
+function authHeaders(){ return { 'Authorization':'Bearer ' + (localStorage.getItem('leo_access_token') || '') }; }
 
 function showApp(){
   $('loginPage').style.display = 'none';
   $('mainNav').style.display = 'flex';
-  $('page-ddos').style.display = 'flex';
+  $('page-dashboard').style.display = 'flex';
   $('navUser').textContent = '@' + (localStorage.getItem('leo_user') || 'user');
 }
 function showLogin(){
   $('loginPage').style.display = 'flex';
   $('mainNav').style.display = 'none';
-  $('page-ddos').style.display = 'none';
-  $('page-leo').style.display = 'none';
-  $('page-admin').style.display = 'none';
+  document.querySelectorAll('.page').forEach(function(page){ page.style.display = 'none'; });
 }
 
 (function(){
-  var params = new URLSearchParams(location.search);
-  var token = params.get('leo_token');
-  var user = params.get('leo_user');
-  var avatar = params.get('leo_avatar');
-  var err = params.get('leo_err');
-  if(token && user){ saveAuth(user, avatar); history.replaceState({}, '', location.pathname); }
-  if(err){
-    setTimeout(function(){
-      var el = $('loginErr');
-      if(el){ el.textContent = 'GitHub error: ' + err; el.style.display = 'block'; }
-    }, 100);
-    history.replaceState({}, '', location.pathname);
+  var params = new URLSearchParams(location.hash.slice(1));
+  var token = params.get('access_token');
+  if(token){
+    try {
+      var payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      var user = payload.user_metadata && payload.user_metadata.username || (payload.email || 'user').split('@')[0];
+      saveAuth(user, token, params.get('refresh_token'));
+      history.replaceState({}, '', location.pathname + location.search);
+    } catch(e){ localStorage.removeItem('leo_access_token'); }
   }
 })();
 
@@ -348,19 +411,25 @@ function showOk(msg){ $('loginOk').textContent = msg; $('loginOk').style.display
 $('regBtn').onclick = function(){
   var u = $('loginUser').value.trim();
   var p = $('loginPass').value;
-  if(!u || !p) return showErr('isi username dan password');
-  if(u.length < 3) return showErr('username minimal 3 karakter');
-  if(p.length < 4) return showErr('password minimal 4 karakter');
+  if(!u || !p) return showErr('isi email dan password');
+  if(p.length < 8) return showErr('password minimal 8 karakter');
   fetch('/api/auth?action=register', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ username: u, password: p })
+    body: JSON.stringify({ email: u, username: u.split('@')[0], password: p })
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
     if(d.error) return showErr(d.error);
-    showOk('Akun dibuat! Silakan login.');
-    setTimeout(function(){ $('tabLogin').click(); }, 1200);
+    if(d.access_token){
+      saveAuth(d.username, d.access_token, d.refresh_token);
+      showApp();
+      initApp();
+      initAdminPanel();
+      return;
+    }
+    showOk('Akun dibuat. Cek email untuk verifikasi, lalu masuk.');
+    setTimeout(function(){ $('tabLogin').click(); }, 1800);
   })
   .catch(function(e){ showErr('error: ' + e.message); });
 };
@@ -368,16 +437,16 @@ $('regBtn').onclick = function(){
 $('loginBtn').onclick = function(){
   var u = $('loginUser').value.trim();
   var p = $('loginPass').value;
-  if(!u || !p) return showErr('isi username dan password');
+  if(!u || !p) return showErr('isi email dan password');
   fetch('/api/auth?action=login', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ username: u, password: p })
+    body: JSON.stringify({ email: u, password: p })
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
     if(d.error) return showErr(d.error);
-    saveAuth(d.username);
+    saveAuth(d.username, d.access_token, d.refresh_token);
     showApp();
     initApp();
     initAdminPanel();
@@ -389,9 +458,8 @@ $('githubBtn').onclick = function(){
   fetch('/api/auth?action=config')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(!d.githubClientId) return showErr('GitHub Client ID belum di-set');
-      var redirect = encodeURIComponent(location.origin + '/api/auth?action=github');
-      location.href = 'https://github.com/login/oauth/authorize?client_id=' + d.githubClientId + '&redirect_uri=' + redirect + '&scope=read:user';
+      if(!d.githubUrl) return showErr('Supabase Auth belum dikonfigurasi.');
+      location.href = d.githubUrl;
     })
     .catch(function(e){ showErr('error: ' + e.message); });
 };
@@ -420,6 +488,13 @@ function initApp(){
       };
     })(tabs[i]);
   }
+
+  document.querySelectorAll('[data-go]').forEach(function(button){
+    button.onclick = function(){
+      var tab = document.querySelector('.tab[data-p="' + button.dataset.go + '"]');
+      if(tab) tab.click();
+    };
+  });
 
   function log(msg, cls){
     cls = cls || '';
@@ -509,9 +584,42 @@ function initApp(){
   var chatStoreKey = 'leo_chat_history_v1_' + (getCurrentUser().toLowerCase() || 'guest');
   var attached = null;
 
+  function renderDashboardSummary(){
+    $('dashboardUser').textContent = getCurrentUser() || 'teman';
+    $('dashboardChatCount').textContent = String(conversations.length);
+    $('dashboardScriptCount').textContent = '—';
+    var recent = $('dashboardRecent');
+    recent.textContent = '';
+    var items = conversations.slice().sort(function(a,b){ return (b.updatedAt || 0) - (a.updatedAt || 0); }).slice(0,5);
+    if(!items.length){
+      var empty = document.createElement('div');
+      empty.className = 'recent-empty';
+      empty.textContent = 'Belum ada percakapan. Mulai chat pertamamu dengan LeoAI.';
+      recent.appendChild(empty);
+      return;
+    }
+    items.forEach(function(conversation){
+      var item = document.createElement('button');
+      item.className = 'recent-item';
+      var title = document.createElement('span');
+      title.textContent = conversation.title || 'Percakapan baru';
+      var date = document.createElement('small');
+      date.textContent = conversation.updatedAt ? new Date(conversation.updatedAt).toLocaleDateString('id-ID') : '';
+      item.appendChild(title);
+      item.appendChild(date);
+      item.onclick = function(){
+        openConversation(conversation.id);
+        var tab = document.querySelector('.tab[data-p="leo"]');
+        if(tab) tab.click();
+      };
+      recent.appendChild(item);
+    });
+  }
+
   function persistConversations(){
     try { localStorage.setItem(chatStoreKey, JSON.stringify(conversations.slice(0,50))); }
     catch(e){ console.warn('Riwayat chat tidak dapat disimpan di browser ini.', e); }
+    renderDashboardSummary();
   }
 
   function getCurrentConversation(){
@@ -598,6 +706,7 @@ function initApp(){
     conversations.sort(function(a,b){ return b.updatedAt - a.updatedAt; });
     openConversation(conversations[0].id);
   } else createConversation();
+  renderDashboardSummary();
 
   function escapeHtml(s){
     return String(s).replace(/[&<>"']/g, function(c){
@@ -734,12 +843,14 @@ function initApp(){
       }
       loading.remove();
       if(d.answer){
-        var a = addMsg('a', d.answer);
-        var m = document.createElement('div');
-        m.style.fontSize = '10px'; m.style.color = '#5c6b7f'; m.style.marginTop = '6px';
-        m.textContent = 'via ' + d.provider + ' · ' + d.model + ' · tier ' + (d.tier || 'free');
-        a.appendChild(m);
-        if(currentConversationId === sendingConversationId) chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 4000) });
+        if(currentConversationId === sendingConversationId){
+          var a = addMsg('a', d.answer);
+          var m = document.createElement('div');
+          m.style.fontSize = '10px'; m.style.color = '#5c6b7f'; m.style.marginTop = '6px';
+          m.textContent = 'LeoAI';
+          a.appendChild(m);
+          chatHistory.push({ role: 'assistant', content: d.answer.slice(0, 4000) });
+        }
         saveMessage('assistant', d.answer, sendingConversationId);
         return;
       }
@@ -747,19 +858,172 @@ function initApp(){
       if(d.stage === 'env'){ errText = '⚠ ' + d.error + '\n\nKenapa: ' + d.reason + '\nSolusi: ' + d.fix; }
       else if(d.stage === 'all_failed'){ errText = '⚠ ' + d.error + '\n' + d.summary; }
       else { errText = '⚠ ' + (d.error || 'unknown'); if(d.reason) errText += '\nKenapa: ' + d.reason; if(d.fix) errText += '\nSolusi: ' + d.fix; }
-      addMsg('err', errText);
+      if(currentConversationId === sendingConversationId) addMsg('err', errText);
     } catch(e){
       loading.remove();
-      addMsg('err', 'Network error: ' + e.message);
+      if(currentConversationId === sendingConversationId) addMsg('err', 'Network error: ' + e.message);
     }
   }
+  initDeveloperPages();
+}
 
+var developerPagesInited = false;
+async function developerFetch(url, options){
+  options = options || {};
+  function send(){
+    options.headers = Object.assign({}, options.headers || {}, { 'Content-Type':'application/json' }, authHeaders());
+    return fetch(url, options);
+  }
+  var response = await send();
+  var refreshToken = localStorage.getItem('leo_refresh_token');
+  if(response.status !== 401 || !refreshToken) return response;
+  try {
+    var refreshed = await fetch('/api/auth?action=refresh',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:refreshToken})});
+    var session = await refreshed.json();
+    if(!refreshed.ok || !session.access_token) return response;
+    saveAuth(session.username,session.access_token,session.refresh_token);
+    return await send();
+  } catch(e){ return response; }
+}
+
+function initDeveloperPages(){
+  if(developerPagesInited) return;
+  developerPagesInited = true;
+  $('createApiKeyBtn').onclick = createApiKey;
+  $('uploadScriptBtn').onclick = uploadScript;
+  $('scriptFileInput').onchange = function(){
+    var file = this.files && this.files[0];
+    $('scriptFileName').textContent = file ? file.name : 'Pilih file kode';
+  };
+  loadApiKeys();
+  loadScriptFeed();
+}
+
+async function loadApiKeys(){
+  var list = $('apiKeyList');
+  list.textContent = 'Memuat API key…';
+  try {
+    var response = await developerFetch('/api/apikey');
+    var data = await response.json();
+    if(!response.ok) throw new Error(data.error || 'Tidak dapat memuat API key.');
+    list.textContent = '';
+    if(!data.keys || !data.keys.length){ list.textContent = 'Belum ada API key.'; return; }
+    data.keys.forEach(function(key){
+      var row = document.createElement('div');
+      row.className = 'api-key-row' + (key.revoked_at ? ' revoked' : '');
+      var details = document.createElement('div');
+      var name = document.createElement('b'); name.textContent = key.label;
+      var code = document.createElement('code'); code.textContent = key.key_prefix + '…';
+      var dates = document.createElement('small'); dates.textContent = key.revoked_at ? 'Dicabut' : 'Dibuat ' + new Date(key.created_at).toLocaleDateString('id-ID');
+      details.appendChild(name); details.appendChild(code); details.appendChild(dates); row.appendChild(details);
+      if(!key.revoked_at){
+        var revoke = document.createElement('button'); revoke.className = 'revoke-key'; revoke.textContent = 'Cabut';
+        revoke.onclick = async function(){
+          if(!confirm('Cabut API key ini? Aplikasi yang memakainya akan kehilangan akses.')) return;
+          var result = await developerFetch('/api/apikey',{method:'POST',body:JSON.stringify({action:'revoke',id:key.id})});
+          var payload = await result.json();
+          if(!result.ok) return alert(payload.error || 'Gagal mencabut key.');
+          loadApiKeys();
+        };
+        row.appendChild(revoke);
+      }
+      list.appendChild(row);
+    });
+  } catch(e){ list.textContent = e.message; }
+}
+
+async function createApiKey(){
+  var button = $('createApiKeyBtn');
+  button.disabled = true;
+  try {
+    var response = await developerFetch('/api/apikey',{method:'POST',body:JSON.stringify({action:'create',label:$('apiKeyLabel').value.trim()})});
+    var data = await response.json();
+    if(!response.ok) throw new Error(data.error || 'Gagal membuat API key.');
+    var box = $('newApiKeyBox'); box.textContent = '';
+    var title = document.createElement('b'); title.textContent = 'Salin key sekarang — key lengkap tidak akan ditampilkan lagi.';
+    var value = document.createElement('code'); value.textContent = data.key;
+    var copy = document.createElement('button'); copy.textContent = 'Salin';
+    copy.onclick = function(){ navigator.clipboard.writeText(data.key).then(function(){ copy.textContent='Tersalin'; setTimeout(function(){copy.textContent='Salin';},1200); }); };
+    box.appendChild(title); box.appendChild(value); box.appendChild(copy); box.style.display = 'grid';
+    $('apiKeyLabel').value = '';
+    loadApiKeys();
+  } catch(e){ alert(e.message); }
+  finally { button.disabled = false; }
+}
+
+async function loadScriptFeed(){
+  var feed = $('scriptFeed');
+  $('scriptHubStatus').textContent = 'Memuat…';
+  try {
+    var response = await developerFetch('/api/scripts');
+    var data = await response.json();
+    if(!response.ok) throw new Error(data.error || 'Tidak dapat memuat Script Hub.');
+    feed.textContent = '';
+    var posts = data.posts || [];
+    $('scriptHubStatus').textContent = posts.length + ' script';
+    if(!posts.length){ var empty = document.createElement('div'); empty.className='recent-empty'; empty.textContent='Belum ada script. Jadilah yang pertama berbagi.'; feed.appendChild(empty); }
+    posts.forEach(function(post){ feed.appendChild(renderScriptPost(post)); });
+  } catch(e){ $('scriptHubStatus').textContent = e.message; }
+}
+
+function renderScriptPost(post){
+  var card = document.createElement('article'); card.className='script-card';
+  var header = document.createElement('div'); header.className='script-meta';
+  var author = document.createElement('span'); author.textContent='@' + post.username;
+  var date = document.createElement('time'); date.textContent=new Date(post.created_at).toLocaleString('id-ID');
+  header.appendChild(author); header.appendChild(date); card.appendChild(header);
+  var caption = document.createElement('p'); caption.className='script-caption'; caption.textContent=post.caption; card.appendChild(caption);
+  var file = document.createElement('div'); file.className='script-file'; file.textContent=post.file_name + ' · ' + post.language; card.appendChild(file);
+  var details = document.createElement('details'); details.className='script-source';
+  var summary = document.createElement('summary'); summary.textContent='Lihat kode'; details.appendChild(summary);
+  var pre = document.createElement('pre'); var code = document.createElement('code'); code.textContent=post.source_code; pre.appendChild(code); details.appendChild(pre); card.appendChild(details);
+  var actions = document.createElement('div'); actions.className='script-actions';
+  var like = document.createElement('button'); like.textContent=(post.liked ? '♥' : '♡') + ' ' + ((post.likes && post.likes[0] && post.likes[0].count) || 0); like.className=post.liked?'liked':'';
+  like.onclick = async function(){
+    var r=await developerFetch('/api/scripts',{method:'POST',body:JSON.stringify({action:post.liked?'unlike':'like',scriptId:post.id})});
+    if(r.ok) loadScriptFeed(); else { var d=await r.json(); alert(d.error || 'Like gagal.'); }
+  };
+  var commentToggle = document.createElement('button'); commentToggle.textContent='Komentar (' + ((post.comments && post.comments[0] && post.comments[0].count) || 0) + ')';
+  var download = document.createElement('button'); download.textContent='↓ Unduh (' + post.downloads + ')';
+  download.onclick = async function(){
+    var r=await developerFetch('/api/scripts',{method:'POST',body:JSON.stringify({action:'download',scriptId:post.id})});
+    if(!r.ok){var d=await r.json();return alert(d.error || 'Unduh gagal.');}
+    var blob=new Blob([post.source_code],{type:'text/plain;charset=utf-8'}); var link=document.createElement('a'); link.href=URL.createObjectURL(blob); link.download=post.file_name; link.click(); URL.revokeObjectURL(link.href); loadScriptFeed();
+  };
+  actions.appendChild(like); actions.appendChild(commentToggle); actions.appendChild(download);
+  if(post.owned){ var remove=document.createElement('button'); remove.textContent='Hapus'; remove.className='delete-script'; remove.onclick=async function(){ if(!confirm('Hapus script ini?'))return; var r=await developerFetch('/api/scripts',{method:'POST',body:JSON.stringify({action:'delete',scriptId:post.id})}); if(r.ok)loadScriptFeed(); }; actions.appendChild(remove); }
+  card.appendChild(actions);
+  var comments=document.createElement('div'); comments.className='script-comments'; comments.style.display='none'; card.appendChild(comments);
+  commentToggle.onclick=function(){ var show=comments.style.display==='none'; comments.style.display=show?'block':'none'; if(show) loadScriptComments(post.id,comments); };
+  return card;
+}
+
+async function loadScriptComments(scriptId,container){
+  container.textContent='Memuat komentar…';
+  try {
+    var r=await developerFetch('/api/scripts?action=comments&scriptId='+encodeURIComponent(scriptId)); var d=await r.json(); if(!r.ok)throw new Error(d.error||'Gagal memuat komentar.');
+    container.textContent='';
+    (d.comments||[]).forEach(function(comment){var row=document.createElement('p');row.className='script-comment';var name=document.createElement('b');name.textContent='@'+comment.username+' ';row.appendChild(name);row.appendChild(document.createTextNode(comment.body));container.appendChild(row);});
+    var form=document.createElement('form');form.className='comment-form';var input=document.createElement('input');input.maxLength=1200;input.placeholder='Tulis komentar…';var send=document.createElement('button');send.textContent='Kirim';form.appendChild(input);form.appendChild(send);
+    form.onsubmit=async function(e){e.preventDefault();if(!input.value.trim())return;var response=await developerFetch('/api/scripts',{method:'POST',body:JSON.stringify({action:'comment',scriptId:scriptId,comment:input.value})});var result=await response.json();if(!response.ok)return alert(result.error||'Komentar gagal.');loadScriptComments(scriptId,container);loadScriptFeed();};container.appendChild(form);
+  } catch(e){container.textContent=e.message;}
+}
+
+async function uploadScript(){
+  var file=$('scriptFileInput').files && $('scriptFileInput').files[0]; var caption=$('scriptCaption').value.trim();
+  if(!file)return alert('Pilih file script terlebih dahulu.'); if(!caption)return alert('Tambahkan caption.'); if(file.size>50000)return alert('Ukuran maksimum 50 KB.');
+  var button=$('uploadScriptBtn');button.disabled=true;
+  try {
+    var source=await file.text();var ext=file.name.split('.').pop().toLowerCase();
+    var r=await developerFetch('/api/scripts',{method:'POST',body:JSON.stringify({action:'upload',caption:caption,fileName:file.name,language:ext,source:source})});var d=await r.json();if(!r.ok)throw new Error(d.error||'Upload gagal.');
+    $('scriptCaption').value='';$('scriptFileInput').value='';$('scriptFileName').textContent='Pilih file kode';loadScriptFeed();
+  } catch(e){alert(e.message);} finally{button.disabled=false;}
 }
 
 /* ===== ADMIN PANEL ===== */
 async function checkAdmin(){
   try {
-    var r = await fetch('/api/admin', {
+    var r = await developerFetch('/api/admin', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ action:'checkAdmin', user: getCurrentUser() })
@@ -776,8 +1040,8 @@ async function initAdminPanel(){
 
   $('addAdminBtn').onclick = async function(){
     var u = $('newAdminUser').value.trim();
-    if(!u) return alert('username kosong');
-    var r = await fetch('/api/admin', {
+    if(!u) return alert('email kosong');
+    var r = await developerFetch('/api/admin', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ action:'addAdmin', user: getCurrentUser(), newAdmin: u })
@@ -793,7 +1057,7 @@ async function initAdminPanel(){
 }
 
 async function loadAdmins(){
-  var r = await fetch('/api/admin', {
+  var r = await developerFetch('/api/admin', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ action:'listAdmins', user: getCurrentUser() })

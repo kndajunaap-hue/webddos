@@ -5,6 +5,7 @@
     { "source": "/api/oracle", "destination": "/api/oracle.js" },
     { "source": "/api/auth",   "destination": "/api/auth.js"   },
     { "source": "/api/admin",  "destination": "/api/admin.js"  },
-    { "source": "/api/apikey", "destination": "/api/apikey.js" }
+    { "source": "/api/apikey", "destination": "/api/apikey.js" },
+    { "source": "/api/scripts", "destination": "/api/scripts.js" }
   ]
 }

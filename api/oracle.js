@@ -1,4 +1,4 @@
-import { cors, ratelimit, originGuard, sanitize } from './_guard.js';
+import { cors, ratelimit, originGuard } from './_guard.js';
 import { validateKey } from './apikey.js';
 
 const PROVIDERS = [
@@ -54,6 +54,11 @@ Use language-tagged code fences. Match the user's language and requested platfor
 
 const SYSTEM_SMART = SYSTEM_BASIC + "For complex requests, give a deeper technical explanation, cover edge cases, and provide a complete defensive or lab-safe implementation where applicable.";
 
+function cleanText(value, max){
+  if(typeof value !== 'string') return '';
+  return value.replace(/\u0000/g,'').slice(0,max);
+}
+
 function getSystemPrompt(tier){
   if(tier === 'elite' || tier === 'pro') return SYSTEM_SMART;
   return SYSTEM_BASIC;
@@ -83,18 +88,24 @@ export default async function handler(req, res){
   if(!ratelimit(req,res)) return;
   if(req.method!=='POST') return res.status(405).json({ error:'POST only' });
 
-  const prompt  = sanitize(req.body && req.body.prompt || '');
+  const externalFormat = !!(req.body && Array.isArray(req.body.messages));
+  const incoming = externalFormat ? req.body.messages.filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string').slice(-12) : [];
+  const lastUserIndex = externalFormat ? incoming.map(m => m.role).lastIndexOf('user') : -1;
+  const prompt  = cleanText(externalFormat && lastUserIndex >= 0 ? incoming[lastUserIndex].content : req.body && req.body.prompt || '', 12000);
   const file    = req.body && req.body.file || null;
-  const history = (req.body && Array.isArray(req.body.history)) ? req.body.history.slice(-10) : [];
-  const apiKey  = (req.body && req.body.apiKey) || req.headers['x-api-key'];
+  const history = externalFormat
+    ? incoming.slice(0,lastUserIndex).slice(-10).map(m => ({ role:m.role, content:cleanText(m.content,4000) }))
+    : ((req.body && Array.isArray(req.body.history)) ? req.body.history.slice(-10).filter(h => h && (h.role === 'user' || h.role === 'assistant') && typeof h.content === 'string').map(h => ({ role:h.role, content:cleanText(h.content,4000) })) : []);
+  const bearer = String(req.headers.authorization || '').replace(/^Bearer\s+/i,'');
+  const apiKey  = (req.body && req.body.apiKey) || req.headers['x-api-key'] || (bearer.startsWith('sk_leo_') ? bearer : '');
 
   let tier = 'free';
-  let keyData = null;
-
-  if(apiKey){
-    keyData = validateKey(apiKey);
-    if(keyData) tier = keyData.tier;
+  const keyData = apiKey ? await validateKey(apiKey) : null;
+  if(apiKey && !keyData && (externalFormat || String(apiKey).startsWith('sk_leo_'))){
+    return res.status(401).json({ error:'API key tidak valid, sudah dicabut, atau kedaluwarsa.' });
   }
+  if(externalFormat && !apiKey) return res.status(401).json({ error:'Kirim API key lewat Authorization: Bearer sk_leo_… atau x-api-key.' });
+  if(keyData) tier = keyData.tier;
 
   const limits = getTierLimit(tier);
   if(!prompt && !file) return res.status(400).json({ error:'empty prompt' });
@@ -148,6 +159,18 @@ export default async function handler(req, res){
 
             if(refused){ attempts.push({ provider: p.name, model: model, reason: 'refusal' }); continue; }
 
+            if(externalFormat){
+              return res.json({
+                id:'chatcmpl-leo-' + Date.now(),
+                object:'chat.completion',
+                created:Math.floor(Date.now()/1000),
+                model:'leoai-' + tier,
+                choices:[{ index:0, message:{ role:'assistant', content:answer }, finish_reason:'stop' }],
+                answer:answer,
+                provider:p.name,
+                tier:tier
+              });
+            }
             return res.json({ answer: answer, provider: p.name, model: data.model || model, tier: tier });
           } catch(e){
             attempts.push({ provider:p.name, model:model, reason:'parse failed' });

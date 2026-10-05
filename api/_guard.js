@@ -36,7 +36,7 @@ export function cors(req, res, methods){
   methods = methods || 'GET,POST,DELETE,OPTIONS';
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Methods', methods);
-  res.setHeader('Access-Control-Allow-Headers','Content-Type,x-api-key');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type,Authorization,x-api-key');
   res.setHeader('Access-Control-Allow-Credentials','true');
   res.setHeader('Vary','Origin');
   if(req.method === 'OPTIONS'){ res.status(200).end(); return false; }
